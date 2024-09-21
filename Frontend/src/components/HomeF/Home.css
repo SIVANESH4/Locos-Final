@@ -1,0 +1,244 @@
+.home-page{
+    background-color: #000;
+    color:white;
+    width:100%;
+    height: 100vh;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.home-page h3{
+    padding: 1.5rem;
+    font-weight: 400;
+    font-family: "Sriracha", cursive;
+    font-style: normal;
+}
+
+.hero{
+    margin-top: 6%;
+    margin-left: 2rem;
+}
+.hero h1{
+    font-size: 3.4rem;
+}
+.hero p{
+    font-size: 1.1rem;
+}
+.hero button{
+    background-color: white;
+    color:black;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+.hero span{
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    border-bottom: 01px solid white;
+}
+.contact h5{
+font-size: 1rem;
+margin-left: 2rem;
+margin-top: 5rem;
+background: #5ae4a8;
+background: linear-gradient(to right, #5ae4a8 0%, #3468a3 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+.contact ul{
+    list-style: none;
+    font-size: 0.9rem;
+}
+.social-media{
+    list-style: none;
+    display: flex;
+}
+.social-media li{
+    margin-right: 2rem;
+}
+.white-space{
+    background-color: white;
+    position: absolute;
+    width:49.5%;
+    height: 98vh;
+    margin-left: 50%;
+    margin-top: -46.5%;
+    border-radius: 5px;
+}
+.hs-link{
+    color:#000;
+    text-decoration: none;
+}
+.white-space nav ul{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    list-style: none;
+    padding-top: 1rem;
+}
+.white-space nav ul li:hover{
+    border-bottom: 1px solid black;
+}
+.white-space nav ul li a {
+    text-decoration: none;
+    color:#000;
+}
+.white-space img{
+    width:100%;
+}
+
+.benefit-section {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding-bottom: 30px;
+    padding-left: 30px;
+  }
+.benefit-section h2 {
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  .cards-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 1rem;
+  }
+  .cards {
+    background-color:white;
+    border-radius: 8px;
+    padding: 10px;
+    width: 85%;
+    height: auto;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    color:black;
+  }
+  #services-page {
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  #services-page h1 {
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    font-weight: 600;
+  }
+  
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 1.5rem; /* Space between boxes */
+    justify-items: center;
+  }
+  .service-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .service-card:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+  }
+  
+  .service-card h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+  }
+  
+  .service-card p {
+    margin-bottom: 1rem;
+    color: #666;
+  }
+  
+  .service-card button {
+    background-color: var(--text-color) ;
+    color: #fff;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .service-card button:hover {
+    background-color: #1b2e35;
+  }
+  #footer {
+    background-color:#000;
+    color: #fff;
+    padding: 20px 10px;
+  }
+  
+  .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap:70px;
+  }
+  
+  .footer-section {
+    flex: 1;
+    margin: 10px;
+    min-width: 200px;
+  }
+  
+  .footer-section h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    background: #5ae4a8;
+    background: linear-gradient(to right, #5ae4a8 0%, #3468a3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .footer-section p, .footer-section ul {
+    font-size: 14px;
+    color: #ddd;
+  }
+  
+  .footer-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .footer-section ul li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .footer-section a {
+    color:#5ae4a8;
+    text-decoration: none;
+  }
+  
+  .footer-section a:hover {
+    text-decoration: underline;
+  }
+  
+  .social-media {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+  }
+  
+  .social-media a {
+    color:white;
+    font-size: 1.5rem;
+    text-decoration: none;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #ddd;
+  }
+  
+  .footer-bottom p {
+    margin: 0;
+  }
+  

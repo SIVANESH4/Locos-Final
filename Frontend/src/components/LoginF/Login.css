@@ -1,10 +1,9 @@
+
 .login-container{
     display: flex;
     justify-content: center;
     align-items: center;
     height:100vh;
-    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
-    backdrop-filter: blur(10px);
 }
 .login-container form{
     margin-top: 3%;
