@@ -1,0 +1,48 @@
+.signup-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:100vh;
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+    backdrop-filter: blur(10px);
+}
+.signup-container form{
+    margin-top: 3%;
+    width:27rem;
+    height:34rem;
+    background-color:var(--primary-color);
+    box-shadow: #666 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    border-radius: 15px;
+
+}
+.signup-container h2{
+    color:var(--text-color);
+    font-size: 2rem;
+    margin-top: 2%;
+}
+.form-container{
+    margin-left: 8%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+.role-btn{
+    display: flex;
+    justify-content:space-evenly;
+    margin-top: 5%;
+}
+.role-btn button{
+    padding: 10px 35px;
+}
+.signup-container input, .signup-container select, .signup-container textarea{
+    width:85%;
+}
+.signup-container span{
+    color:blue;
+    margin-left: 2%;
+}
+#signup-btn{
+    margin-right: 13%;
+    padding: 10px 60px;
+}
