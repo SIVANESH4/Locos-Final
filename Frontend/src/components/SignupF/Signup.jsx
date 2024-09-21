@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './Signup.css';
@@ -14,6 +14,11 @@ export const Signup = () => {
     const [service, setService] = useState('');
     const [services] = useState(['Electrical','Cleaning','Plumbing','AC','RO','Washing Machine','Installation','Television']);
     const navigate = useNavigate();
+    
+    useEffect(()=>{
+        fetchUser()
+    },[])
+
 
     const handleRole = (role) => {
         setIsTechnician(role === 'Technician');
@@ -27,7 +32,7 @@ export const Signup = () => {
             return;
         }
 
-        const userData = {
+        const userdata = {
             username,
             email,
             password,
@@ -35,19 +40,28 @@ export const Signup = () => {
             address,
             role: isTechnician ? 'Technician' : 'Customer',
             service: isTechnician ? service : null
-        };
-
-        try {
-            // Post data to your backend API
-            await axios.post('http://localhost:8088/userRoutes/user', userData);
-            alert('Registration successful!');
-            navigate('/login');
-        } catch (error) {
-            console.error('Registration error:', error);
-            alert('An error occurred while registering');
         }
-    };
-
+            // Post data to your backend API
+            axios
+            .post('http://localhost:8088/userRoutes/signup', userdata)
+            .then(()=>{
+            setEmail('')
+            setPassword('')
+            setPhoneNo('')
+            setAddress('')
+            setService('')
+            alert('Registration successful!');
+            navigate('/login')
+        })
+        .catch((error)=>{
+            if(error.response && error.response.status === 404){
+                alert(error.response.data.message)
+            }else{
+                console.log('unable to register',error)
+                alert('an error occurred while registering')
+            }
+        })
+        } 
     return (
         <>
             <div className="signup-container">
@@ -57,6 +71,7 @@ export const Signup = () => {
                         <button type="button" onClick={() => handleRole('Customer')} className="btn btn-dark">Customer</button>
                         <button type="button" onClick={() => handleRole('Technician')} className="btn btn-dark">Technician</button>
                     </div>
+                    
                     <div className="form-container">
                         <label className="form-label">Username</label><br />
                         <input type="text" className="form-control" value={username} onChange={(e) => setUserName(e.target.value)} required/><br />
@@ -89,3 +104,4 @@ export const Signup = () => {
         </>
     );
 };
+
