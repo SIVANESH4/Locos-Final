@@ -5,7 +5,7 @@ const cors = require('cors');
 const Routesuser = require('./routers/userRoutes')
 
 const PORT = 8088;
-const dbURL = "mongodb://localhost:27017/";
+const dbURL = "mongodb://localhost:27017/locos";
 const app = express();
 app.use(express.json())
 app.use(cors());

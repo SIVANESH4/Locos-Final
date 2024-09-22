@@ -15,15 +15,6 @@ export const Signup = () => {
     const [services] = useState(['Electrical','Cleaning','Plumbing','AC','RO','Washing Machine','Installation','Television']);
     const navigate = useNavigate();
     
-    useEffect(()=>{
-        fetchUser()
-    },[])
-
-
-    const handleRole = (role) => {
-        setIsTechnician(role === 'Technician');
-    };
-
     const handleRegister = async (event) => {
         event.preventDefault();
 
@@ -61,7 +52,25 @@ export const Signup = () => {
                 alert('an error occurred while registering')
             }
         })
-        } 
+        }
+    useEffect(()=>{
+        fetchUser();
+    },[])
+
+    const fetchUser =  async() => {
+        try {
+            const res = await axios.get('http://localhost:8088/userRoutes/signup')
+            .then((res) => { 
+                console.log(res.data) 
+              }) 
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    };
+    const handleRole = (role) => {
+        setIsTechnician(role === 'Technician');
+    };
+ 
     return (
         <>
             <div className="signup-container">
