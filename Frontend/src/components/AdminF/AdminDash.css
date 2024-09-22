@@ -28,6 +28,10 @@
     font-size: 1.1rem;
     cursor: pointer;
   }
+  .sidebar ul li a{
+    text-decoration: none;
+    color:var(--text-color);
+  }
   .logout-link{
     text-decoration: none;
     color:var(--text-color);

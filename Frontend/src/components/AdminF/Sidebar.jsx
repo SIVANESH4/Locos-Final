@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 export const Sidebar = ({ activeSection, setActiveSection }) => {
-  
+  const navigate = useNavigate();
   return (
     <div className="sidebar">
         <center><i class="fa-solid fa-circle-user"></i></center>
@@ -24,9 +24,23 @@ export const Sidebar = ({ activeSection, setActiveSection }) => {
         <li className={activeSection === 'jobrequests' ? 'active' : ''} onClick={() => setActiveSection('jobrequests')}>
           JobRequests
         </li>
-        <Link className='logout-link'><li>
-        Logout
-      </li></Link>
+        <li className='logout-link'>
+  <a
+    href="#"
+    onClick={(e) => {
+      e.preventDefault();
+      if (confirm("Are you sure you want to logout?")) {
+        // Navigate to homepage
+        navigate("/");
+      } else {
+        // Reload the same page
+        window.location.reload();
+      }
+    }}
+  >
+    Logout
+  </a>
+</li>
       </ul>
     </div>
   );
