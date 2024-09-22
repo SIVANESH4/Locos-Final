@@ -51,10 +51,10 @@ export const Login = () => {
             <center><h2>Login</h2></center>
             <center><h5>Welcome Back!</h5></center>
             <div className="login-box">  
-                <input type="text"
+                <input type="mail"
                  name="username" 
                  class="form-control"
-                  placeholder="Username"
+                  placeholder="Email Address"
                   value={email} 
                   onChange={(e)=> setEmail(e.target.value)}
                   required/>   <br />
