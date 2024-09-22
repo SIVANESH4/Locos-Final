@@ -1,0 +1,5 @@
+.customer-dashboard {
+    display: grid;
+    grid-template-columns: 170px 1fr; /* Sidebar takes 250px and the remaining space goes to main content */
+    height: 100vh;
+  }
