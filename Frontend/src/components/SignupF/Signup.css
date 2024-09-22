@@ -17,6 +17,15 @@
     border-radius: 15px;
 
 }
+.btn-primary {
+    background-color:var(--text-color); /* dark gray */
+    color: #fff; /* white */
+  }
+  
+  .btn-secondary {
+    background-color: #ffff; /* white */
+    color: #333; /* dark gray */
+  }
 .signup-container h2{
     color:var(--text-color);
     font-size: 2rem;

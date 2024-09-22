@@ -77,9 +77,21 @@ export const Signup = () => {
                 <form onSubmit={handleRegister}>
                     <center><h2>Sign up</h2></center>
                     <div className="role-btn">
-                        <button type="button" onClick={() => handleRole('Customer')} className="btn btn-dark">Customer</button>
-                        <button type="button" onClick={() => handleRole('Technician')} className="btn btn-dark">Technician</button>
-                    </div>
+  <button
+    type="button"
+    onClick={() => handleRole('Customer')}
+    className={`btn ${isTechnician ? 'btn-secondary' : 'btn-dark'}`}
+  >
+    Customer
+  </button>
+  <button
+    type="button"
+    onClick={() => handleRole('Technician')}
+    className={`btn ${isTechnician ? 'btn-dark' : 'btn-secondary'}`}
+  >
+    Technician
+  </button>
+</div>
                     
                     <div className="form-container">
                         <label className="form-label">Username</label><br />
