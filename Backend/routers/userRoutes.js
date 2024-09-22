@@ -124,6 +124,37 @@ router.post('/ForgotPassword',async(req,res)=>{
       }
   });
 
+router.get('/allusers',async(req,res)=>{
+  try{
+    const users = await User.find({})
+    res.json(users)
+  }
+  catch(error){
+    res.status(501).json({'Error fetching users ':error})
+  }
+})
+
+router.get('/technician',async(req,res)=>{
+  try{
+    const tech = await User.find({role:'Technician'})
+    res.json(tech)
+  }
+  catch(error){
+    res.status(501).json({error:'Error fetching technician'})
+  }
+})
+
+router.get('/usercount',async(req,res)=>{
+  try{
+    const consumer = await User.countDocuments({role:'Customer'})
+    const tech = await User.countDocuments({role:'Technician'})
+    res.json({consumer,tech})
+  }
+  catch(error){
+    res.status(501).json({error:'Error fetching users count'})
+  }
+})
+
 // Additional endpoints for updating or deleting users
 // Example: router.put('/api/users/:id', (req, res) => {});
 // Example: router.delete('/api/users/:id', (req, res) => {});

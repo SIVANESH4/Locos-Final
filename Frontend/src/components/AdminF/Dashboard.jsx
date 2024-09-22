@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Bar } from 'react-chartjs-2';
 import { Pie } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
+import axios from "axios";
 
 
 export const Dashboard = () => {
@@ -38,9 +39,8 @@ const options1 = {
   }
 };
 
-
-  const customers = 100; // replace with actual data
-  const technicians = 50; // replace with actual data
+  const [customers,setCustomers] = useState('')
+  const [technicians,setTechnicians] = useState('')
 
   Chart.register(...registerables);
 
@@ -72,6 +72,20 @@ const options = {
       }
     }
   };
+  //displaying users count
+  useEffect(()=>{
+    const Userscount = async() => {
+      try{
+        const response = await axios.get('http://localhost:8088/userRoutes/usercount')
+        setCustomers(response.data.consumer)
+        setTechnicians(response.data.tech)
+      }
+      catch(error){
+        console.log('Error fectching user count',error)
+      }
+    }
+    Userscount()
+  })
   return (
     <>
       <div className="dashboard-boxes">

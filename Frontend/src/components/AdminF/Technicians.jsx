@@ -1,12 +1,8 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 export const Technicians = () => {
-  const [technicians, setTechnicians] = useState([
-    { id: 1, name: 'John Doe', email: 'john@example.com', phone: '1234567890', address: '123 Street', pincode: '123456', service: 'Electrical', rating: 4.5, jobsDone: 20 },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', phone: '9876543210', address: '456 Avenue', pincode: '654321', service: 'Cleaning', rating: 4.0, jobsDone: 15 },
-    { id: 3, name: 'Mike Johnson', email: 'mike@example.com', phone: '6549871230', address: '789 Boulevard', pincode: '987654', service: 'Plumbing', rating: 3.8, jobsDone: 10 },
-  ]);
-
+  const [technicians,setTechnicians] = useState([])
   const [newTechnician, setNewTechnician] = useState({ name: '', email: '', phone: '', address: '', pincode: '', service: '', rating: 0, jobsDone: 0 });
 
   const [showForm, setShowForm] = useState(false);
@@ -27,6 +23,19 @@ export const Technicians = () => {
   const handleShowForm = () => {
     setShowForm(!showForm); // Show the form when the button is clicked
   };
+  //displaying technicians
+  useEffect(()=>{
+    const fetchTech = async() => {
+      try{
+        const response = await axios.get('http://localhost:8088/userRoutes/technician/')
+        setTechnicians(response.data)
+      }
+      catch(error){
+        console.log('Error fetching Technicians',error)
+      }
+    }
+    fetchTech();
+  },[])
   return (
     <div className="technicians-management">
       <div className="head">
@@ -110,22 +119,22 @@ export const Technicians = () => {
             <th>Address</th>
             <th>Pincode</th>
             <th>Service</th>
-            <th>Rating</th>
-            <th>Jobs Done</th>
+            {/* /*<th>Rating</th>
+            <th>Jobs Done</th> */}
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {technicians.map((technician) => (
             <tr key={technician.id}>
-              <td>{technician.name}</td>
+              <td>{technician.username}</td>
               <td>{technician.email}</td>
-              <td>{technician.phone}</td>
+              <td>{technician.phoneNo}</td>
               <td>{technician.address}</td>
               <td>{technician.pincode}</td>
               <td>{technician.service}</td>
-              <td>{technician.rating.toFixed(1)}</td>
-              <td>{technician.jobsDone}</td>
+              {/* <td>{technician.rating.toFixed(1)}</td>
+              <td>{technician.jobsDone}</td> */}
               <td>
                 <button onClick={() => handleRemoveTechnician(technician.id)} className="remove">
                   Ban

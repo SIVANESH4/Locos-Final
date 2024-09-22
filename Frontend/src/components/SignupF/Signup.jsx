@@ -13,6 +13,7 @@ export const Signup = () => {
     const [address, setAddress] = useState('');
     const [service, setService] = useState('');
     const [services] = useState(['Electrical','Cleaning','Plumbing','AC','RO','Washing Machine','Installation','Television']);
+    const [pincode,setPincode]=useState('')
     const navigate = useNavigate();
     
     const handleRegister = async (event) => {
@@ -29,6 +30,7 @@ export const Signup = () => {
             password,
             phoneNo,
             address,
+            pincode,
             role: isTechnician ? 'Technician' : 'Customer',
             service: isTechnician ? service : null
         }
@@ -40,6 +42,7 @@ export const Signup = () => {
             setPassword('')
             setPhoneNo('')
             setAddress('')
+            setPincode('')
             setService('')
             alert('Registration successful!');
             navigate('/login')
@@ -117,6 +120,8 @@ export const Signup = () => {
                         <textarea className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} required></textarea><br />
                         <label className="form-label">Phone No</label><br />
                         <input type="text" className="form-control" value={phoneNo} onChange={(e) => setPhoneNo(e.target.value)} required/><br />
+                        <label className="form-label">Pincode</label> <br />
+                        <input type="text" className="form-control" value={pincode} onChange={(e) => setPincode(e.target.value)} required/>< br/>
                         <p>Already have an account?<Link to='/login'><span> Login</span></Link></p>
                         <center><button type="submit" id="signup-btn" className="btn btn-dark">Sign up</button></center>
                     </div>
