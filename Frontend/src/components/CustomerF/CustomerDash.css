@@ -3,3 +3,144 @@
     grid-template-columns: 170px 1fr; /* Sidebar takes 250px and the remaining space goes to main content */
     height: 100vh;
   }
+  .customer-dashboard h3{
+  }
+
+  .ongoing-works{
+    width:29rem;
+    height:18rem;
+    background-color:white;
+    padding:10px;
+    margin-top: 1rem;
+    border-radius: 10px;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  }
+  .ongoing-jobs-list{
+    margin-left: -10px;
+  }
+  .ongoing-job-item{
+    width:25rem;
+    height: auto;
+    padding: 20px;
+    margin: 1rem 0rem;
+    color: var(--text-color);
+    border-radius: 10px;
+    list-style: none;
+    background-color: var(--background-color);
+  }
+  
+  .chart-section{
+    width:28rem;
+    height: 13.5rem;
+    margin-top: 1rem;
+  }
+  .personal-details{
+    width:50%;
+    height: auto;
+    margin-top: -48%;
+    margin-left: 45%;
+  }
+  .empty-black{
+    background-color: var(--text-color);
+    width:37rem;
+    height:8rem;
+    border-radius: 10px;
+    margin: 1rem 1rem 0px 32rem;
+    overflow: hidden;
+  }
+  .circle{
+    width:2rem;
+    height:2rem;
+    position: absolute;
+    border-radius: 50%;
+    background-color: var(--background-color);
+    animation: move 4s infinite alternate;
+  }
+  @keyframes move {
+    0% {
+      transform: translate(200px, 20px);
+    }
+    25% {
+      transform: translate(200px, 100px); /* Move right */
+    }
+    50% {
+      transform: translate(20px, 100px); /* Move down-right */
+    }
+    75% {
+      transform: translate(0, 20px); /* Move down */
+    }
+    100% {
+      transform: translate(0, 0); /* Move back to start */
+    }
+  }
+  
+  /* Individual circle animations */
+  #c1 { margin-left: 10px;animation-delay: 0s; }
+  #c2 {  margin-left: 330px; animation-delay: 0.5s; }
+  #c3 { margin-left: 400px; animation-delay: 1s; }
+  #c4 { margin-left: 180px; animation-delay: 1.5s; }
+  #c5 { margin-left: 490px; animation-delay: 2s; }
+  #c6 { margin-left: 290px; animation-delay: 0s; }
+  #c7 { margin-left:200px; animation-delay: 0.5s; }
+  #c1 { margin-left: 150px;animation-delay: 0s; }
+  #c2 {  margin-left: 330px; animation-delay: 0.5s; }
+  #c3 { margin-left: 400px; animation-delay: 1s; }
+  #c4 { margin-left: 180px; animation-delay: 1.5s; }
+
+/* For service section */
+.drop-down select{
+  margin-right: 5rem;
+  padding: 5px 10px;
+  border-radius: 8px;
+  outline: none;
+}
+.services-grid-dash{
+  margin-top: 1.5rem;
+  margin-left: 1rem;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap:1rem;
+}
+.worker-card{
+  width: 15rem;
+  height: 20rem;
+  padding: 20px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+.worker-card i{
+  font-size: 5rem;
+  padding-bottom: 1rem;
+}
+
+.service-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.service-history-table th, .service-history-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.service-history-table th {
+  background-color:var(--text-color);
+  color: white;
+  border: 1px solid var(--background-color);
+}
+
+.service-history-table td {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid white;
+}
+
+.service-history-table select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

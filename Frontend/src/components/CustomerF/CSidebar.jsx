@@ -18,12 +18,7 @@ export const CSidebar = ({ activeSection, setActiveSection }) => {
         >
           Dashboard
         </li>
-        <li
-          className={activeSection === "profile" ? "active" : ""}
-          onClick={() => setActiveSection("profile")}
-        >
-          Profile
-        </li>
+
         <li
           className={activeSection === "services" ? "active" : ""}
           onClick={() => setActiveSection("services")}

@@ -1,7 +1,6 @@
 import React from 'react'
 import { CDashboard } from './CDashboard';
 import { CServices } from './CServices';
-import { CProfile } from './CProfile';
 import { CSidebar } from './CSidebar';
 import { CHistory } from './CHistory';
 import { useState } from 'react';
@@ -10,15 +9,14 @@ import './CustomerDash.css';
 export const CustomerDash = () => {
     const navigate = useNavigate();
     const [activeSection, setActiveSection] = useState("dashboard");
+    const [bookedServices, setBookedServices] = useState([]); // <--- Add this line
 
   const renderContent = () => {
     switch (activeSection) {
       case "dashboard":
         return <CDashboard />;
-      case "profile":
-        return <CProfile />;
       case "services":
-        return <CServices />;
+        return <CServices bookedServices={bookedServices} setBookedServices={setBookedServices}/>;
         case "history":
         return <CHistory />;
       default:
