@@ -19,7 +19,16 @@ export const Login = () => {
       setEmail()
       setPassword()
       alert('Login Successful')
+      const role = response.data.role
+      if( role === 'Admin'){
+        navigate('/admin')
+      }
+      else if( role === 'Customer'){
+        navigate('/customer')
+      }
+      else if( role === 'Technician'){
       navigate('/')
+      }
       window.location.reload()
     }
     catch(error){

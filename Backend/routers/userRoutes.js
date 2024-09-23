@@ -10,13 +10,14 @@ dotenv.config()
 // Create a new user (Signup route)
 router.post('/signup', async (req, res) => {
   try {
-    const { username, email, password, phoneNo, address, role,service} = req.body;
+    const { username, email, password, phoneNo, address,pincode, role,service} = req.body;
     const newUser = new User({
       username,
       email,
       password,
       phoneNo,
       address,
+      pincode,
       role,
       // Only add services if the user is a service provider
       service: role === 'Technician' ? service : null
@@ -51,7 +52,7 @@ router.post('/userlogin',async(req,res) =>{
     res.status(401).json({message:'Incorrect Password'})
   }
   const token = jwt.sign({userId: user._id},SECRET_KEY,{expiresIn:'1hr'})
-  res.json({token})
+  res.json({role:user.role,token})
   }
 
   catch(error){
