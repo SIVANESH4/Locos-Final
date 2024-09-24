@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../modules/user'); // Import the User model
+const Services = require('../modules/services')
 const router = express.Router();
 const jwt = require('jsonwebtoken')
 const SECRET_KEY = 'secret-key'
@@ -124,7 +125,7 @@ router.post('/ForgotPassword',async(req,res)=>{
       return res.status(501).json({message:"Internal Error"});
       }
   });
-
+//fetching  all users
 router.get('/allusers',async(req,res)=>{
   try{
     const users = await User.find({})
@@ -134,7 +135,7 @@ router.get('/allusers',async(req,res)=>{
     res.status(501).json({'Error fetching users ':error})
   }
 })
-
+//fetching technicians
 router.get('/technician',async(req,res)=>{
   try{
     const tech = await User.find({role:'Technician'})
@@ -144,7 +145,7 @@ router.get('/technician',async(req,res)=>{
     res.status(501).json({error:'Error fetching technician'})
   }
 })
-
+//fetching users cound
 router.get('/usercount',async(req,res)=>{
   try{
     const consumer = await User.countDocuments({role:'Customer'})
@@ -155,6 +156,34 @@ router.get('/usercount',async(req,res)=>{
     res.status(501).json({error:'Error fetching users count'})
   }
 })
+
+//Creating Services
+router.post('/newservice',async(req,res)=>{
+  try{
+    const {newService,description}=req.body;
+    const servicename = await Services.findOne({servicename:newService})
+    if(servicename){
+      res.status(203).json({message:'Service is already exists'})
+    }
+    const newservice = new Services({servicename:newService,servicedescription:description})
+    await newservice.save()
+    res.status(200).json({message:'Service Added'})
+  }
+  catch(error){
+    res.status(500).json({message:'Internal error'})
+  }
+})
+
+//sending Services
+router.get('/service',async(req,res)=>{
+  try{
+    const service = await Services.find({})
+    res.status(200).json({service})
+  }
+  catch(error){
+    res.status(500).json({'Error fetching services':error})
+  }
+}) 
 
 // Additional endpoints for updating or deleting users
 // Example: router.put('/api/users/:id', (req, res) => {});
