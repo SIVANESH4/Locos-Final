@@ -53,7 +53,7 @@ router.post('/userlogin',async(req,res) =>{
     res.status(401).json({message:'Incorrect Password'})
   }
   const token = jwt.sign({userId: user._id},SECRET_KEY,{expiresIn:'1hr'})
-  res.json({role:user.role,token})
+  res.json({token,role:user.role})
   }
 
   catch(error){
@@ -128,7 +128,7 @@ router.post('/ForgotPassword',async(req,res)=>{
 //fetching  all users
 router.get('/allusers',async(req,res)=>{
   try{
-    const users = await User.find({})
+    const users = await User.find({}).select('-password -_id')
     res.json(users)
   }
   catch(error){
@@ -138,7 +138,7 @@ router.get('/allusers',async(req,res)=>{
 //fetching technicians
 router.get('/technician',async(req,res)=>{
   try{
-    const tech = await User.find({role:'Technician'})
+    const tech = await User.find({role:'Technician'}).select('-password -_id')
     res.json(tech)
   }
   catch(error){
@@ -177,13 +177,24 @@ router.post('/newservice',async(req,res)=>{
 //sending Services
 router.get('/service',async(req,res)=>{
   try{
-    const service = await Services.find({})
+    const service = await Services.find({}).select('servicename servicedescription status -_id')
     res.status(200).json({service})
   }
   catch(error){
     res.status(500).json({'Error fetching services':error})
   }
 }) 
+
+//sending technician to users
+router.get('/techniciandetails',async(req,res)=>{
+  try{
+    const tech = await User.find({role:'Technician'}).select('username service address -_id')
+    res.json({tech})
+  }
+  catch(error){
+    res.status(400).json({error:'error sending servicer details'})
+  }
+})
 
 // Additional endpoints for updating or deleting users
 // Example: router.put('/api/users/:id', (req, res) => {});

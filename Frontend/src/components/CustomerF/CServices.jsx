@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import data from "../../../demo.json"; // Ensure the path is correct
+// import data from "../../../demo.json"; // Ensure the path is correct
+import axios from "axios";
 
 export const CServices = () => {
   const [workers, setWorkers] = useState([]);
@@ -26,7 +27,17 @@ export const CServices = () => {
 
   useEffect(() => {
     // Initialize workers with the imported data
-    setWorkers(data);
+    const fetchTechnician = async() => {
+      try{
+      const response = await axios.get('http://localhost:8088/userRoutes/techniciandetails')
+      setWorkers(response.data.tech)
+      console.log(response.data)
+      }
+      catch(error){
+        console.log('Error fetching Technicians Details',error)
+      }
+    }
+    fetchTechnician();
   }, []);
 
   const handleBookService = (worker) => {
@@ -102,14 +113,14 @@ export const CServices = () => {
         </div>
       </div>
       <div className="services-grid-dash">
-        {filteredWorkers.length > 0 ? (
-          filteredWorkers.map((worker) => (
+        {workers.length > 0 ? (
+          workers.map((worker) => (
             <div className="worker-card" key={worker.id}>
               <center><i className="fa-solid fa-circle-user"></i>
-              <h4>{worker.name}</h4>
+              <h4>{worker.username}</h4>
               <p>Service: {worker.service}</p>
-              <p>Location: {worker.location}</p>
-              <p>Rating: {worker.rating}</p>
+              <p>Location: {worker.address}</p>
+              {/* <p>Rating: {worker.rating}</p> */}
               <button
                 onClick={() => handleBookService(worker)}
                 className="btn btn-dark"
