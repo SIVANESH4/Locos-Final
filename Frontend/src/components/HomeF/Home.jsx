@@ -30,7 +30,7 @@ export const Home = () => {
             Connect with local professionals for plumbing, electrical work,<br />
             cleaning, and more
           </p>
-          <Link to='/customer'><button className="btn btn-dark">Get Started &rarr; </button></Link>
+          <Link to='/signup'><button className="btn btn-dark">Get Started &rarr; </button></Link>
         </section>
         <section className="contact">
           <h5>Contact us</h5>

@@ -122,7 +122,7 @@ export const Signup = () => {
                         <input type="text" className="form-control" value={phoneNo} onChange={(e) => setPhoneNo(e.target.value)} required/><br />
                         <label className="form-label">Pincode</label> <br />
                         <input type="text" className="form-control" value={pincode} onChange={(e) => setPincode(e.target.value)} required/>< br/>
-                        <p>Already have an account?<Link to='/login'><span> Login</span></Link></p>
+                        <p>Already have an account?<Link to='/login' className='link'><span> Login</span></Link></p>
                         <center><button type="submit" id="signup-btn" className="btn btn-dark">Sign up</button></center>
                     </div>
                 </form>
