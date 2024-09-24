@@ -77,7 +77,7 @@ export const Login = () => {
                  Lost Password? 
                  </p>
                 <button type="submit" id='login-btn' class="btn btn-dark">Login</button>
-                <p>New User? <Link to='/signup'><span>Signup</span></Link></p>
+                <p>New User? <Link to='/signup' className='link'><span>Signup</span></Link></p>
                 </div>
             </form>
         </div>

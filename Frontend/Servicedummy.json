@@ -1,0 +1,49 @@
+[{
+  
+    "servicename": "Cleaning",
+    "servicedescription": "Home and office cleaning services",
+    "status": "Active"
+  },
+  {
+   
+    "servicename": "Electrical",
+    "servicedescription": "Electrical installation and repairs",
+    "status": "Active"
+  },
+  {
+    "servicename": "Plumbing",
+    "servicedescription": "Expert plumbing services for residential needs",
+    "status": "Active"
+  },
+  {
+    "servicename": "AC",
+    "servicedescription": "Air conditioning installation and maintenance",
+    "status": "Active"
+  },
+  {
+    "servicename": "RO",
+    "servicedescription": "RO water purifier installation and repair",
+    "status": "Active"
+  },
+  {
+    "servicename": "Washing Machine",
+    "servicedescription": "Washing machine installation and repair",
+    "status": "Active"
+  },
+  {
+    "servicename": "Installation",
+    "servicedescription": "General installation services for home appliances",
+    "status": "Active"
+  },
+  {
+   
+    "servicename": "Television",
+    "servicedescription": "Television installation and setup",
+    "status": "Active"
+  },
+  {
+   
+    "servicename": "Car Wash",
+    "servicedescription": "Home and Office",
+    "status": "Active"
+  }]

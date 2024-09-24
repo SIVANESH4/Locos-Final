@@ -17,6 +17,9 @@
     border-radius: 15px;
 
 }
+.link{
+    text-decoration: none;
+}
 .btn-primary {
     background-color:var(--text-color); /* dark gray */
     color: #fff; /* white */
@@ -50,6 +53,7 @@
 .signup-container span{
     color:blue;
     margin-left: 2%;
+    text-decoration: none;
 }
 #signup-btn{
     margin-right: 13%;

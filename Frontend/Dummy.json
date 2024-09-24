@@ -1,0 +1,202 @@
+[
+    {
+      "username": "vishnu",
+      "email": "ngvk172005@gmail.com",
+      "password": "123",
+      "phoneNo": "786787",
+      "address": "Madurai",
+      "role": "Admin",
+      "service": "",
+      "pincode": "625001"
+    },
+    {
+      "username": "ravi",
+      "email": "ravi@gmail.com",
+      "password": "123",
+      "phoneNo": "987654",
+      "address": "Chennai",
+      "role": "Technician",
+      "service": "Plumbing",
+      "pincode": "600001"
+    },
+    {
+      "username": "arun",
+      "email": "arun@gmail.com",
+      "password": "123",
+      "phoneNo": "564738",
+      "address": "Trichy",
+      "role": "Customer",
+      "service": "",
+      "pincode": "620001"
+    },
+    {
+      "username": "karthik",
+      "email": "karthik@gmail.com",
+      "password": "123",
+      "phoneNo": "876543",
+      "address": "Salem",
+      "role": "Technician",
+      "service": "Electrical",
+      "pincode": "636001"
+    },
+    {
+      "username": "suresh",
+      "email": "suresh@gmail.com",
+      "password": "123",
+      "phoneNo": "789654",
+      "address": "Erode",
+      "role": "Customer",
+      "service": "",
+      "pincode": "638001"
+    },
+    {
+      "username": "mohan",
+      "email": "mohan@gmail.com",
+      "password": "123",
+      "phoneNo": "123456",
+      "address": "Tirunelveli",
+      "role": "Technician",
+      "service": "Cleaning",
+      "pincode": "627001"
+    },
+    {
+      "username": "bala",
+      "email": "bala@gmail.com",
+      "password": "123",
+      "phoneNo": "258963",
+      "address": "Madurai",
+      "role": "Customer",
+      "service": "",
+      "pincode": "625002"
+    },
+    {
+      "username": "gokul",
+      "email": "gokul@gmail.com",
+      "password": "123",
+      "phoneNo": "753951",
+      "address": "Thanjavur",
+      "role": "Technician",
+      "service": "Installation",
+      "pincode": "613001"
+    },
+    {
+      "username": "deepa",
+      "email": "deepa@gmail.com",
+      "password": "123",
+      "phoneNo": "789123",
+      "address": "Namakkal",
+      "role": "Customer",
+      "service": "",
+      "pincode": "637001"
+    },
+    {
+      "username": "murali",
+      "email": "murali@gmail.com",
+      "password": "123",
+      "phoneNo": "963852",
+      "address": "Karur",
+      "role": "Technician",
+      "service": "Installation",
+      "pincode": "639001"
+    },
+    {
+      "username": "meena",
+      "email": "meena@gmail.com",
+      "password": "123",
+      "phoneNo": "123789",
+      "address": "Kanyakumari",
+      "role": "Customer",
+      "service": "",
+      "pincode": "629001"
+    },
+    {
+      "username": "raj",
+      "email": "raj@gmail.com",
+      "password": "123",
+      "phoneNo": "147258",
+      "address": "Ooty",
+      "role": "Technician",
+      "service": "AC",
+      "pincode": "643001"
+    },
+    {
+      "username": "selva",
+      "email": "selva@gmail.com",
+      "password": "123",
+      "phoneNo": "852741",
+      "address": "Pollachi",
+      "role": "Customer",
+      "service": "",
+      "pincode": "642001"
+    },
+    {
+      "username": "anbu",
+      "email": "anbu@gmail.com",
+      "password": "123",
+      "phoneNo": "963147",
+      "address": "Cuddalore",
+      "role": "Technician",
+      "service": "Washing Machine",
+      "pincode": "607001"
+    },
+    {
+      "username": "vimal",
+      "email": "vimal@gmail.com",
+      "password": "123",
+      "phoneNo": "789456",
+      "address": "Thoothukudi",
+      "role": "Customer",
+      "service": "",
+      "pincode": "628001"
+    },
+    {
+      "username": "aravind",
+      "email": "aravind@gmail.com",
+      "password": "123",
+      "phoneNo": "951753",
+      "address": "Dharmapuri",
+      "role": "Technician",
+      "service": "Television",
+      "pincode": "636701"
+    },
+    {
+      "username": "manoj",
+      "email": "manoj@gmail.com",
+      "password": "123",
+      "phoneNo": "741852",
+      "address": "Tirupur",
+      "role": "Technician",
+      "service": "RO",
+      "pincode": "641601"
+    },
+    {
+      "username": "janani",
+      "email": "janani@gmail.com",
+      "password": "123",
+      "phoneNo": "963852",
+      "address": "Sivakasi",
+      "role": "Customer",
+      "service": "",
+      "pincode": "626123"
+    },
+    {
+      "username": "vijay",
+      "email": "vijay@gmail.com",
+      "password": "123",
+      "phoneNo": "789123",
+      "address": "Virudhunagar",
+      "role": "Technician",
+      "service": "Electrical",
+      "pincode": "626001"
+    },
+    {
+        "username": "charan",
+        "email": "charan@gmail.com",
+        "password": "123",
+        "phoneNo": "963852",
+        "address": "Sivakasi",
+        "role": "Customer",
+        "service": "",
+        "pincode": "626123"
+      }
+  ]
