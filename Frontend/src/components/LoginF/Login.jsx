@@ -27,7 +27,7 @@ export const Login = () => {
         navigate('/customer')
       }
       else if( role === 'Technician'){
-      navigate('/')
+      navigate('/technician')
       }
       window.location.reload()
     }
