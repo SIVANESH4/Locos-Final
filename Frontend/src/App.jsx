@@ -4,6 +4,7 @@ import { Login } from "./components/LoginF/Login";
 import {Home} from "./components/HomeF/Home";
 import { AdminDash } from "./components/AdminF/AdminDash";
 import { CustomerDash } from "./components/CustomerF/CustomerDash";
+import { TechnicianDash } from "./components/TechnicianF/TechnicianDash";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminDash/>}/>
           <Route path="/customer" element={<CustomerDash/>}/>
+          <Route path="/technician" element={<TechnicianDash/>}/>
         </Routes>
       </Router>
     </>

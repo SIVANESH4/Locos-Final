@@ -1,0 +1,81 @@
+.technician-dashboard{
+    display: grid;
+    grid-template-columns: 170px 1fr; /* Sidebar takes 250px and the remaining space goes to main content */
+    height: 100vh;
+}
+.techdash{
+    margin-top: 2rem;
+}
+.tech-ongoing-works{
+    width:29rem;
+    height:25rem;
+    background-color:white;
+    padding:10px;
+    margin-top: 1rem;
+    border-radius: 10px;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  }
+  .tech-ongoing-jobs-list{
+    margin-left: -10px;
+  }
+  .tech-ongoing-job-item{
+    width:25rem;
+    height: auto;
+    padding: 20px;
+    margin: 1rem 0rem;
+    color: var(--text-color);
+    border-radius: 10px;
+    list-style: none;
+    background-color: var(--background-color);
+  }
+.tech-chart-container{
+    margin-top:-30%;
+    margin-left: 42%;
+}
+.tech-personal-details{
+  width:50%;
+  height: auto;
+}
+.tech-personal-details div{
+  margin-top: 1rem;
+}
+.tech-notification{
+  width: 35rem;
+  height:33rem;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  overflow: scroll;
+  scrollbar-width: none;
+  padding: 20px;
+  background-color: var(--background-color);
+}
+
+/* Job Card Styles */
+.job-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.job-card h3 {
+  margin: 0;
+  font-size: 1.2em;
+  color: var(--text-color);
+}
+
+.job-card p {
+  margin: 5px 0;
+  color:#555;
+}
+
+.job-card strong {
+  color: #555;
+}
+.job-card button{
+  margin-right: 20px;
+}
+

@@ -50,6 +50,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 5 columns for 5 boxes */
     gap: 20px;
+    margin-top: 1rem;
   }
   
   .stat-box {
@@ -59,7 +60,7 @@
     color:var(--text-color);
     padding-left: 10px;
     
-    width:20rem;
+    width:23rem;
     height:7rem;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   }
@@ -84,8 +85,8 @@
   .stat-box span{
     position: absolute;
     font-size: 5rem;
-    margin-top:-5%;
-    margin-left: 15%;
+    margin-top:-4.5%;
+    margin-left: 16%;
     font-family: "Noto Serif Old Uyghur", serif;
     font-weight: 400;
     font-style: normal;
@@ -109,7 +110,7 @@
     width:40rem;
     height:25rem;
     position: absolute;
-    margin-top: -27%;
+    margin-top: -25%;
     margin-left: 28%;
   }
   .bar-container h4{
@@ -122,28 +123,28 @@
     padding: 20px;
   }
   
-  .users-table {
+  table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
   }
   
-  .users-table th,
-  .users-table td {
+  table th,
+  table td {
     text-align: left;
     padding: 10px;
   }
-  .users-table td{
+  table td{
     border: 1px solid white;
     background-color: var(--background-color);
   }
-  .users-table th {
+  table th {
     background-color:var(--text-color);
     color: white;
     border: 1px solid var(--secondary-color);
   }
   
-  .users-table td button {
+  table td button {
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
