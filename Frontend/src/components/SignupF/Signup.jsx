@@ -59,7 +59,6 @@ export const Signup = () => {
         })
         }
     useEffect(()=>{
-        fetchUser();
         fetchService();
     },[])
 
@@ -73,16 +72,16 @@ export const Signup = () => {
         }
     };
 
-    const fetchUser =  async() => {
-        try {
-            const res = await axios.get('http://localhost:8088/userRoutes/fetchUsers')
-            .then((res) => { 
-                //console.log(res.data) 
-              }) 
-        } catch (error) {
-            console.error('Error fetching user:', error);
-        }
-    };
+    // const fetchUser =  async() => {
+    //     try {
+    //         const res = await axios.get('http://localhost:8088/userRoutes/fetchUsers')
+    //         .then((res) => { 
+    //             //console.log(res.data) 
+    //           }) 
+    //     } catch (error) {
+    //         console.error('Error fetching user:', error);
+    //     }
+    // };
     const handleRole = (role) => {
         setIsTechnician(role === 'Technician');
     };
