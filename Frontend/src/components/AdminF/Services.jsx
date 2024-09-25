@@ -58,6 +58,7 @@ export const Services = () => {
             setNewService('')
             setDescription('')
             alert('Service added Successfully')
+            window.location.reload();
           })
         .catch((error)=> {
           console.log('Error While Creating new Service',error)
@@ -72,6 +73,7 @@ export const Services = () => {
         try{
           const response = axios.put('http://localhost:8088/userRoutes/statusupdate',{id})
          fetchService();
+         window.location.reload();
       }
         catch(error){
           console.log('Error while changing',error)
