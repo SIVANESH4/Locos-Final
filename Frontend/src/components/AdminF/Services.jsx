@@ -13,8 +13,18 @@ export const Services = () => {
     //     { id: 8, name: 'Television', description: 'Television installation and setup', providersCount: 2, status: 'Active' }
     //   ]);
     const [services,setServices] = useState([])
+    const [servicerCount,setServicerCount] =useState([])    
+    // const [newService, setNewService] = useState({ name: '', description: '', providersCount: 0 });
+      const [showAddForm, setShowAddForm] = useState(false); // new state to track form visibility
+      const [newService,setNewService] = useState('')
+      const [description,setDescription] = useState('')
 
-    useEffect(() =>{
+      useEffect(() =>{
+        fetchService();
+        fetchCount();
+      },[])
+      
+      //fetching services
       const fetchService = async() => {
         try{
           const response = await axios.get('http://localhost:8088/userRoutes/service')
@@ -24,13 +34,18 @@ export const Services = () => {
           console.log('Error fetching services',error)
         }
       }
-      fetchService();
-    },[])
-    
-      // const [newService, setNewService] = useState({ name: '', description: '', providersCount: 0 });
-      const [showAddForm, setShowAddForm] = useState(false); // new state to track form visibility
-      const [newService,setNewService] = useState('')
-      const [description,setDescription] = useState('')
+
+      //fetching technician count
+      const fetchCount = async() => {
+        try{
+          const response = await axios.get('http://localhost:8088/userRoutes/numberoftechnician')
+          setServicerCount([])
+          console.log(response.data)
+        }
+        catch(error){
+          console.log('Error fetching count',error)
+        }
+      }
       
       // Add new service
       const handleNewService = async(event) => {
@@ -50,16 +65,27 @@ export const Services = () => {
       const handleToggleAddForm = () => {
         setShowAddForm(!showAddForm);
       };
+
+    //updating the Status 
+      const handleStatus = async(id) => {
+        try{
+          const response = axios.put('http://localhost:8088/userRoutes/statusupdate',{id})
+         fetchService();
+      }
+        catch(error){
+          console.log('Error while changing',error)
+      }
+    }
       // Toggle service status (active/inactive)
-      const handleToggleStatus = (id) => {
-        setServices(
-          services.map((service) =>
-            service.id === id
-              ? { ...service, status: service.status === 'Active' ? 'Inactive' : 'Active' }
-              : service
-          )
-        );
-      };
+      // const handleToggleStatus = (id) => {
+      //   setServices(
+      //     services.map((service) =>
+      //       service.id === id
+      //         ? { ...service, status: service.status === 'Active' ? 'Inactive' : 'Active' }
+      //         : service
+      //     )
+      //   );
+      // };
     
       // Remove a service
       const handleRemoveService = (id) => {
@@ -107,12 +133,12 @@ export const Services = () => {
                 <p><strong>No. of Providers:</strong> {service.providersCount}</p>
                 <p><strong>Status:</strong> {service.status}</p>
                 <div className="actions">
-                  {/* <button
-                    onClick={() => handleToggleStatus(service.id)}
+                  <button
+                    onClick={() => handleStatus(service._id)}
                     className={service.status === 'Active' ? 'deactivate' : 'activate'}
                   >
                     {service.status === 'Active' ? 'Deactivate' : 'Activate'}
-                  </button> */}
+                  </button>
                   <button onClick={() => handleRemoveService(service.id)} className="remove">
                     Remove
                   </button>

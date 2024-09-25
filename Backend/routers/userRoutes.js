@@ -125,6 +125,8 @@ router.post('/ForgotPassword',async(req,res)=>{
       return res.status(501).json({message:"Internal Error"});
       }
   });
+
+
 //fetching  all users
 router.get('/allusers',async(req,res)=>{
   try{
@@ -177,7 +179,7 @@ router.post('/newservice',async(req,res)=>{
 //sending Services
 router.get('/service',async(req,res)=>{
   try{
-    const service = await Services.find({}).select('servicename servicedescription status -_id')
+    const service = await Services.find({})
     res.status(200).json({service})
   }
   catch(error){
@@ -196,6 +198,43 @@ router.get('/techniciandetails',async(req,res)=>{
   }
 })
 
+//no of techinician depending services
+router.get('/numberoftechnician',async(req,res) => {
+  try{
+    const count = await User.aggregate([
+      {
+        $match :{role:'Technician'}
+      },
+      {
+      $group: {
+        _id:"$service",
+        count:{$sum: 1}
+      }
+    }
+    ])
+    res.status(200).json({count})
+  }
+  catch(error){
+    res.status.apply(400).json({message:'Error fetching technician'})
+  }
+})
+
+router.put('/statusupdate',async(req,res) => {
+  const {id} = req.body;  
+  try{
+      const StatusUpdate = await Services.findById(id)
+      if(!StatusUpdate){
+        res.status(404).json({message:'Service not found'})
+      }
+      const updatedata = StatusUpdate.status === 'Active'?'Inactive':'Active';
+      StatusUpdate.status = updatedata
+      await StatusUpdate.save();
+      res.status(200).json({StatusUpdate})
+    }
+    catch(error){
+      res.status(400).json({'error while update status':error})
+    }
+})
 // Additional endpoints for updating or deleting users
 // Example: router.put('/api/users/:id', (req, res) => {});
 // Example: router.delete('/api/users/:id', (req, res) => {});

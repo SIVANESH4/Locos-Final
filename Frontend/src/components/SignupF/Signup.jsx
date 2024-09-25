@@ -12,10 +12,12 @@ export const Signup = () => {
     const [phoneNo, setPhoneNo] = useState('');
     const [address, setAddress] = useState('');
     const [service, setService] = useState('');
-    const [services] = useState(['Electrical','Cleaning','Plumbing','AC','RO','Washing Machine','Installation','Television']);
+    //const [services] = useState(['Electrical','Cleaning','Plumbing','AC','RO','Washing Machine','Installation','Television']);
+    const [services,setServices] = useState([])
     const [pincode,setPincode]=useState('')
     const navigate = useNavigate();
     
+
     const handleRegister = async (event) => {
         event.preventDefault();
 
@@ -58,13 +60,24 @@ export const Signup = () => {
         }
     useEffect(()=>{
         fetchUser();
+        fetchService();
     },[])
+
+    const fetchService = async() => {
+        try{
+            const response = await axios.get('http://localhost:8088/userRoutes/service')
+            setServices(response.data.service)
+        }
+        catch(error){
+            console.log('Error fetching Services',error)
+        }
+    };
 
     const fetchUser =  async() => {
         try {
-            const res = await axios.get('http://localhost:8088/userRoutes/signup')
+            const res = await axios.get('http://localhost:8088/userRoutes/fetchUsers')
             .then((res) => { 
-                console.log(res.data) 
+                //console.log(res.data) 
               }) 
         } catch (error) {
             console.error('Error fetching user:', error);
@@ -111,7 +124,7 @@ export const Signup = () => {
                                 <select className="form-control" value={service} onChange={(e) => setService(e.target.value)} required>
                                     <option value="">Select a Service</option>
                                     {services.map((service, index) => (
-                                        <option key={index} value={service}>{service}</option>
+                                        <option key={index} value={service.servicename}>{service.servicename}</option>
                                     ))}
                                 </select><br />
                             </div>
