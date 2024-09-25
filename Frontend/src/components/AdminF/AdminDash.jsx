@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useLocalStorage } from 'react-use';
 import { Dashboard } from "./Dashboard";
 import { AllUsers } from "./AllUsers";
 import { Technicians } from "./Technicians";
@@ -10,7 +11,7 @@ import { Sidebar } from "./Sidebar";
 import "./AdminDash.css";
 export const AdminDash = () => {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState("dashboard");
+  const [activeSection, setActiveSection] = useLocalStorage('activeSection', 'dashboard');
 
   const renderContent = () => {
     switch (activeSection) {
@@ -24,8 +25,6 @@ export const AdminDash = () => {
         return <JobRequests />;
       case "services":
         return <Services />;
-      default:
-        return <Dashboard />;
     }
   };
   return (

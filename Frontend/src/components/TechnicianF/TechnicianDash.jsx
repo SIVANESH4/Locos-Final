@@ -1,4 +1,5 @@
 import React from 'react'
+import { useLocalStorage } from 'react-use';
 import { useState } from 'react';
 import { TSidebar } from './TSidebar';
 import { THistory } from './THistory';
@@ -9,7 +10,7 @@ import { TJobReq } from './TJobReq';
 import { TProfile } from './TProfile';
 export const TechnicianDash = () => {
     const navigate = useNavigate();
-    const [activeSection, setActiveSection] = useState("dashboard");
+    const [activeSection, setActiveSection] = useLocalStorage('activeSection', 'dashboard');
     const [bookedServices, setBookedServices] = useState([]); // <--- Add this line
 
   const renderContent = () => {

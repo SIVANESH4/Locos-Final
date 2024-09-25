@@ -1,4 +1,5 @@
 import React from 'react'
+import { useLocalStorage } from 'react-use';
 import { CDashboard } from './CDashboard';
 import { CServices } from './CServices';
 import { CSidebar } from './CSidebar';
@@ -8,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import './CustomerDash.css';
 export const CustomerDash = () => {
     const navigate = useNavigate();
-    const [activeSection, setActiveSection] = useState("dashboard");
+    const [activeSection, setActiveSection] = useLocalStorage('activeSection', 'dashboard');
     const [bookedServices, setBookedServices] = useState([]); // <--- Add this line
 
   const renderContent = () => {
