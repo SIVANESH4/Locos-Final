@@ -36,73 +36,67 @@ export const Services = () => {
     }
   };
 
-  //fetching technician count
-  const fetchCount = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:8088/userRoutes/numberoftechnician"
-      );
-      setServicerCount([]);
-      console.log(response.data);
-    } catch (error) {
-      console.log("Error fetching count", error);
+      //fetching technician count
+      const fetchCount = async() => {
+        try{
+          const response = await axios.get('http://localhost:8088/userRoutes/numberoftechnician')
+          setServicerCount([])
+          console.log(response.data)
+        }
+        catch(error){
+          console.log('Error fetching count',error)
+        }
+      }
+      
+      // Add new service
+      const handleNewService = async(event) => {
+        event.preventDefault();
+          const newData = ({newService,description});
+          axios
+          .post('http://localhost:8088/userRoutes/newservice',newData)
+          .then((res)=>{
+            setNewService('')
+            setDescription('')
+            alert('Service added Successfully')
+          })
+        .catch((error)=> {
+          console.log('Error While Creating new Service',error)
+        })
+      }
+      const handleToggleAddForm = () => {
+        setShowAddForm(!showAddForm);
+      };
+
+    //updating the Status 
+      const handleStatus = async(id) => {
+        try{
+          const response = axios.put('http://localhost:8088/userRoutes/statusupdate',{id})
+         fetchService();
+      }
+        catch(error){
+          console.log('Error while changing',error)
+      }
     }
-  };
-
-  // Add new service
-  const handleNewService = async (event) => {
-    event.preventDefault();
-    const newData = { newService, description };
-    axios
-      .post("http://localhost:8088/userRoutes/newservice", newData)
-      .then((res) => {
-        setNewService("");
-        setDescription("");
-        alert("Service added Successfully");
-      })
-      .catch((error) => {
-        console.log("Error While Creating new Service", error);
-      });
-  };
-  const handleToggleAddForm = () => {
-    setShowAddForm(!showAddForm);
-  };
-  //updating the Status
-  const handleStatus = async (id) => {
-    try {
-      const response = axios.put(
-        "http://localhost:8088/userRoutes/statusupdate",
-        { id }
-      );
-      fetchService();
-    } catch (error) {
-      console.log("Error while changing", error);
-    }
-  };
-  // Toggle service status (active/inactive)
-  // const handleToggleStatus = (id) => {
-  //   setServices(
-  //     services.map((service) =>
-  //       service.id === id
-  //         ? { ...service, status: service.status === 'Active' ? 'Inactive' : 'Active' }
-  //         : service
-  //     )
-  //   );
-  // };
-
-  // Remove a service
-  const handleRemoveService = (id) => {
-    setServices(services.filter((service) => service.id !== id));
-  };
-
-  return (
-    <div className="services-management">
-      <div className="head">
-        <h2>Services Management</h2>
-        <button onClick={handleToggleAddForm} className="add-btn">
-          Add New Service
-        </button>
-      </div>
+      // Toggle service status (active/inactive)
+      // const handleToggleStatus = (id) => {
+      //   setServices(
+      //     services.map((service) =>
+      //       service.id === id
+      //         ? { ...service, status: service.status === 'Active' ? 'Inactive' : 'Active' }
+      //         : service
+      //     )
+      //   );
+      // };
+    
+      // Remove a service
+      const handleRemoveService = (id) => {
+        setServices(services.filter((service) => service.id !== id));
+      };
+    
+      return (
+        <div className="services-management">
+          <div className="head"><h2>Services Management</h2>
+          <button onClick={handleToggleAddForm} className='add-btn'>Add New Service</button></div>
 
       {/* Add New Service Form */}
       {showAddForm && (
