@@ -57,6 +57,7 @@ export const Services = () => {
             setNewService('')
             setDescription('')
             alert('Service added Successfully')
+            window.location.reload();
           })
         .catch((error)=> {
           console.log('Error While Creating new Service',error)
@@ -70,22 +71,23 @@ export const Services = () => {
       const handleStatus = async(id) => {
         try{
           const response = axios.put('http://localhost:8088/userRoutes/statusupdate',{id})
-         fetchService();
+         //fetchService();
+         window.location.reload()
       }
         catch(error){
           console.log('Error while changing',error)
       }
     }
-      // Toggle service status (active/inactive)
-      // const handleToggleStatus = (id) => {
-      //   setServices(
-      //     services.map((service) =>
-      //       service.id === id
-      //         ? { ...service, status: service.status === 'Active' ? 'Inactive' : 'Active' }
-      //         : service
-      //     )
-      //   );
-      // };
+    //  // Toggle service status (active/inactive)
+    //   const handleToggleStatus = (id) => {
+    //     setServices(
+    //       services.map((service) =>
+    //         service.id === id
+    //           ? { ...service, status: service.status === 'Active' ? 'Inactive' : 'Active' }
+    //           : service
+    //       )
+    //     );
+    //   };
     
       // Remove a service
       const handleRemoveService = (id) => {
