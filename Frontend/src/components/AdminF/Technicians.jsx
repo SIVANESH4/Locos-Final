@@ -15,7 +15,7 @@ export const Technicians = () => {
     const fetchTech = async() => {
       try{
         const response = await axios.get('http://localhost:8088/userRoutes/technician/')
-        setTechnicians(response.data)
+        setTechnicians(response.data.tech)
       }
       catch(error){
         console.log('Error fetching Technicians',error)

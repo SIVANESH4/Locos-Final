@@ -74,13 +74,13 @@ router.post( '/userlogin' , async (req,res) => {
         {userId: user._id},
         SECRET_KEY
       );
-      res.json({
+      return res.json({
         message: ' Login succesful ',
         token,
         role:user.role
       });
   }catch( error ){
-    res.status(500).json(error)
+    return res.status(500).json(error)
   }
 });
 
@@ -148,6 +148,7 @@ router.post( '/ForgotPassword' , async (req,res) => {
 //fetching all users
 router.get('/allusers', async (req,res) => {
       try{
+        //fetching all users detail send to admin
           const users = await UserDB.find({}).select('-password -_id')
           res.status(200).json({users})
       }
@@ -159,6 +160,7 @@ router.get('/allusers', async (req,res) => {
 //fetching technicians
 router.get('/technician', async (req,res) => {
     try{
+      //fetching the servicer detail by the role
         const tech = await UserDB.find({role:'Technician'}).select('-password -_id')
         res.json({tech})
       }
@@ -170,6 +172,7 @@ router.get('/technician', async (req,res) => {
 //fetching users count
 router.get('/usercount', async(req,res) => {
     try{
+      //count the customer and technician by the role
         const consumer = await UserDB.countDocuments({role:'Customer'})
         const tech = await UserDB.countDocuments({role:'Technician'})
         res.json({consumer,tech})
@@ -183,16 +186,17 @@ router.get('/usercount', async(req,res) => {
 router.post('/newservice',async(req,res)=>{
   try{
     const {newService,description}=req.body;
-    const servicename = await ServiceDB.findOne({servicename:newService})
+    const servicename = await ServicesDB.findOne({servicename:newService})
     if(servicename){
-      res.status(203).json({message:'Service is already exists'})
+       return res.status(203).json({message:'Service is already exists'})
     }
     const newservice = new ServicesDB({servicename:newService,servicedescription:description})
     await newservice.save()
-    res.status(200).json({message:'Service Added'})
+    console.log(newservice)
+    return res.status(200).json({message:'Service Added'})
   }
   catch(error){
-    res.status(500).json({message:'Internal error'})
+    return res.status(500).json({message:'Internal error'})
   }
 })
 
@@ -250,10 +254,10 @@ router.put('/statusupdate',async(req,res) => {
       const updatedata = StatusUpdate.status === 'Active'?'Inactive':'Active';
       StatusUpdate.status = updatedata
       await StatusUpdate.save();
-      res.status(200).json({StatusUpdate})
+      return res.status(200).json({StatusUpdate})
     }
     catch(error){
-      res.status(400).json({'error while update status':error})
+      return res.status(400).json({'error while update status':error})
     }
 })
 // Additional endpoints for updating or deleting users

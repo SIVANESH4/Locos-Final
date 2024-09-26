@@ -51,7 +51,7 @@ export const AllUsers = () => {
       const fetchAllUsers = async() => {
         try{
           const response = await axios.get('http://localhost:8088/userRoutes/allusers')
-          setUsers(response.data)
+          setUsers(response.data.users)
         }
         catch(error){
           console.log('Error fetching users',error)
