@@ -59,14 +59,25 @@ export const AllUsers = () => {
       }
       fetchAllUsers();
     },[])
-      const handleBan = (id) => {
-        // Ban/unban logic
-        setUsers(
-          users.map((user) =>
-            user.id === id ? { ...user, banned: !user.banned } : user
-          )
-        );
-      };
+      // const handleBan = (id) => {
+      //   // Ban/unban logic
+      //   setUsers(
+      //     users.map((user) =>
+      //       user.id === id ? { ...user, banned: !user.banned } : user
+      //     )
+      //   );
+      // };
+      
+      //changing the user status
+      const handleStatus = async(email) => {
+        try{
+            const response = axios.put('http://localhost:8088/userRoutes/userstatus',{email})
+            window.location.reload();
+        }
+        catch(error){
+          console.log(error,'Error while changing status')
+        }
+      }
 
       if (users.length === 0) {
         return (
@@ -103,12 +114,14 @@ export const AllUsers = () => {
                   <td>{user.pincode}</td>
                   <td>{user.role}</td>
                   <td>
-                    <button
-                      onClick={() => handleBan(user.id)}
-                      className={user.banned ? 'banned' : 'ban'}
-                    >
-                      {user.banned ? 'Unban' : 'Ban'}
-                    </button>
+                  <button
+                onClick={() => handleStatus(user.email)}
+                className={
+                  user.status === "Active" ? "deactivate" : "activate"
+                }
+              >
+                {user.status === "Active" ? "Deactivate" : "Activate"}
+              </button>
                   </td>
                 </tr>
               ))}

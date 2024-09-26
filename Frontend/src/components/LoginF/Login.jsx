@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import './Login.css'
 import axios from 'axios';
+import {jwtDecode} from 'jwt-decode'
+
 export const Login = () => {
   const[user,setUser]=useState('')
   const [email,setEmail]=useState('')
@@ -20,7 +22,12 @@ export const Login = () => {
       setEmail()
       setPassword()
       alert('Login Successful')
-      const role = response.data.role
+      const token=response.data.token;
+      const role =response.data.role;
+      const userInfo=jwtDecode(token,response.data.JWT_SECRET).user;
+      //storing the logged user details in localstorage
+      localStorage.setItem("userInfo",JSON.stringify(userInfo));
+     
       if( role === 'Admin'){
         navigate('/admin')
       }

@@ -64,7 +64,7 @@ export const Signup = () => {
 
     const fetchService = async() => {
         try{
-            const response = await axios.get('http://localhost:8088/userRoutes/service')
+            const response = await axios.get('http://localhost:8088/serviceRoutes/service')
             setServices(response.data.service)
         }
         catch(error){

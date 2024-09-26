@@ -10,36 +10,48 @@ export const CServices = () => {
   const [selectedRating, setSelectedRating] = useState("Default");
 
   // Define your services array
-  const services = [
-    { title: "Electrical" },
-    { title: "Plumbing" },
-    { title: "Installation" },
-    { title: "Maintenance" },
-    { title: "Television" },
-    { title: "System" },
-    { title: "AC" },
-    { title: "RO" },
-    { title: "Washing Machine" },
-    { title: "Refrigerator" },
-    { title: "Microwave Oven" },
-    { title: "Cleaning" },
-  ];
+  // const services = [
+  //   { title: "Electrical" },
+  //   { title: "Plumbing" },
+  //   { title: "Installation" },
+  //   { title: "Maintenance" },
+  //   { title: "Television" },
+  //   { title: "System" },
+  //   { title: "AC" },
+  //   { title: "RO" },
+  //   { title: "Washing Machine" },
+  //   { title: "Refrigerator" },
+  //   { title: "Microwave Oven" },
+  //   { title: "Cleaning" },
+  // ];
+  const [services,setServices] = useState([])
 
   useEffect(() => {
-    // Initialize workers with the imported data
-    const fetchTechnician = async() => {
-      try{
-      const response = await axios.get('http://localhost:8088/userRoutes/techniciandetails')
-      setWorkers(response.data.tech)
-      console.log(response.data)
-      }
-      catch(error){
-        console.log('Error fetching Technicians Details',error)
-      }
-    }
+   
     fetchTechnician();
+    fetchService();
   }, []);
 
+  //fetching the service details
+  const fetchTechnician = async() => {
+    try{
+    const response = await axios.get('http://localhost:8088/userRoutes/techniciandetails')
+    setWorkers(response.data.tech)
+    }
+    catch(error){
+      console.log('Error fetching Technicians Details',error)
+    }
+  }
+  //fetching the service
+  const fetchService = async () => {
+    try{
+      const response = await axios.get('http://localhost:8088/serviceRoutes/service')
+      setServices(response.data.service)
+    }
+    catch(error){
+      console.log('error fetching service',error)
+    }
+  }
   const handleBookService = (worker) => {
     const updatedBookedServices = [...bookedServices, worker];
     setBookedServices(updatedBookedServices);
@@ -86,8 +98,8 @@ export const CServices = () => {
           >
             <option value="All Services">All Services</option>
             {services.map((service, index) => (
-              <option key={index} value={service.title}>
-                {service.title}
+              <option key={index} value={service.servicename}>
+                {service.servicename}
               </option>
             ))}
           </select>

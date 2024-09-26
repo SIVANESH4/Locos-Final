@@ -28,7 +28,7 @@ export const Services = () => {
   const fetchService = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8088/userRoutes/service"
+        "http://localhost:8088/serviceRoutes/service"
       );
       setServices(response.data.service);
     } catch (error) {
@@ -53,7 +53,7 @@ export const Services = () => {
         event.preventDefault();
           const newData = ({newService,description});
           axios
-          .post('http://localhost:8088/userRoutes/newservice',newData)
+          .post('http://localhost:8088/serviceRoutes/newservice',newData)
           .then((res)=>{
             setNewService('')
             setDescription('')
@@ -71,7 +71,7 @@ export const Services = () => {
     //updating the Status 
       const handleStatus = async(id) => {
         try{
-          const response = axios.put('http://localhost:8088/userRoutes/statusupdate',{id})
+          const response = axios.put('http://localhost:8088/serviceRoutes/statusupdate',{id})
          fetchService();
          window.location.reload();
       }

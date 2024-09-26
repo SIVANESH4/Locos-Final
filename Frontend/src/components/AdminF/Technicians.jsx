@@ -6,9 +6,9 @@ export const Technicians = () => {
 
   const [showForm, setShowForm] = useState(false);
   // Remove a technician (ban functionality)
-  const handleRemoveTechnician = (id) => {
-    setTechnicians(technicians.filter((tech) => tech.id !== id));
-  };
+  // const handleRemoveTechnician = (id) => {
+  //   setTechnicians(technicians.filter((tech) => tech.id !== id));
+  // };
 
   //displaying technicians
   useEffect(()=>{
@@ -23,6 +23,17 @@ export const Technicians = () => {
     }
     fetchTech();
   },[])
+
+  //changing technician status
+  const handleStatus = async(email) => {
+    try{
+      const response = axios.put('http://localhost:8088/userRoutes/userstatus',{email})
+      window.location.reload();
+    }
+    catch(error){
+      console.log('error changing status',error)
+    }
+  }
   return (
     <div className="technicians-management">
       <div className="head">
@@ -56,9 +67,14 @@ export const Technicians = () => {
               {/* <td>{technician.rating.toFixed(1)}</td>
               <td>{technician.jobsDone}</td> */}
               <td>
-                <button onClick={() => handleRemoveTechnician(technician.id)} className="remove">
-                  Ban
-                </button>
+              <button
+                onClick={() => handleStatus(technician.email)}
+                className={
+                  technician.status === "Active" ? "deactivate" : "activate"
+                }
+              >
+                {technician.status === "Active" ? "Deactivate" : "Activate"}
+              </button>
               </td>
             </tr>
           ))}

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-
+var techid = localStorage.getItem("userInfo");
+techid=JSON.parse(techid);
+console.log(techid)
 const services = [
   { title: "Electrical" },
   { title: "Plumbing" },
@@ -16,13 +18,14 @@ const services = [
 ];
 
 export const TProfile = () => {
+  
   const [userData, setUserData] = useState({
-    name: 'John Doe',
-    email: 'johndoe@example.com',
-    phone: '123-456-7890',
-    address: '123 Main St, Springfield',
-    pincode: '987654',
-    service: '',
+    name: techid.username || "",
+    email: techid.email || "",
+    phone: techid.phoneNo || "",
+    address: techid.address || "",
+    pincode: techid.pincode || "",
+    service: techid.service || ""
   });
 
   const [selectedService, setSelectedService] = useState('System');
