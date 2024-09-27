@@ -248,7 +248,7 @@ router.put( '/userupdate', async ( req,res ) => {
       const updateData = {
         username:req.body.name,
         email:req.body.email,
-        phoneNo:req.body.phoneno,
+        phoneNo:req.body.phone,
         address:req.body.address,
         pincode:req.body.pincode,
         service:req.body.service
