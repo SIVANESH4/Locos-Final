@@ -91,8 +91,14 @@ export const Services = () => {
       // };
     
       // Remove a service
-      const handleRemoveService = (id) => {
-        setServices(services.filter((service) => service.id !== id));
+      const handleRemoveService = async (id) => {
+       try{
+          const response = await axios.delete('http://localhost:8088/serviceRoutes/deletingservice',{data:{id}})
+          window.location.reload();
+       }
+       catch(error){
+        console.log('error deleting service',error)
+       }
       };
     
       return (
@@ -150,7 +156,7 @@ export const Services = () => {
                 {service.status === "Active" ? "Deactivate" : "Activate"}
               </button>
               <button
-                onClick={() => handleRemoveService(service.id)}
+                onClick={() => handleRemoveService(service._id)}
                 className="remove"
               >
                 Remove
