@@ -59,13 +59,12 @@ export const Signup = () => {
         })
         }
     useEffect(()=>{
-        fetchUser();
         fetchService();
     },[])
 
     const fetchService = async() => {
         try{
-            const response = await axios.get('http://localhost:8088/userRoutes/service')
+            const response = await axios.get('http://localhost:8088/serviceRoutes/service')
             setServices(response.data.service)
         }
         catch(error){
@@ -73,16 +72,16 @@ export const Signup = () => {
         }
     };
 
-    const fetchUser =  async() => {
-        try {
-            const res = await axios.get('http://localhost:8088/userRoutes/fetchUsers')
-            .then((res) => { 
-                //console.log(res.data) 
-              }) 
-        } catch (error) {
-            console.error('Error fetching user:', error);
-        }
-    };
+    // const fetchUser =  async() => {
+    //     try {
+    //         const res = await axios.get('http://localhost:8088/userRoutes/fetchUsers')
+    //         .then((res) => { 
+    //             //console.log(res.data) 
+    //           }) 
+    //     } catch (error) {
+    //         console.error('Error fetching user:', error);
+    //     }
+    // };
     const handleRole = (role) => {
         setIsTechnician(role === 'Technician');
     };

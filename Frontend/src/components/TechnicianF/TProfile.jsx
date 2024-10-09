@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 const services = [
   { title: "Electrical" },
@@ -16,13 +16,14 @@ const services = [
 ];
 
 export const TProfile = () => {
+  
   const [userData, setUserData] = useState({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    phone: "123-456-7890",
-    address: "123 Main St, Springfield",
-    pincode: "987654",
-    service: "",
+    name: 'John Doe',
+    email: 'johndoe@example.com',
+    phone: '123-456-7890',
+    address: '123 Main St, Springfield',
+    pincode: '987654',
+    service: '',
   });
 
   const [selectedService, setSelectedService] = useState("System");

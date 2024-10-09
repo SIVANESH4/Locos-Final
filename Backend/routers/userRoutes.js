@@ -1,6 +1,5 @@
 const express = require('express');
-const User = require('../modules/user'); // Import the User model
-const Services = require('../modules/services')
+const UserDB = require('../modules/user'); // Import the User model
 const router = express.Router();
 const jwt = require('jsonwebtoken')
 const SECRET_KEY = 'secret-key'
@@ -10,70 +9,88 @@ dotenv.config()
 
 // Create a new user (Signup route)
 router.post('/signup', async (req, res) => {
-  try {
-    const { username, email, password, phoneNo, address,pincode, role,service} = req.body;
-    const newUser = new User({
-      username,
-      email,
-      password,
-      phoneNo,
-      address,
-      pincode,
-      role,
-      // Only add services if the user is a service provider
-      service: role === 'Technician' ? service : null
-    });
-    
-    await newUser.save();
-    res.status(200).json({ message: 'Account created successfully' });
-  } 
-  catch (error) {
-    res.status(500).json({ message: 'Error during signup', error: error.message });
+    try {
+      const { username, email, password, phoneNo, address,pincode, role,service} = req.body;
+
+      //check if the users already exists
+      const existsUser = await UserDB.findOne({email:email})
+      if (existsUser) {
+          return res.status(200).json({ message: 'users already exists'})
+     }
+
+      //Register the user
+      const newUser = new UserDB({
+        username,
+        email,
+        password,
+        phoneNo,
+        address,
+        pincode,
+        role,
+        // Only add services if the user is a service provider
+        service: role === 'Technician' ? service : null
+      });
+      const user = await newUser.save();
+
+      //Generate a JWT token
+      const token = jwt.sign(
+        { id: user._id, username: user.username, email: user.email },
+        SECRET_KEY,
+    );
+
+
+      res.status(200).json({ 
+        message: 'Account created successfully' ,token
+      });
+    } catch (error) {
+      
+      return res.status(500).json({ message: 'Error during signup', error: error.message });
   }
 });
 
-// Fetch all users (for admin use)
-router.get('/fetchusers', async (req, res) => {
-  try {
-    const users = await User.find();
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({error:'Unable to get User'});
-  }
-});
-
-router.post('/userlogin',async(req,res) =>{
+//user login
+router.post( '/userlogin' , async (req,res) => { 
   try{
-  const {email,password}=req.body
-  const user = await User.findOne({email})
-  if(!user){
-    res.status(401).json({message:'User Not Found'})
-  }
-  if(user.password!=password){
-    res.status(401).json({message:'Incorrect Password'})
-  }
-  const token = jwt.sign({userId: user._id},SECRET_KEY,{expiresIn:'1hr'})
-  res.json({token,role:user.role})
-  }
+      const {email,password}=req.body
 
-  catch(error){
-    res.status(404).json({message:'Error while login'})
-    console.log(error)
+      //Find the user by email
+      const userInfo = await UserDB.findOne({email})
+      if(!userInfo){
+        return  res.status(401).json({message:'User Not Found'})
+      }
+
+      //Check if the password matches
+      if(userInfo.password!=password){
+        return  res.status(401).json({message:'Incorrect Password'})
+      }
+
+      //Generate the token
+      const token = jwt.sign(
+        {user: userInfo},
+        SECRET_KEY
+      );
+      return res.json({
+        message: ' Login succesful ',
+        token,
+        role:userInfo.role
+      });
+  }catch( error ){
+    return res.status(500).json(error)
   }
 });
 
 //fogot password
-router.post('/ForgotPassword',async(req,res)=>{
-
-  const email=req.body.email;
-  try{
-      //Find the user by email
-      const user = await User.findOne({email:email});
-      if(!user){
+router.post( '/ForgotPassword' , async (req,res) => {
+    const { email } = req.body.email;
+    try{
+        //Find the user by email
+        const user = await UserDB.findOne({email:email});
+        if(!user){
           return res.status(404).json({message:'No such email in DB'});
-      }
-  
-      const Transport=nodemailer.createTransport(
+        }
+        
+        // Configure Nodemailer transporter
+        const Transport=nodemailer.createTransport(
           {
               service:"gmail",
               auth:{
@@ -83,7 +100,7 @@ router.post('/ForgotPassword',async(req,res)=>{
           }
       );
   
-      //sending mail to requested users 
+      // Configure the email options
           const send={
               from:`Loco's ${process.env.MAILID}`,
               to:`${email}`,
@@ -117,123 +134,142 @@ router.post('/ForgotPassword',async(req,res)=>{
   
       await Transport.sendMail(send);
       return res.status(200).json({message:"Password is send successfully"});
-  
-  }
-  
-  catch(err)
+  }catch(err)
       {
-      return res.status(501).json({message:"Internal Error"});
+      return res.status(500).json({message:"Internal Error"});
       }
   });
 
-
-//fetching  all users
-router.get('/allusers',async(req,res)=>{
-  try{
-    const users = await User.find({}).select('-password -_id')
-    res.json(users)
-  }
-  catch(error){
-    res.status(501).json({'Error fetching users ':error})
-  }
+//fetching all users
+router.get('/allusers', async (req,res) => {
+      try{
+        //fetching all users detail send to admin except the admin
+          const users = await UserDB.find({
+            role: { $in: ['Customer' ,'Technician']} //except the admin send both customer and technician info
+          }).select('-password -_id')
+          res.status(200).json({users})
+      }
+      catch(error){
+        console.log(error)
+      }
 })
+
 //fetching technicians
-router.get('/technician',async(req,res)=>{
-  try{
-    const tech = await User.find({role:'Technician'}).select('-password -_id')
-    res.json(tech)
-  }
-  catch(error){
-    res.status(501).json({error:'Error fetching technician'})
-  }
-})
-//fetching users cound
-router.get('/usercount',async(req,res)=>{
-  try{
-    const consumer = await User.countDocuments({role:'Customer'})
-    const tech = await User.countDocuments({role:'Technician'})
-    res.json({consumer,tech})
-  }
-  catch(error){
-    res.status(501).json({error:'Error fetching users count'})
-  }
-})
-
-//Creating Services
-router.post('/newservice',async(req,res)=>{
-  try{
-    const {newService,description}=req.body;
-    const servicename = await Services.findOne({servicename:newService})
-    if(servicename){
-      res.status(203).json({message:'Service is already exists'})
+router.get('/technician', async (req,res) => {
+    try{
+      //fetching the servicer detail by the role
+        const tech = await UserDB.find({role:'Technician'}).select('-password -_id')
+        res.json({tech})
+      }
+    catch(error){
+        console.log(error)
     }
-    const newservice = new Services({servicename:newService,servicedescription:description})
-    await newservice.save()
-    res.status(200).json({message:'Service Added'})
-  }
-  catch(error){
-    res.status(500).json({message:'Internal error'})
-  }
 })
 
-//sending Services
-router.get('/service',async(req,res)=>{
-  try{
-    const service = await Services.find({})
-    res.status(200).json({service})
-  }
-  catch(error){
-    res.status(500).json({'Error fetching services':error})
-  }
-}) 
+//fetching users count
+router.get('/usercount', async(req,res) => {
+    try{
+      //count the customer and technician by the role
+        const consumer = await UserDB.countDocuments({role:'Customer'})
+        const tech = await UserDB.countDocuments({role:'Technician'})
+        res.json({consumer,tech})
+    }
+    catch(error){
+        console.log(error)
+    }
+})
 
 //sending technician to users
-router.get('/techniciandetails',async(req,res)=>{
+router.get( '/techniciandetails', async (req,res) => {
   try{
-    const tech = await User.find({role:'Technician'}).select('username service address -_id')
-    res.json({tech})
+      //fetch all the servicer by role 
+      const tech = await UserDB.find({
+        role:'Technician'
+      }).select('username service address _id')
+      
+      res.json({tech})
   }
   catch(error){
-    res.status(400).json({error:'error sending servicer details'})
+      console.log(error)
   }
 })
 
 //no of techinician depending services
-router.get('/numberoftechnician',async(req,res) => {
+router.get( '/numberoftechnician' , async (req,res) => {
   try{
-    const count = await User.aggregate([
-      {
-        $match :{role:'Technician'}
-      },
-      {
-      $group: {
-        _id:"$service",
-        count:{$sum: 1}
+    //count service depending the catogery 
+      const count = await UserDB.aggregate([
+        {
+          $match :{role:'Technician'}  //check the role is technician 
+        },
+        {
+        $group: {
+           _id:"$service",
+            count:{$sum: 1}
+        }
       }
-    }
     ])
     res.status(200).json({count})
   }
   catch(error){
-    res.status.apply(400).json({message:'Error fetching technician'})
+    console.log({message:'Error fetching technician'},error)
   }
 })
 
-router.put('/statusupdate',async(req,res) => {
-  const {id} = req.body;  
-  try{
-      const StatusUpdate = await Services.findById(id)
-      if(!StatusUpdate){
-        res.status(404).json({message:'Service not found'})
-      }
-      const updatedata = StatusUpdate.status === 'Active'?'Inactive':'Active';
-      StatusUpdate.status = updatedata
-      await StatusUpdate.save();
-      res.status(200).json({StatusUpdate})
+//updating users status for admin
+router.put('/userstatus' , async ( req,res ) => {
+    const {email} = req.body;
+    try{
+      //check if the user exist or not
+        const existingUser = await UserDB.findOne({email:email})
+        if(!existingUser){
+          return res.status(400).json({message:'No such User'})
+        }
+        
+        //change the status
+        const updateStatus = existingUser.status === 'Active' ? 'Inactive' : 'Active'
+        existingUser.status = updateStatus;
+
+        //storing the updated status
+        await existingUser.save();
+        res.status(200).json({existingUser})
     }
     catch(error){
-      res.status(400).json({'error while update status':error})
+        return res.status(500).json({error:'Internal error'})
     }
+})
+
+//updating user details 
+router.put( '/userupdate', async ( req,res ) => {
+      if( !req.body.email ){
+          return res.status(400).json({message:'email is required'})
+      }
+      //store the update request data
+      const updateData = {
+        username:req.body.name,
+        email:req.body.email,
+        phoneNo:req.body.phone,
+        address:req.body.address,
+        pincode:req.body.pincode,
+        service:req.body.service
+      };
+
+      try {
+        const UpdateUser = await UserDB.findOneAndUpdate(
+          { email:req.body.email }, //find by email
+            updateData,
+          { new: true , runValidators: true} //return updated document
+        )
+
+        if(!UpdateUser){
+          return res.status(404).json({message:' User not Found'})
+        }
+        //sending updated document
+        res.send(UpdateUser)
+      }
+      catch ( error ) {
+          return res.status(500).json({message:'Internal Error'})
+      }
 })
 // Additional endpoints for updating or deleting users
 // Example: router.put('/api/users/:id', (req, res) => {});

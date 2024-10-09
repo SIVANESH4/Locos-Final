@@ -5,6 +5,9 @@ import { Bar } from "react-chartjs-2";
 import { Chart } from "chart.js";
 import { registerables } from "chart.js";
 Chart.register(...registerables);
+var userid = localStorage.getItem("userInfo");
+userid=JSON.parse(userid);
+console.log(userid)
 
 export const CDashboard = () => {
   const [ongoingJobs, setOngoingJobs] = useState([]);
@@ -56,12 +59,12 @@ export const CDashboard = () => {
     ],
   };
 
-  const [userData, setUserData] = useState({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    phone: "123-456-7890",
-    address: "123 Main St, Springfield",
-    pincode: "987654",
+    const [userData, setUserData] = useState({
+    name: 'John Doe',
+    email: 'johndoe@example.com',
+    phone: '123-456-7890',
+    address: '123 Main St, Springfield',
+    pincode: '987654',
   });
 
   const handleInputChange = (e) => {
