@@ -8,7 +8,6 @@ export const TJobReq = () => {
       location: '123 Street, City',
       bookingDate: '2024-09-22',
       status: 'Pending',
-      specialInstructions: 'Fix the leaking tap in the kitchen.',
     },
     {
       id: 2,
@@ -17,7 +16,6 @@ export const TJobReq = () => {
       location: '456 Avenue, City',
       bookingDate: '2024-09-23',
       status: 'Accepted',
-      specialInstructions: 'Install ceiling fan in the living room.',
     },
     {
       id: 3,
@@ -26,7 +24,6 @@ export const TJobReq = () => {
       location: '789 Road, City',
       bookingDate: '2024-09-21',
       status: 'Completed',
-      specialInstructions: 'Fix the broken door handle.',
     },
   ];
 
@@ -54,7 +51,6 @@ export const TJobReq = () => {
             <p><strong>Location:</strong> {job.location}</p>
             <p><strong>Date:</strong> {job.bookingDate}</p>
             <p><strong>Status:</strong> {job.status}</p>
-            <p><strong>Instructions:</strong> {job.specialInstructions}</p>
 
             {/* Show Accept/Decline buttons if job is pending */}
             {job.status === 'Pending' && (
