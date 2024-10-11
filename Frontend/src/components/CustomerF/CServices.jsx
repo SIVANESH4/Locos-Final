@@ -138,7 +138,7 @@ export const CServices = () => {
                 <h4>{worker.username}</h4>
                 <p>Service: {worker.service}</p>
                 <p>Location: {worker.address}</p>
-                {/* <p>Rating: {worker.rating}</p> */}
+                <p>Rating: {worker.rating}</p> 
                 <button
                   onClick={() => handleBookNow(worker.id)}
                   className="btn btn-dark"
