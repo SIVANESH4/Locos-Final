@@ -38,6 +38,7 @@ export const CSidebar = ({ activeSection, setActiveSection }) => {
               e.preventDefault();
               if (confirm("Are you sure you want to logout?")) {
                 // Navigate to homepage
+                localStorage.clear();
                 navigate("/");
               } else {
                 // Reload the same page

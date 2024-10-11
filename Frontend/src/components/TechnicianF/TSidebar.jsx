@@ -41,6 +41,7 @@ export const TSidebar = ({ activeSection, setActiveSection }) => {
               onClick={(e) => {
                 e.preventDefault();
                 if (confirm("Are you sure you want to logout?")) {
+                  localStorage.clear()
                   // Navigate to homepage
                   navigate("/");
                 } else {

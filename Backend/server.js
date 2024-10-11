@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const Routesuser = require('./routers/userRoutes')
 const Routeservice = require('./routers/serviceRoutes')
+const Routejob = require('./routers/jobRequestRoutes')
 
 const PORT = 8088;
 const dbURL = "mongodb://localhost:27017/";
@@ -12,6 +13,7 @@ app.use(express.json())
 app.use(cors());
 app.use('/userRoutes',Routesuser)
 app.use('/serviceRoutes',Routeservice)
+app.use('/jobRequestRoutes',Routejob)
 
 mongoose.connect(dbURL)
 .then(()=>{

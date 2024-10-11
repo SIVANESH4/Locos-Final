@@ -41,7 +41,7 @@ export const Services = () => {
         try{
           const response = await axios.get('http://localhost:8088/userRoutes/numberoftechnician')
           setServicerCount([])
-          console.log(response.data)
+          //console.log(response.data)
         }
         catch(error){
           console.log('Error fetching count',error)
@@ -71,7 +71,7 @@ export const Services = () => {
     //updating the Status 
       const handleStatus = async(id) => {
         try{
-          const response = axios.put('http://localhost:8088/userRoutes/statusupdate',{id})
+          const response = axios.put('http://localhost:8088/serviceRoutes/statusupdate',{id})
          fetchService();
          window.location.reload();
       }

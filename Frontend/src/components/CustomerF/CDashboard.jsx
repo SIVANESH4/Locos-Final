@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart } from "chart.js";
 import { registerables } from "chart.js";
+import axios from "axios";
 Chart.register(...registerables);
 var userid = localStorage.getItem("userInfo");
 userid=JSON.parse(userid);
@@ -59,23 +60,41 @@ export const CDashboard = () => {
     ],
   };
 
-    const [userData, setUserData] = useState({
-    name: 'John Doe',
-    email: 'johndoe@example.com',
-    phone: '123-456-7890',
-    address: '123 Main St, Springfield',
-    pincode: '987654',
-  });
+  //   const [userData, setUserData] = useState({
+  //   name: 'John Doe',
+  //   email: 'johndoe@example.com',
+  //   phone: '123-456-7890',
+  //   address: '123 Main St, Springfield',
+  //   pincode: '987654',
+  // });
+  const [name,setName]=useState(userid.username || "")
+  const email=userid.email || ""
+  const [phone,setPhone]=useState(userid.phoneNo || "")
+  const [address,setAddress]=useState(userid.address || "")
+  const [pincode,setPincode]=useState(userid.pincode || "")
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
-  };
+  //updating userdetails
+  const handleUpdateData = async(event) => {
+    event.preventDefault();
+    const Updatedata = ({
+      name,email,phone,address,pincode
+    })
+    const response = await axios.put('http://localhost:8088/userRoutes/userupdate',Updatedata)
+    console.log(response.data)
+    localStorage.setItem('userInfo',JSON.stringify(response.data))
+    alert('Profile updated Sucessfully')
+    window.location.reload()
+  }
 
-  const handleSave = () => {
-    // Logic to save/update profile data
-    alert("Profile updated successfully");
-  };
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setUserData({ ...userData, [name]: value });
+  // };
+
+  // const handleSave = () => {
+  //   // Logic to save/update profile data
+  //   alert("Profile updated successfully");
+  // };
   return (
     <>
       <div className="customer-dash">
@@ -102,7 +121,7 @@ export const CDashboard = () => {
           <Bar data={barData} />
         </div>
         {/* Personal Details */}
-        <form >
+        <form onSubmit={handleUpdateData}>
         <div className="personal-details">
           <h3>Personal Information</h3>
 
@@ -112,8 +131,8 @@ export const CDashboard = () => {
               type="text"
               id="name"
               name="name"
-              value={userData.name}
-              onChange={handleInputChange}
+              value={name}
+              onChange={(e)=> setName(e.target.value)}
               className="form-control"
             />
           </div>
@@ -124,7 +143,7 @@ export const CDashboard = () => {
               type="email"
               id="email"
               name="email"
-              value={userData.email}
+              value={email}
               disabled
               className="form-control"
             />
@@ -136,8 +155,8 @@ export const CDashboard = () => {
               type="text"
               id="phone"
               name="phone"
-              value={userData.phone}
-              onChange={handleInputChange}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               className="form-control"
             />
           </div>
@@ -147,8 +166,8 @@ export const CDashboard = () => {
             <textarea
               id="address"
               name="address"
-              value={userData.address}
-              onChange={handleInputChange}
+              value={address}
+              onChange={(e)=>setAddress(e.target.value)}
               className="form-control"
             />
           </div>
@@ -159,13 +178,13 @@ export const CDashboard = () => {
               type="text"
               id="pincode"
               name="pincode"
-              value={userData.pincode}
-              onChange={handleInputChange}
+              value={pincode}
+              onChange={(e) => setPincode(e.target.value)}
               className="form-control"
             />
           </div>
           <br />
-          <button className="btn btn-dark" onClick={handleSave}>
+          <button className="btn btn-dark" type="submit">
             Save Changes
           </button>
         </div>

@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+var userid = localStorage.getItem("userInfo")
+userid=JSON.parse(userid);
 
 const services = [
   { title: "Electrical" },
@@ -17,37 +20,56 @@ const services = [
 
 export const TProfile = () => {
   
-  const [userData, setUserData] = useState({
-    name: 'John Doe',
-    email: 'johndoe@example.com',
-    phone: '123-456-7890',
-    address: '123 Main St, Springfield',
-    pincode: '987654',
-    service: '',
-  });
+  // const [userData, setUserData] = useState({
+  //   name: 'John Doe',
+  //   email: 'johndoe@example.com',
+  //   phone: '123-456-7890',
+  //   address: '123 Main St, Springfield',
+  //   pincode: '987654',
+  //   service: '',
+  // });
+  const [name,setName]=useState(userid.username || "")
+  const email=userid.email || ""
+  const [phone,setPhone]=useState(userid.phoneNo || "")
+  const [address,setAddress]=useState(userid.address || "")
+  const [pincode,setPincode]=useState(userid.pincode || "")
+  const [service,setService]=useState(userid.service || " ")
 
-  const [selectedService, setSelectedService] = useState("System");
+  //updating technician details
+  const handleUpdateData = async(event) => {
+    event.preventDefault();
+    const Updatedata = ({
+      name,email,phone,address,pincode,service
+    })
+    const response = await axios.put('http://localhost:8088/userRoutes/userupdate',Updatedata)
+    console.log(response.data)
+    localStorage.setItem('userInfo',JSON.stringify(response.data))
+    alert('Profile updated Sucessfully')
+    window.location.reload()
+  }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
-  };
+  // const [selectedService, setSelectedService] = useState("System");
 
-  const handleServiceChange = (e) => {
-    setSelectedService(e.target.value);
-    setUserData({ ...userData, service: e.target.value });
-  };
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setUserData({ ...userData, [name]: value });
+  // };
 
-  const handleSave = () => {
-    // Logic to save/update profile data
-    alert("Profile updated successfully");
-  };
+  // const handleServiceChange = (e) => {
+  //   setSelectedService(e.target.value);
+  //   setUserData({ ...userData, service: e.target.value });
+  // };
+
+  // const handleSave = () => {
+  //   // Logic to save/update profile data
+  //   alert("Profile updated successfully");
+  // };
 
   return (
     <>
       <div className="head">
         {/* Personal Details */}
-        <form>
+        <form onSubmit={handleUpdateData}>
           <div className="tech-personal-details">
             <h3>Personal Information</h3>
 
@@ -57,8 +79,8 @@ export const TProfile = () => {
                 type="text"
                 id="name"
                 name="name"
-                value={userData.name}
-                onChange={handleInputChange}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="form-control"
               />
             </div>
@@ -69,7 +91,7 @@ export const TProfile = () => {
                 type="email"
                 id="email"
                 name="email"
-                value={userData.email}
+                value={email}
                 disabled
                 className="form-control"
               />
@@ -81,8 +103,8 @@ export const TProfile = () => {
                 type="text"
                 id="phone"
                 name="phone"
-                value={userData.phone}
-                onChange={handleInputChange}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="form-control"
               />
             </div>
@@ -92,8 +114,8 @@ export const TProfile = () => {
               <textarea
                 id="address"
                 name="address"
-                value={userData.address}
-                onChange={handleInputChange}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
                 className="form-control"
               />
             </div>
@@ -104,8 +126,8 @@ export const TProfile = () => {
                 type="text"
                 id="pincode"
                 name="pincode"
-                value={userData.pincode}
-                onChange={handleInputChange}
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value)}
                 className="form-control"
               />
             </div>
@@ -115,11 +137,11 @@ export const TProfile = () => {
               <select
                 id="service"
                 name="service"
-                value={selectedService}
-                onChange={handleServiceChange}
+                value={service}
+                onChange={(e)=>setService(e.target.value)}
                 className="form-control"
               >
-                <option value="">Select a service</option>
+                <option value="">{service}</option>
                 {services.map((service, index) => (
                   <option key={index} value={service.title}>
                     {service.title}
@@ -129,7 +151,7 @@ export const TProfile = () => {
             </div>
 
             <br />
-            <button className="btn btn-dark" onClick={handleSave}>
+            <button className="btn btn-dark" type='submit'>
               Save Changes
             </button>
           </div>
