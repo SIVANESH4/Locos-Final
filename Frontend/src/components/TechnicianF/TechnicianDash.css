@@ -41,6 +41,9 @@
 .tech-personal-details div{
   margin-top: 1rem;
 }
+.form-group-tech{
+  width:340%;
+}
 .tech-notification{
   width: 35rem;
   height:33rem;

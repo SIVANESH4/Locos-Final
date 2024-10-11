@@ -2,7 +2,23 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 export const CSidebar = ({ activeSection, setActiveSection }) => {
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  const handleConfirmLogout = () => {
+    setShowLogoutModal(false);
+    localStorage.clear();
+    navigate("/");
+    console.log("User logged out");
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutModal(false);
+  };
   return (
     <div className="sidebar">
       <center>
@@ -32,23 +48,24 @@ export const CSidebar = ({ activeSection, setActiveSection }) => {
           Service History
         </li>
         <li className="logout-link">
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              if (confirm("Are you sure you want to logout?")) {
-                // Navigate to homepage
-                localStorage.clear();
-                navigate("/");
-              } else {
-                // Reload the same page
-                window.location.reload();
-              }
-            }}
-          >
+          <a href="#" onClick={handleLogoutClick}>
             Logout
           </a>
         </li>
+        {showLogoutModal && (
+          <div className="modal" style={{ display: 'block' }}>
+            <div className="logout-content">
+              <center><h2>Confirm Logout</h2>
+              <p>Are you sure you want to logout?</p>
+              </center>
+              <div className="logout-btn">
+              <button id="yes" className="btn btn-dark"onClick={handleConfirmLogout}>
+                Yes
+              </button>
+              <button className="btn btn-dark" onClick={handleCancelLogout}>No</button>
+            </div></div>
+          </div>
+        )}
       </ul>
     </div>
   );

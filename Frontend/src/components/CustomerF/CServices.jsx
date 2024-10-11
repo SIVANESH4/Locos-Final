@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import data from "../../../demo.json"; // Ensure the path is correct
 import axios from "axios";
 
 export const CServices = () => {
@@ -8,50 +7,55 @@ export const CServices = () => {
   const [selectedService, setSelectedService] = useState("All Services");
   const [selectedLocation, setSelectedLocation] = useState("Default");
   const [selectedRating, setSelectedRating] = useState("Default");
+  const [services, setServices] = useState([]);
+  const [showForm, setShowForm] = useState({});
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [issue, setIssue] = useState("");
 
-  // Define your services array
-  // const services = [
-  //   { title: "Electrical" },
-  //   { title: "Plumbing" },
-  //   { title: "Installation" },
-  //   { title: "Maintenance" },
-  //   { title: "Television" },
-  //   { title: "System" },
-  //   { title: "AC" },
-  //   { title: "RO" },
-  //   { title: "Washing Machine" },
-  //   { title: "Refrigerator" },
-  //   { title: "Microwave Oven" },
-  //   { title: "Cleaning" },
-  // ];
-  const [services,setServices] = useState([])
+  const handleBookNow = (workerId) => {
+    console.log("Book Now button clicked");
+    setShowForm((prevShowForm) => ({ ...prevShowForm, [workerId]: true }));
+  };
+
+  const handleSubmit = (event, workerId) => {
+    event.preventDefault();
+    console.log("Form submitted:", { name, location, phoneNumber, issue });
+    setShowForm((prevShowForm) => ({ ...prevShowForm, [workerId]: false }));
+  };
+
+  const handleCancel = (workerId) => {
+    setShowForm((prevShowForm) => ({ ...prevShowForm, [workerId]: false }));
+  };
 
   useEffect(() => {
-   
     fetchTechnician();
     fetchService();
   }, []);
 
-  //fetching the service details
-  const fetchTechnician = async() => {
-    try{
-    const response = await axios.get('http://localhost:8088/userRoutes/techniciandetails')
-    setWorkers(response.data.tech)
+  const fetchTechnician = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8088/userRoutes/techniciandetails"
+      );
+      setWorkers(response.data.tech);
+    } catch (error) {
+      console.log("Error fetching Technicians Details", error);
     }
-    catch(error){
-      console.log('Error fetching Technicians Details',error)
-    }
-  }
-  //fetching the service
+  };
+
   const fetchService = async () => {
-    try{
-      const response = await axios.get('http://localhost:8088/serviceRoutes/service')
-      setServices(response.data.service)
+    try {
+      const response = await axios.get(
+        "http://localhost:8088/serviceRoutes/service"
+      );
+      setServices(response.data.service);
+    } catch (error) {
+      console.log("Error fetching service", error);
     }
-    catch(error){
-      console.log('error fetching service',error)
-    }
-  }
+  };
+
   const handleBookService = (worker) => {
     const updatedBookedServices = [...bookedServices, worker];
     setBookedServices(updatedBookedServices);
@@ -128,17 +132,68 @@ export const CServices = () => {
         {workers.length > 0 ? (
           workers.map((worker) => (
             <div className="worker-card" key={worker.id}>
-              <center><i className="fa-solid fa-circle-user"></i>
-              <h4>{worker.username}</h4>
-              <p>Service: {worker.service}</p>
-              <p>Location: {worker.address}</p>
-              {/* <p>Rating: {worker.rating}</p> */}
-              <button
-                onClick={() => handleBookService(worker)}
-                className="btn btn-dark"
-              >
-                Book Now
-              </button></center>
+              <center>
+                <i className="fa-solid fa-circle-user"></i>
+                <h4>{worker.username}</h4>
+                <p>Service: {worker.service}</p>
+                <p>Location: {worker.address}</p>
+                {/* <p>Rating: {worker.rating}</p> */}
+                <button onClick={() => handleBookNow(worker.id)} className="btn btn-dark">
+                  Book Now
+                </button>
+              </center>
+              {showForm[worker.id] && (
+                <div className="modal" style={{ display: 'block' }}>
+                  <div className="modal-content-customer">
+                    <center><h2>Book a Service</h2></center>
+                    <form onSubmit={(e) => handleSubmit(e, worker.id)}>
+                      <label>
+                        Name:
+                        <input
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          className="form-control"
+                        />
+                      </label>
+                      <br />
+                      <label>
+                        Location:
+                        <input
+                          type="text"
+                          value={location}
+                          onChange={(e) => setLocation(e.target.value)}
+                          className="form-control"
+                        />
+                      </label>
+                      <br />
+                      <label>
+                        Phone Number:
+                        <input
+                          type="tel"
+                          value={phoneNumber}
+                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          className="form-control"
+                        />
+                      </label>
+                      <br />
+                      <label>
+                        Issue:
+                        <textarea
+                          value={issue}
+                          onChange={(e) => setIssue(e.target.value)}
+                          className="form-control"
+                        />
+                      </label>
+                      <br />
+                      <button type="submit" className="btn btn-dark">Submit</button>
+                      <button type="button" className="btn btn-dark" onClick={() => handleCancel(worker.id)}>
+                        Cancel
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              )}
             </div>
           ))
         ) : (

@@ -189,7 +189,7 @@ export const CDashboard = () => {
           </button>
         </div>
         </form>
-        <div className="empty-black">
+        {/* <div className="empty-black">
           <div className="circle" id="c1"></div>
           <div className="circle" id="c2"></div>
           <div className="circle" id="c3"></div>
@@ -200,7 +200,7 @@ export const CDashboard = () => {
           <div className="circle" id="c8"></div>
           <div className="circle" id="c9"></div>
           <div className="circle" id="c10"></div>
-        </div>
+        </div> */}
       </div>
     </>
   );

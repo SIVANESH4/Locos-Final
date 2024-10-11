@@ -44,19 +44,19 @@ export const TDashboard = () => {
   return (
     <>
       <div className="dashboard-boxes">
-        <h3>Overview</h3>
+        <h2>Locos</h2>
         <div className="stats-grid">
           <div className="stat-box">
-            <p>Total Jobs</p><span>0</span>
-            <h3>In-Progress</h3>
+            <div><p>Total Jobs</p>
+            <h3>In-Progress</h3></div><span>0</span>
           </div>
           <div className="stat-box">
-            <p>Total Jobs</p><span>0</span>
-            <h3>Pending</h3>
+            <div><p>Total Jobs</p>
+            <h3>Pending</h3></div><span>0</span>
           </div>
           <div className="stat-box">
-            <p>Total Jobs </p><span>0</span>
-            <h3>Finished</h3>
+            <div><p>Total Jobs </p>
+            <h3>Finished</h3></div><span>0</span>
           </div>
         </div>
       </div>

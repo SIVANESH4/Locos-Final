@@ -40,46 +40,20 @@
     background-color:var(--text-color);
     color: white;
   }
-  .modal {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal-content {
-    background-color: #f0f0f0;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .modal-content h3 {
-    margin-top: 0;
-  }
-  
-  .modal-content button {
-    background-color: #337ab7;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-  
-  .modal-content button:hover {
-    background-color: #23527c;
-  }
-  
-  .modal-content button#yes {
-    margin-right: 10px;
-  }
+.logout-content{
+  background-color:var(--primary-color);
+  border-radius: 10px;
+  margin: 17% 33%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  width:30%;
+  height: auto;
+  padding: 20px;
+}
+.logout-btn{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
   /* maincontent */
   .main-content {
     flex: 1;
@@ -98,8 +72,11 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     color:var(--text-color);
-    padding-left: 10px;
-    
+    display: flex;
+    justify-content:space-between;
+    padding: 10px;
+    padding-right: 3rem;
+    align-items: center;
     width:23rem;
     height:7rem;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -118,15 +95,10 @@
     padding-bottom: 1rem;
   }
   .stat-box p {
-    font-size: 18px;
-    margin-top: 1.1rem;
-    
+    font-size: 18px;    
   }
   .stat-box span{
-    position: absolute;
     font-size: 5rem;
-    margin-top:-4.5%;
-    margin-left: 16%;
     font-family: "Noto Serif Old Uyghur", serif;
     font-weight: 400;
     font-style: normal;
@@ -149,9 +121,8 @@
   .bar-container{
     width:40rem;
     height:25rem;
-    position: absolute;
-    margin-top: -25%;
-    margin-left: 28%;
+    margin-top: -33%;
+    margin-left: 35%;
   }
   .bar-container h4{
     font-size: 2rem;

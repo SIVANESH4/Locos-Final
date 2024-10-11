@@ -92,16 +92,16 @@ const options = {
         <h2>Locos</h2>
         <div className="stats-grid">
           <div className="stat-box">
-            <p>Total Jobs</p><span>0</span>
-            <h3>Request</h3>
+            <div><p>Total Jobs</p>
+            <h3>Request</h3></div><span>0</span>
           </div>
           <div className="stat-box">
-            <p>Total Jobs</p><span>0</span>
-            <h3>Pending</h3>
+            <div><p>Total Jobs</p>
+            <h3>Pending</h3></div><span>0</span>
           </div>
           <div className="stat-box">
-            <p>Total Jobs </p><span>0</span>
-            <h3>Finished</h3>
+            <div><p>Total Jobs </p>
+            <h3>Finished</h3></div><span>0</span>
           </div>
         </div>
       </div>

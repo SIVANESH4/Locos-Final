@@ -1,7 +1,24 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 export const TSidebar = ({ activeSection, setActiveSection }) => {
-    const navigate = useNavigate();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  const handleConfirmLogout = () => {
+    setShowLogoutModal(false);
+    localStorage.clear();
+    navigate("/");
+    console.log("User logged out");
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutModal(false);
+  };
     return (
       <div className="sidebar">
         <center>
@@ -36,23 +53,24 @@ export const TSidebar = ({ activeSection, setActiveSection }) => {
             History
           </li>
           <li className="logout-link">
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (confirm("Are you sure you want to logout?")) {
-                  localStorage.clear()
-                  // Navigate to homepage
-                  navigate("/");
-                } else {
-                  // Reload the same page
-                  window.location.reload();
-                }
-              }}
-            >
-              Logout
-            </a>
-          </li>
+          <a href="#" onClick={handleLogoutClick}>
+            Logout
+          </a>
+        </li>
+        {showLogoutModal && (
+          <div className="modal" style={{ display: 'block' }}>
+            <div className="logout-content">
+              <center><h2>Confirm Logout</h2>
+              <p>Are you sure you want to logout?</p>
+              </center>
+              <div className="logout-btn">
+              <button id="yes" className="btn btn-dark"onClick={handleConfirmLogout}>
+                Yes
+              </button>
+              <button className="btn btn-dark" onClick={handleCancelLogout}>No</button>
+            </div></div>
+          </div>
+        )}
         </ul>
       </div>
     );

@@ -73,7 +73,7 @@ export const TProfile = () => {
           <div className="tech-personal-details">
             <h3>Personal Information</h3>
 
-            <div className="form-group">
+            <div className="form-group-tech">
               <label htmlFor="name">Name</label>
               <input
                 type="text"
@@ -85,7 +85,7 @@ export const TProfile = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group-tech">
               <label htmlFor="email">Email</label>
               <input
                 type="email"
@@ -97,7 +97,7 @@ export const TProfile = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group-tech">
               <label htmlFor="phone">Phone</label>
               <input
                 type="text"
@@ -109,7 +109,7 @@ export const TProfile = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group-tech">
               <label htmlFor="address">Address</label>
               <textarea
                 id="address"
@@ -120,7 +120,7 @@ export const TProfile = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group-tech">
               <label htmlFor="pincode">Pincode</label>
               <input
                 type="text"
@@ -132,7 +132,7 @@ export const TProfile = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group-tech">
               <label htmlFor="service">Service</label>
               <select
                 id="service"
