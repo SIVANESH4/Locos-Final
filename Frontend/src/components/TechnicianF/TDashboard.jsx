@@ -4,10 +4,9 @@ import { Bar } from 'react-chartjs-2';
 
 export const TDashboard = () => {
   const [ongoingJobs, setOngoingJobs] = useState([]);
-  const [acceptedJobs, setAcceptedJobs] = useState(5); // default value
-  const [completedJobs, setCompletedJobs] = useState(3); // default value
+  const [completedJobs, setCompletedJobs] = useState(2); // default value
   const [inProgressJobs, setInProgressJobs] = useState(2); // default value
-  const [pendingJobs, setPendingJobs] = useState(4); // default value
+  const [pendingJobs, setPendingJobs] = useState(5); // default value
 
   useEffect(() => {
     const fetchOngoingJobs = async () => {
@@ -21,18 +20,16 @@ export const TDashboard = () => {
   }, []);
 
   const chartData = {
-    labels: ['Accepted', 'In Progress', 'Pending', 'Completed'],
+    labels: [ 'In Progress', 'Pending', 'Completed'],
     datasets: [{
       label: 'Jobs',
-      data: [acceptedJobs, inProgressJobs, pendingJobs, completedJobs],
+      data: [inProgressJobs, pendingJobs, completedJobs],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(255, 206, 86, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
         'rgba(75, 192, 192, 0.2)',
       ],
       borderColor: [
-        'none',
         'none',
         'none',
         'none',

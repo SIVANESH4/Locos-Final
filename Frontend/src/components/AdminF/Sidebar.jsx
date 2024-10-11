@@ -54,12 +54,6 @@ export const Sidebar = ({ activeSection, setActiveSection }) => {
         >
           Technicians
         </li>
-        <li
-          className={activeSection === "jobrequests" ? "active" : ""}
-          onClick={() => setActiveSection("jobrequests")}
-        >
-          JobRequests
-        </li>
         <li className="logout-link">
           <a href="#" onClick={handleLogoutClick}>
             Logout

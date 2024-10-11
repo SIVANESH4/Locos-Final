@@ -6,7 +6,6 @@ import { Dashboard } from "./Dashboard";
 import { AllUsers } from "./AllUsers";
 import { Technicians } from "./Technicians";
 import { Services } from "./Services";
-import { JobRequests } from "./JobRequests";
 import { Sidebar } from "./Sidebar";
 import "./AdminDash.css";
 
@@ -22,8 +21,6 @@ export const AdminDash = () => {
         return <AllUsers />;
       case "technicians":
         return <Technicians />;
-      case "jobrequests":
-        return <JobRequests />;
       case "services":
         return <Services />;
     }

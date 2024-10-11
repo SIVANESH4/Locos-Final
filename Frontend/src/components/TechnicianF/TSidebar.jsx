@@ -38,13 +38,7 @@ export const TSidebar = ({ activeSection, setActiveSection }) => {
             className={activeSection === "profile" ? "active" : ""}
             onClick={() => setActiveSection("profile")}
           >
-            Profile
-          </li>
-          <li
-            className={activeSection === "jobrequests" ? "active" : ""}
-            onClick={() => setActiveSection("jobrequests")}
-          >
-            Job Request
+           Job Requests
           </li>
           <li
             className={activeSection === "history" ? "active" : ""}

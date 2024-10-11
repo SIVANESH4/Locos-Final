@@ -6,7 +6,6 @@ import { THistory } from './THistory';
 import { TDashboard } from './TDashboard';
 import { useNavigate } from 'react-router-dom';
 import './TechnicianDash.css';
-import { TJobReq } from './TJobReq';
 import { TProfile } from './TProfile';
 export const TechnicianDash = () => {
     const navigate = useNavigate();
@@ -19,8 +18,6 @@ export const TechnicianDash = () => {
         return <TDashboard />;
       case "profile":
         return <TProfile/>
-      case "jobrequests":
-        return <TJobReq/>
         case "history":
         return <THistory />;
       default:

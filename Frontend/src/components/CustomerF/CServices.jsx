@@ -13,6 +13,7 @@ export const CServices = () => {
   const [location, setLocation] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [issue, setIssue] = useState("");
+  const [appointmentDate, setAppointmentDate] = useState("");
 
   const handleBookNow = (workerId) => {
     console.log("Book Now button clicked");
@@ -21,7 +22,7 @@ export const CServices = () => {
 
   const handleSubmit = (event, workerId) => {
     event.preventDefault();
-    console.log("Form submitted:", { name, location, phoneNumber, issue });
+    console.log("Form submitted:", { name, location, phoneNumber, issue,appointmentDate  });
     setShowForm((prevShowForm) => ({ ...prevShowForm, [workerId]: false }));
   };
 
@@ -138,14 +139,19 @@ export const CServices = () => {
                 <p>Service: {worker.service}</p>
                 <p>Location: {worker.address}</p>
                 {/* <p>Rating: {worker.rating}</p> */}
-                <button onClick={() => handleBookNow(worker.id)} className="btn btn-dark">
+                <button
+                  onClick={() => handleBookNow(worker.id)}
+                  className="btn btn-dark"
+                >
                   Book Now
                 </button>
               </center>
               {showForm[worker.id] && (
-                <div className="modal" style={{ display: 'block' }}>
+                <div className="modal" style={{ display: "block" }}>
                   <div className="modal-content-customer">
-                    <center><h2>Book a Service</h2></center>
+                    <center>
+                      <h2>Book a Service</h2>
+                    </center>
                     <form onSubmit={(e) => handleSubmit(e, worker.id)}>
                       <label>
                         Name:
@@ -186,8 +192,24 @@ export const CServices = () => {
                         />
                       </label>
                       <br />
-                      <button type="submit" className="btn btn-dark">Submit</button>
-                      <button type="button" className="btn btn-dark" onClick={() => handleCancel(worker.id)}>
+                      <label>
+                        Appointment Date:
+                        <input
+                          type="date"
+                          value={appointmentDate}
+                          onChange={(e) => setAppointmentDate(e.target.value)}
+                          className="form-control"
+                        />
+                      </label>
+                      <br />
+                      <button type="submit" className="btn btn-dark">
+                        Submit
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-dark"
+                        onClick={() => handleCancel(worker.id)}
+                      >
                         Cancel
                       </button>
                     </form>
