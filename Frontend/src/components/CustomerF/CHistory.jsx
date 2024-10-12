@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+var userid = localStorage.getItem("userInfo");
+userid=JSON.parse(userid);
+import axios from 'axios';
 
 export const CHistory = () => {
   // Sample service history data
-  const [services, setServices] = useState([
-    { id: 1, serviceType: 'Electrical', provider: 'John Doe', date: '2024-09-15', status: 'Completed', rating: 4.5 },
-    { id: 2, serviceType: 'Cleaning', provider: 'Jane Smith', date: '2024-09-10', status: 'In-progress', rating: null },
-    { id: 3, serviceType: 'Plumbing', provider: 'Mike Johnson', date: '2024-09-05', status: 'Completed', rating: null },
-  ]);
+  // const [services, setServices] = useState([
+  //   { id: 1, serviceType: 'Electrical', provider: 'John Doe', date: '2024-09-15', status: 'Completed', rating: 4.5 },
+  //   { id: 2, serviceType: 'Cleaning', provider: 'Jane Smith', date: '2024-09-10', status: 'In-progress', rating: null },
+  //   { id: 3, serviceType: 'Plumbing', provider: 'Mike Johnson', date: '2024-09-05', status: 'Completed', rating: null },
+  // ]);
 
   const [selectedRating, setSelectedRating] = useState({});
 
@@ -14,6 +17,25 @@ export const CHistory = () => {
     setServices(services.map(service => service.id === id ? { ...service, rating } : service));
     setSelectedRating({ ...selectedRating, [id]: rating });
   };
+
+  const [services,setServices]= useState([])
+  const user = userid._id
+
+  useEffect(()=>{
+    fetchServiceData();
+  },[])
+
+  //fetching service history
+  const fetchServiceData = async(event) => {
+    // event.preventDefault()
+    try{ 
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/joblist',{user})
+      console.log(response.data)
+    }
+    catch(error){
+      console.log('error fetching service history',error)
+    }
+  }
 
   return (
     <div className="service-history">

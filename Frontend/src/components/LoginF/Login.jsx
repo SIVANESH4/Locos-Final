@@ -21,13 +21,17 @@ export const Login = () => {
     .post('http://localhost:8088/userRoutes/userlogin',{email,password})
       setEmail()
       setPassword()
-      alert('Login Successful')
       const token=response.data.token;
       const role =response.data.role;
+      const status = response.data.status;
       const userInfo=jwtDecode(token,response.data.JWT_SECRET).user;
       //storing the logged user details in localstorage
       localStorage.setItem("userInfo",JSON.stringify(userInfo));
-     
+      if( status === 'Inactive'){
+        alert('This Accout Currently Inactive by the Admin')
+      }
+      else{
+        alert('Login Successful')
       if( role === 'Admin'){
         navigate('/admin')
       }
@@ -37,6 +41,7 @@ export const Login = () => {
       else if( role === 'Technician'){
       navigate('/technician')
       }
+    }
       window.location.reload()
     }
     catch(error){

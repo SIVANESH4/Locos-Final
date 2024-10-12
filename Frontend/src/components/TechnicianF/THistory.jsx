@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+var userid = localStorage.getItem("userInfo");
+userid = JSON.parse(userid);
 
 export const THistory = () => {
   const defaultHistory = [
@@ -31,8 +34,20 @@ export const THistory = () => {
   ];
 
   // Set history data in state
-  const [history, setHistory] = useState(defaultHistory);
-
+  const [history, setHistory] = useState([]);
+  const user = userid._id
+  useEffect( ()=> {
+    fetchJobHistory()
+  })
+  const fetchJobHistory = async() => {
+    try{
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/joblisthistory',{user})
+      setHistory(response.data.job)
+    }
+    catch(error){
+      console.log('error fetching job history',error)
+    }
+  }
   return (
     <div>
       <h1>Job History</h1>
@@ -44,7 +59,7 @@ export const THistory = () => {
             <th style={{ padding: '10px', border: '1px solid #ddd' }}>Service</th>
             <th style={{ padding: '10px', border: '1px solid #ddd' }}>Customer</th>
             <th style={{ padding: '10px', border: '1px solid #ddd' }}>Location</th>
-            <th style={{ padding: '10px', border: '1px solid #ddd' }}>Date Completed/Declined</th>
+            <th style={{ padding: '10px', border: '1px solid #ddd' }}>Appointment Date </th>
             <th style={{ padding: '10px', border: '1px solid #ddd' }}>Status</th>
             <th style={{ padding: '10px', border: '1px solid #ddd' }}>Rating</th>
           </tr>
@@ -52,10 +67,10 @@ export const THistory = () => {
         <tbody>
           {history.map((job) => (
             <tr key={job.id}>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.serviceType}</td>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.user}</td>
+              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.service}</td>
+              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.customerName}</td>
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.location}</td>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.completedDate}</td>
+              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.bookingDate}</td>
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.status}</td>
               {/* If status is completed, display rating */}
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>

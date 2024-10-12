@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 var userid = localStorage.getItem("userInfo");
 userid = JSON.parse(userid);
@@ -46,17 +46,20 @@ const defaultJobs = [
 ];
 
 export const TProfile = () => {
-  const [jobs, setJobs] = useState(defaultJobs);
+   const [jobs, setJobs] = useState([]);
   const [name, setName] = useState(userid.username || "");
   const email = userid.email || "";
   const [phone, setPhone] = useState(userid.phoneNo || "");
   const [address, setAddress] = useState(userid.address || "");
   const [pincode, setPincode] = useState(userid.pincode || "");
   const [service, setService] = useState(userid.service || " ");
-
+  const [customer,setCustomer] = useState(null)
+  useEffect(() => {
+    fetchJobRequest();
+  })
   //updating technician details
   const handleUpdateData = async (event) => {
-    event.preventDefault();
+    //event.preventDefault();
     const Updatedata = {
       name,
       email,
@@ -73,6 +76,22 @@ export const TProfile = () => {
     localStorage.setItem("userInfo", JSON.stringify(response.data));
     alert("Profile updated Sucessfully");
     window.location.reload();
+  };
+  const user = userid._id
+  //fetching the job request
+  const fetchJobRequest = async(event) => {
+    try{
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/joblist',{user})
+      //console.log(response.data)
+      setJobs(response.data.job)
+    }
+    catch(error){
+      console.log('Error while Fetching joblist ',error)
+    }
+  }
+  //accepting job Request
+  const handleAccept = (jobs) => {
+    setCustomer(jobs); // Store the selected customer's data
   };
 
   // Function to update the status of a job
@@ -191,25 +210,25 @@ export const TProfile = () => {
                     }}
                     className="job-card"
                   >
-                    <h3>Service: {job.serviceType}</h3>
+                    <h3>Service: {job.service}</h3>
                     <p>
-                      <strong>Customer:</strong> {job.user}
+                      <strong>Customer:</strong> {job.customerName}
                     </p>
                     <p>
                       <strong>Location:</strong> {job.location}
                     </p>
                     <p>
-                      <strong>Date:</strong> {job.bookingDate}
+                      <strong>Appoinment Date:</strong> {job.bookingDate}
                     </p>
                     <p>
                       <strong>Status:</strong> {job.status}
                     </p>
 
                     {/* Show Accept/Decline buttons if job is pending */}
-                    {job.status === "Pending" && (
+                    {job.status === "open" && (
                       <div>
                         <button
-                          onClick={() => updateJobStatus(job.id, "In Progress")}
+                          onClick={()=> handleAccept(jobs)}
                           className="btn btn-dark"
                         >
                           Accept
@@ -224,7 +243,7 @@ export const TProfile = () => {
                     )}
 
                     {/* Show Cancel and Complete buttons if job is in progress */}
-                    {job.status === "In Progress" && (
+                    {job.status === "In_Progress" && (
                       <div>
                         <button
                           onClick={() => updateJobStatus(job.id, "Cancelled")}

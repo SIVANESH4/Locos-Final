@@ -50,6 +50,7 @@ export const Technicians = () => {
             <th>Address</th>
             <th>Pincode</th>
             <th>Service</th>
+            <th>Status</th>
             {/* /*<th>Rating</th>
             <th>Jobs Done</th> */}
             <th>Actions</th>
@@ -64,6 +65,7 @@ export const Technicians = () => {
               <td>{technician.address}</td>
               <td>{technician.pincode}</td>
               <td>{technician.service}</td>
+              <td>{technician.status}</td>
               {/* <td>{technician.rating.toFixed(1)}</td>
               <td>{technician.jobsDone}</td> */}
               <td>

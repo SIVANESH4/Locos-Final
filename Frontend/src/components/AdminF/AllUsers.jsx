@@ -101,6 +101,7 @@ export const AllUsers = () => {
                 <th>Address</th>
                 <th>Pincode</th>
                 <th>Role</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -113,6 +114,7 @@ export const AllUsers = () => {
                   <td className='address'>{user.address}</td>
                   <td>{user.pincode}</td>
                   <td>{user.role}</td>
+                  <td>{user.status}</td>
                   <td>
                   <button
                 onClick={() => handleStatus(user.email)}
