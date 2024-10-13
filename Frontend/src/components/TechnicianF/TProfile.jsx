@@ -53,7 +53,7 @@ export const TProfile = () => {
   const [address, setAddress] = useState(userid.address || "");
   const [pincode, setPincode] = useState(userid.pincode || "");
   const [service, setService] = useState(userid.service || " ");
-  const [customer,setCustomer] = useState(null)
+  const [customer,setCustomer] = useState('')
   useEffect(() => {
     fetchJobRequest();
   })
@@ -81,7 +81,7 @@ export const TProfile = () => {
   //fetching the job request
   const fetchJobRequest = async(event) => {
     try{
-      const response = await axios.post('http://localhost:8088/jobRequestRoutes/joblist',{user})
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/openjoblist',{user})
       //console.log(response.data)
       setJobs(response.data.job)
     }
@@ -90,8 +90,9 @@ export const TProfile = () => {
     }
   }
   //accepting job Request
-  const handleAccept = (jobs) => {
-    setCustomer(jobs); // Store the selected customer's data
+  const handleAccept = (job) => {
+    setCustomer(job); // Store the selected customer's data
+    console.log(customer)
   };
 
   // Function to update the status of a job
@@ -228,7 +229,7 @@ export const TProfile = () => {
                     {job.status === "open" && (
                       <div>
                         <button
-                          onClick={()=> handleAccept(jobs)}
+                          onClick={()=> handleAccept(job)}
                           className="btn btn-dark"
                         >
                           Accept

@@ -48,7 +48,7 @@ router.post('/creatingjob', async (req, res) => {
 });
 
 // Fetch all job requests ( customers or technician)
-router.post('/joblist', async (req, res) => {
+router.post('/openjoblist', async (req, res) => {
   const {user} = req.body
   try{
 
@@ -58,12 +58,13 @@ router.post('/joblist', async (req, res) => {
     } 
 
     const job = await JobRequest.find({
-      $or:[{customerId:user } ,{serviceProviderId:user}]
+     serviceProviderId:user,
+     status:'open'
     })
     
     //check the job were found
     if(job.length === 0){
-      return res.status(404).json({message:'No jobs found for this users'})
+      return res.status(200).json({message:'No jobs found for this users'})
     }
 
     return res.status(200).json({job})
@@ -75,7 +76,7 @@ router.post('/joblist', async (req, res) => {
 });
 
 // decline job requests
-router.post('/declinejob',async(req, res) => {
+router.put('/declinejob',async(req, res) => {
   try{
     //check that the jobRequest existing
     // const existingJob = await JobRequest.findOne({
@@ -110,7 +111,7 @@ router.post('/declinejob',async(req, res) => {
 })
 
 //accepting job Request
-router.post('/acceptingjob',async(req, res) => {
+router.put('/acceptingjob',async(req, res) => {
   try{
     const statusUpdate = await JobRequest.findOneAndUpdate(
       {

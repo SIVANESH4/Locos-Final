@@ -82,7 +82,7 @@ router.post( '/userlogin' , async (req,res) => {
 
 //fogot password
 router.post( '/ForgotPassword' , async (req,res) => {
-    const { email } = req.body.email;
+    const { email } = req.body
     try{
         //Find the user by email
         const user = await UserDB.findOne({email:email});

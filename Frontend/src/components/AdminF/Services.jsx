@@ -53,7 +53,7 @@ export const Services = () => {
         event.preventDefault();
           const newData = ({newService,description});
           axios
-          .post('http://localhost:8088/userRoutes/newservice',newData)
+          .post('http://localhost:8088/serviceRoutes/newservice',newData)
           .then((res)=>{
             setNewService('')
             setDescription('')
@@ -79,6 +79,17 @@ export const Services = () => {
           console.log('Error while changing',error)
       }
     }
+
+    const handleRemoveService = async(id) => {
+      try{
+        alert('Delete the Service')
+        const response = await axios.delete('http://localhost:8088/serviceRoutes/deletingservice',{data:{id}})
+        window.location.reload();
+      }
+      catch(error){
+        console.log('Error deleting service',error)
+      }
+    }
       // Toggle service status (active/inactive)
       // const handleToggleStatus = (id) => {
       //   setServices(
@@ -91,9 +102,9 @@ export const Services = () => {
       // };
     
       // Remove a service
-      const handleRemoveService = (id) => {
-        setServices(services.filter((service) => service.id !== id));
-      };
+      // const handleRemoveService = (id) => {
+      //   setServices(services.filter((service) => service.id !== id));
+      // };
     
       return (
         <div className="services-management">
