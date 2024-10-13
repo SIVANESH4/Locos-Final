@@ -49,6 +49,12 @@ export const Sidebar = ({ activeSection, setActiveSection }) => {
           Services
         </li>
         <li
+          className={activeSection === "jobrequest" ? "active" : ""}
+          onClick={() => setActiveSection("jobrequest")}
+        >
+          Job Requests
+        </li>
+        <li
           className={activeSection === "technicians" ? "active" : ""}
           onClick={() => setActiveSection("technicians")}
         >
