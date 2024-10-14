@@ -46,16 +46,17 @@ const defaultJobs = [
 ];
 
 export const TProfile = () => {
-   const [jobs, setJobs] = useState([]||"No Job Request");
+   const [jobs, setJobs] = useState([]);
   const [name, setName] = useState(userid.username || "");
   const email = userid.email || "";
   const [phone, setPhone] = useState(userid.phoneNo || "");
   const [address, setAddress] = useState(userid.address || "");
   const [pincode, setPincode] = useState(userid.pincode || "");
   const [service, setService] = useState(userid.service || " ");
+  const [customer,setCustomer] = useState('')
   useEffect(() => {
     fetchJobRequest();
-  },[])
+  })
   //updating technician details
   const handleUpdateData = async (event) => {
     //event.preventDefault();
@@ -76,31 +77,22 @@ export const TProfile = () => {
     alert("Profile updated Sucessfully");
     window.location.reload();
   };
-  const user = userid._id
+  const user = userid._id;
   //fetching the job request
   const fetchJobRequest = async(event) => {
     try{
       const response = await axios.post('http://localhost:8088/jobRequestRoutes/openjoblist',{user})
-      console.log(response.data)
+      //console.log(response.data)
       setJobs(response.data.job)
     }
     catch(error){
       console.log('Error while Fetching joblist ',error)
     }
   }
-  const servicerId = userid._id
   //accepting job Request
-  const handleAccept = async(job) => {
-    // setCustomer(job); // Store the selected customer's data
-    // console.log(customer)
-    try{
-      const response = await axios.put('http://localhost:8088/jobRequestRoutes/acceptingjob',{servicerId,custId:job._id})
-      console.log(response.data)
-      fetchJobRequest();
-    }
-    catch(error){
-      console.log(error)
-    }
+  const handleAccept = (job) => {
+    setCustomer(job); // Store the selected customer's data
+    console.log(customer)
   };
 
   // Function to update the status of a job
@@ -205,6 +197,7 @@ export const TProfile = () => {
         </form>
         <div className="tech-notify">
           <h3>Job Requests</h3>
+          {jobs.length === 0 && <p>You are free!</p>}
           <div className="tech-not">
             <div className="tech-jobreq">
               {/* List of Job Requests */}
@@ -237,7 +230,7 @@ export const TProfile = () => {
                     {job.status === "open" && (
                       <div>
                         <button
-                          onClick={()=> handleAccept(job)}
+                          onClick={() => handleAccept(job)}
                           className="btn btn-dark"
                         >
                           Accept
