@@ -74,18 +74,35 @@ const options = {
   };
   //displaying users count
   useEffect(()=>{
-    const Userscount = async() => {
-      try{
-        const response = await axios.get('http://localhost:8088/userRoutes/usercount')
-        setCustomers(response.data.consumer)
-        setTechnicians(response.data.tech)
-      }
-      catch(error){
-        console.log('Error fectching user count',error)
-      }
-    }
     Userscount()
+    JobRequestCount()
   })
+  const Userscount = async() => {
+    try{
+      const response = await axios.get('http://localhost:8088/userRoutes/usercount')
+      setCustomers(response.data.consumer)
+      setTechnicians(response.data.tech)
+    }
+    catch(error){
+      console.log('Error fectching user count',error)
+    }
+  }
+  const [total,setTotal]=useState('')
+  const [complete,setComplete]=useState('')
+  const [pending,setPending]=useState('')
+  //jobrequest fetching 
+  const JobRequestCount = async() =>{
+    try{
+      const response = await axios.get('http://localhost:8088/JobRequestRoutes/jobrequestcount')
+      // console.log(response.data)
+      setComplete(response.data.completeJob)
+      setTotal(response.data.totalJob)
+      setPending(response.data.pendingJob)
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
   return (
     <>
       <div className="dashboard-boxes">
@@ -93,15 +110,15 @@ const options = {
         <div className="stats-grid">
           <div className="stat-box">
             <div><p>Total Jobs</p>
-            <h3>Request</h3></div><span>0</span>
+            <h3>Request</h3></div><span>{total}</span>
           </div>
           <div className="stat-box">
             <div><p>Total Jobs</p>
-            <h3>Pending</h3></div><span>0</span>
+            <h3>In-Progress</h3></div><span>{pending}</span>
           </div>
           <div className="stat-box">
             <div><p>Total Jobs </p>
-            <h3>Finished</h3></div><span>0</span>
+            <h3>Finished</h3></div><span>{complete}</span>
           </div>
         </div>
       </div>

@@ -1,24 +1,30 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
+import axios from 'axios';
+var userid = localStorage.getItem("userInfo");
+userid = JSON.parse(userid);
 
 export const TDashboard = () => {
-  const [ongoingJobs, setOngoingJobs] = useState([]);
+  const [ongoingJobs, setOngoingJobs] = useState([]||"No Ongoing Jobs");
   const [completedJobs, setCompletedJobs] = useState(2); // default value
   const [inProgressJobs, setInProgressJobs] = useState(2); // default value
   const [pendingJobs, setPendingJobs] = useState(5); // default value
 
   useEffect(() => {
-    const fetchOngoingJobs = async () => {
-      const ongoingJobData = [
-        { id: 1, service: 'Electrical Repair', provider: 'John Electrician', date: '2024-09-25', status: 'In Progress' },
-        { id: 2, service: 'Plumbing Maintenance', provider: 'Anna Plumber', date: '2024-09-26', status: 'Scheduled' },
-      ];
-      setOngoingJobs(ongoingJobData);
-    };
-    fetchOngoingJobs();
-  }, []);
-
+    fetchOngoingJob();
+  },[])
+ 
+  const fetchOngoingJob = async(event) => {
+    try{
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/ongoingjob',{user:userid._id})
+      setOngoingJobs(response.data.job)
+      console.log(response.data)
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
   const chartData = {
     labels: [ 'In Progress', 'Pending', 'Completed'],
     datasets: [{
@@ -60,21 +66,17 @@ export const TDashboard = () => {
       <div className="techdash">
         <h3>Ongoing Works</h3>
         <div className="tech-ongoing-works">
-          {ongoingJobs.length > 0 ? (
             <ul className="tech-ongoing-jobs-list">
               {ongoingJobs.map((job) => (
                 <li key={job.id} className="ongoing-job-item">
                   <h4>{job.service}</h4>
-                  <p>Provider: {job.provider}</p>
-                  <p>Date: {job.date}</p>
+                  <p>Provider: {job.serviceProviderName}</p>
+                  <p>Date: {job.bookingDate}</p>
                   <p>Status: {job.status}</p>
                   <button className="btn btn-dark">Cancel</button>
                 </li>
               ))}
             </ul>
-          ) : (
-            <p>No ongoing works at the moment.</p>
-          )}
         </div>
       </div>
       <div className="tech-chart-container">

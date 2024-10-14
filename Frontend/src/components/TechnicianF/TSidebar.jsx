@@ -1,9 +1,12 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+var userid = localStorage.getItem("userInfo");
+userid=JSON.parse(userid);
 export const TSidebar = ({ activeSection, setActiveSection }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
+  const [user,setUser]=useState(userid.username)
 
   const handleLogoutClick = () => {
     setShowLogoutModal(true);
@@ -25,7 +28,7 @@ export const TSidebar = ({ activeSection, setActiveSection }) => {
           <i class="fa-solid fa-circle-user"></i>
         </center>
         <center>
-          <h3>Technician</h3>
+          <h3>{user}</h3>
         </center>
         <ul>
           <li

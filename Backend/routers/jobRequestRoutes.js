@@ -49,7 +49,6 @@ router.post('/creatingjob', async (req, res) => {
 
 // Fetch all job requests ( customers or technician)
 router.post('/openjoblist', async (req, res) => {
-  const {user} = req.body
   try{
 
     //validate that the ID is provided
@@ -58,7 +57,7 @@ router.post('/openjoblist', async (req, res) => {
     } 
 
     const job = await JobRequest.find({
-     serviceProviderId:user,
+     serviceProviderId:req.body.user,
      status:'open'
     })
     
@@ -113,6 +112,10 @@ router.put('/declinejob',async(req, res) => {
 //accepting job Request
 router.put('/acceptingjob',async(req, res) => {
   try{
+    // const customerId = new mongoose.Types.ObjectId(req.params.custId);
+    // const serviceProviderId = new mongoose.Types.ObjectId(req.params.servicerId);
+    console.log(req.body.custId)
+    console.log(req.body.servicerId)
     const statusUpdate = await JobRequest.findOneAndUpdate(
       {
         customerId:req.body.custId,
@@ -128,9 +131,10 @@ router.put('/acceptingjob',async(req, res) => {
       }
     )
     if(!statusUpdate){
+      console.log(statusUpdate)
       return res.status(404).json({message:'No mathcing Requested'})
     }
-    res.status(200).json({message:'JobRequest Accepted',status:'success'})
+    res.status(200).json({message:'JobRequest Accepted',status:'success',statusUpdate})
   }
   catch(error){
     console.log(error.message)
@@ -165,4 +169,56 @@ router.post('/joblisthistory', async (req, res) => {
 
 });
 
+//sending job Request to admin
+router.get('/fetchjobRequest',async(req,res) =>{
+  try{
+    const RequestList = await JobRequest.find({})
+    return res.status(200).json({status:'success',RequestList})
+  }
+  catch(error){
+    return res.status(500).json({error})
+  }
+})
+
+//sending job Request count
+router.get('/jobrequestcount',async(req,res) => {
+  try{
+    const totalJob = await JobRequest.countDocuments()
+    const pendingJob = await JobRequest.countDocuments({status:'In_Progress'})
+    const completeJob = await JobRequest.countDocuments({status:'completed'})
+    return res.status(200).json({status:'success',totalJob,completeJob,pendingJob})
+  }
+  catch(error){
+    return res.status(500).json({error})
+  }
+})
+
+//ongoing job Request
+// Fetch all job requests ( customers or technician)
+router.post('/ongoingjob', async (req, res) => {
+  const {user} = req.body
+  try{
+
+    //validate that the ID is provided
+    // if(!user){
+    //   return res.status(404).json({message:'Users ID is required'})
+    // } 
+
+    const job = await JobRequest.find({
+      $or:[{customerId:user } ,{serviceProviderId:user}],
+      status:'In_Progress'
+    })
+    
+    //check the job were found
+    if(job.length === 0){
+      return res.status(200).json({job:'No jobs found for this users'})
+    }
+
+    return res.status(200).json({job})
+  }
+  catch(error){
+    return res.status(500).json({message:'Error while fetching',err:error.message})
+  }
+
+});
 module.exports = router;

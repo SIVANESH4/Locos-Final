@@ -11,35 +11,27 @@ userid=JSON.parse(userid);
 console.log(userid)
 
 export const CDashboard = () => {
-  const [ongoingJobs, setOngoingJobs] = useState([]);
+  const [ongoingJobs, setOngoingJobs] = useState([]||" ");
   const [serviceStats, setServiceStats] = useState({
     booked: 20,
     finished: 15,
     cancelled: 5,
   });
   useEffect(() => {
-    const fetchOngoingJobs = async () => {
-      const ongoingJobData = [
-        {
-          id: 1,
-          service: "Electrical Repair",
-          provider: "John Electrician",
-          date: "2024-09-25",
-          status: "In Progress",
-        },
-        {
-          id: 2,
-          service: "Plumbing Maintenance",
-          provider: "Anna Plumber",
-          date: "2024-09-26",
-          status: "Scheduled",
-        },
-      ];
-      setOngoingJobs(ongoingJobData);
-    };
-    fetchOngoingJobs();
+    fetchOngoingJob();
     fetchServiceStats();
   }, []);
+
+  const fetchOngoingJob = async(event) => {
+    try{
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/ongoingjob',{user:userid._id})
+      console.log(response.data)
+      setOngoingJobs(response.data.job)
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
   const fetchServiceStats = () => {
     setServiceStats({ booked: 20, finished: 15, cancelled: 5 });
   };
@@ -105,8 +97,8 @@ export const CDashboard = () => {
               {ongoingJobs.map((job) => (
                 <li key={job.id} className="ongoing-job-item">
                   <h4>{job.service}</h4>
-                  <p>Provider: {job.provider}</p>
-                  <p>Date: {job.date}</p>
+                  <p>Provider: {job.serviceProviderName}</p>
+                  <p>Date: {job.bookingDate}</p>
                   <p>Status: {job.status}</p>
                   <button className="btn btn-dark">Cancel</button>
                 </li>

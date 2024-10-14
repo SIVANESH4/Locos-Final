@@ -29,8 +29,9 @@ export const CHistory = () => {
   const fetchServiceData = async(event) => {
     // event.preventDefault()
     try{ 
-      const response = await axios.post('http://localhost:8088/jobRequestRoutes/joblist',{user})
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/joblisthistory',{user})
       console.log(response.data)
+      setServices(response.data.job)
     }
     catch(error){
       console.log('error fetching service history',error)
@@ -56,9 +57,9 @@ export const CHistory = () => {
         <tbody>
           {services.map((service) => (
             <tr key={service.id}>
-              <td>{service.serviceType}</td>
-              <td>{service.provider}</td>
-              <td>{service.date}</td>
+              <td>{service.service}</td>
+              <td>{service.serviceProviderName}</td>
+              <td>{service.bookingDate}</td>
               <td>{service.status}</td>
               <td>{service.rating ? service.rating.toFixed(1) : 'Not Rated'}</td>
               <td>

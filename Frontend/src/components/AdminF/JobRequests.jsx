@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
+import axios from 'axios';
 export const JobRequests = () => {
-  const [jobRequests, setJobRequests] = useState([
-    { id: 1, user: 'Alice Doe', service: 'Electrical', address: '12 Main St', pincode: '123456', technician: 'John Doe', status: 'Pending' },
-    { id: 2, user: 'Bob Smith', service: 'Plumbing', address: '456 Oak St', pincode: '654321', technician: '', status: 'Pending' },
-    { id: 3, user: 'Charlie Brown', service: 'Cleaning', address: '789 Pine St', pincode: '987654', technician: 'Mike Johnson', status: 'Completed' },
-  ]);
-
+  // const [jobRequests, setJobRequests] = useState([
+  //   { id: 1, user: 'Alice Doe', service: 'Electrical', address: '12 Main St', pincode: '123456', technician: 'John Doe', status: 'Pending' },
+  //   { id: 2, user: 'Bob Smith', service: 'Plumbing', address: '456 Oak St', pincode: '654321', technician: '', status: 'Pending' },
+  //   { id: 3, user: 'Charlie Brown', service: 'Cleaning', address: '789 Pine St', pincode: '987654', technician: 'Mike Johnson', status: 'Completed' },
+  // ]);
+  const [jobRequests,setJobRequests]=useState([])
   const [filterStatus, setFilterStatus] = useState('');
-
+  useEffect(() => {
+    fetchJobRequest();
+  },[])
   // Update job status
   const handleUpdateStatus = (jobId, newStatus) => {
     const updatedJobs = jobRequests.map((job) =>
@@ -16,6 +19,17 @@ export const JobRequests = () => {
     );
     setJobRequests(updatedJobs);
   };
+  // fetching job request
+  const fetchJobRequest = async() => {
+    try{
+      const response = await axios.get('http://localhost:8088/JobRequestRoutes/fetchjobRequest')
+      setJobRequests(response.data.RequestList)
+      console.log(response.data)
+    }
+    catch(error){
+      console.log('fetching service ',error)
+    }
+  }
 
   // Handle filtering job requests by status
   const filteredJobRequests = jobRequests.filter((job) =>
@@ -52,7 +66,8 @@ export const JobRequests = () => {
             <th>User</th>
             <th>Service</th>
             <th>Address</th>
-            <th>Pincode</th>
+            {/* <th>Pincode</th> */}
+             <th>Appointment Date</th>
             <th>Technician</th>
             <th>Status</th>
             <th>Actions</th>
@@ -61,12 +76,13 @@ export const JobRequests = () => {
         <tbody>
           {filteredJobRequests.map((job) => (
             <tr key={job.id}>
-              <td>{job.id}</td>
-              <td>{job.user}</td>
+              <td>{job._id}</td>
+              <td>{job.customerName}</td>
               <td>{job.service}</td>
-              <td>{job.address}</td>
-              <td>{job.pincode}</td>
-              <td>{job.technician || 'Unassigned'}</td>
+              <td>{job.location}</td>
+              {/* <td>{job.pincode}</td> */}
+                <td>{job.bookingDate}</td>
+              <td>{job.serviceProviderName || 'Unassigned'}</td>
               <td>{job.status}</td>
               <td>
                 {job.status !== 'Cancelled' && (
