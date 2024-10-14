@@ -11,7 +11,7 @@ userid=JSON.parse(userid);
 console.log(userid)
 
 export const CDashboard = () => {
-  const [ongoingJobs, setOngoingJobs] = useState([]||" ");
+  const [ongoingJobs, setOngoingJobs] = useState([]);
   const [serviceStats, setServiceStats] = useState({
     booked: 20,
     finished: 15,
@@ -25,8 +25,8 @@ export const CDashboard = () => {
   const fetchOngoingJob = async(event) => {
     try{
       const response = await axios.post('http://localhost:8088/jobRequestRoutes/ongoingjob',{user:userid._id})
-      console.log(response.data)
-      setOngoingJobs(response.data.job)
+      const fetchedJobs = Array.isArray(response.data.job) ? response.data.job : []; 
+      setOngoingJobs(fetchedJobs)
     }
     catch(error){
       console.log(error)
@@ -92,9 +92,12 @@ export const CDashboard = () => {
       <div className="customer-dash">
         <h3>Ongoing Works</h3>
         <div className="ongoing-works">
-          {ongoingJobs.length > 0 ? (
             <ul className="ongoing-jobs-list">
-              {ongoingJobs.map((job) => (
+              {
+                Array.isArray(ongoingJobs) && ongoingJobs.length === 0 ? (
+                  <p>No Ongoing Jobs Found</p>
+                ) : (
+              ongoingJobs.map((job) => (
                 <li key={job.id} className="ongoing-job-item">
                   <h4>{job.service}</h4>
                   <p>Provider: {job.serviceProviderName}</p>
@@ -102,11 +105,9 @@ export const CDashboard = () => {
                   <p>Status: {job.status}</p>
                   <button className="btn btn-dark">Cancel</button>
                 </li>
-              ))}
+              ))
+            )}
             </ul>
-          ) : (
-            <p>No ongoing works at the moment.</p>
-          )}
         </div>
         <div className="chart-section">
           <h5>Service Statistics</h5>

@@ -56,7 +56,7 @@ export const TProfile = () => {
   const [customer,setCustomer] = useState('')
   useEffect(() => {
     fetchJobRequest();
-  })
+  },[])
   //updating technician details
   const handleUpdateData = async (event) => {
     //event.preventDefault();
@@ -77,13 +77,14 @@ export const TProfile = () => {
     alert("Profile updated Sucessfully");
     window.location.reload();
   };
-  const user = userid._id;
+  
   //fetching the job request
   const fetchJobRequest = async(event) => {
     try{
-      const response = await axios.post('http://localhost:8088/jobRequestRoutes/openjoblist',{user})
-      //console.log(response.data)
-      setJobs(response.data.job)
+     const response = await axios.post('http://localhost:8088/jobRequestRoutes/openjoblist',{user:userid._id})
+      console.log(response.data)
+      const fetchedJobs = Array.isArray(response.data.job) ? response.data.job : []; 
+      setJobs(fetchedJobs)
     }
     catch(error){
       console.log('Error while Fetching joblist ',error)
@@ -197,12 +198,14 @@ export const TProfile = () => {
         </form>
         <div className="tech-notify">
           <h3>Job Requests</h3>
-          {jobs.length === 0 && <p>You are free!</p>}
           <div className="tech-not">
             <div className="tech-jobreq">
               {/* List of Job Requests */}
               <div>
-                {jobs.map((job) => (
+                {
+                  Array.isArray(jobs) && jobs.length > 0 ? (
+
+                 jobs.map((job) => (
                   <div
                     key={job.id}
                     style={{
@@ -227,7 +230,7 @@ export const TProfile = () => {
                     </p>
 
                     {/* Show Accept/Decline buttons if job is pending */}
-                    {job.status === "open" && (
+                    {job.status === "pending" && (
                       <div>
                         <button
                           onClick={() => handleAccept(job)}
@@ -262,11 +265,15 @@ export const TProfile = () => {
                       </div>
                     )}
                   </div>
-                ))}
+                ))
+                  ) :(
+                    <p>no records</p>
+                  )}
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </>
   );

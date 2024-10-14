@@ -6,20 +6,50 @@ var userid = localStorage.getItem("userInfo");
 userid = JSON.parse(userid);
 
 export const TDashboard = () => {
-  const [ongoingJobs, setOngoingJobs] = useState([]||"No Ongoing Jobs");
-  const [completedJobs, setCompletedJobs] = useState(2); // default value
-  const [inProgressJobs, setInProgressJobs] = useState(2); // default value
-  const [pendingJobs, setPendingJobs] = useState(5); // default value
+  const [ongoingJobs, setOngoingJobs] = useState([]);
+  const [completedJobs, setCompletedJobs] = useState(''); // default value
+  const [inProgressJobs, setInProgressJobs] = useState(''); // default value
+  const [pendingJobs, setPendingJobs] = useState(''); // default value
 
   useEffect(() => {
     fetchOngoingJob();
+    fetchJobCount();
   },[])
- 
+  
   const fetchOngoingJob = async(event) => {
     try{
       const response = await axios.post('http://localhost:8088/jobRequestRoutes/ongoingjob',{user:userid._id})
-      setOngoingJobs(response.data.job)
+      const fetchedJobs = Array.isArray(response.data.job) ? response.data.job : []; 
+      setOngoingJobs(fetchedJobs)
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
+  //decline the job request
+  const handleCancelJob = async(job) => {
+    console.log(job)
+    try{
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/canceljobrequest',{custId:job.customerId,
+        servicerId:job.serviceProviderId
+      })
       console.log(response.data)
+      fetchOngoingJob();
+      window.location.reload();
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+  //count of job request
+  const fetchJobCount = async(event) => {
+    try{
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/countjob',{id:userid._id})
+      console.log(response.data)
+      setCompletedJobs(response.data.complete)
+      setInProgressJobs(response.data.progress)
+      setPendingJobs(response.data.pending)
     }
     catch(error){
       console.log(error)
@@ -51,15 +81,15 @@ export const TDashboard = () => {
         <div className="stats-grid">
           <div className="stat-box">
             <div><p>Total Jobs</p>
-            <h3>In-Progress</h3></div><span>0</span>
+            <h3>In-Progress</h3></div><span>{inProgressJobs}</span>
           </div>
           <div className="stat-box">
             <div><p>Total Jobs</p>
-            <h3>Pending</h3></div><span>0</span>
+            <h3>Pending</h3></div><span>{pendingJobs}</span>
           </div>
           <div className="stat-box">
             <div><p>Total Jobs </p>
-            <h3>Finished</h3></div><span>0</span>
+            <h3>Finished</h3></div><span>{completedJobs}</span>
           </div>
         </div>
       </div>
@@ -67,15 +97,22 @@ export const TDashboard = () => {
         <h3>Ongoing Works</h3>
         <div className="tech-ongoing-works">
             <ul className="tech-ongoing-jobs-list">
-              {ongoingJobs.map((job) => (
+            {/* {ongoingJobs.length === 0 ? (
+            <p>No Ongoing Jobs Found</p>
+             ) : ( */}
+             {Array.isArray(ongoingJobs) && ongoingJobs.length === 0 ? (
+              <p>No Ongoing Jobs Found</p>
+            ) : (
+              ongoingJobs.map((job) => (
                 <li key={job.id} className="ongoing-job-item">
                   <h4>{job.service}</h4>
-                  <p>Provider: {job.serviceProviderName}</p>
+                  <p>Provider: {job.customerName}</p>
                   <p>Date: {job.bookingDate}</p>
                   <p>Status: {job.status}</p>
-                  <button className="btn btn-dark">Cancel</button>
+                  <button className="btn btn-dark" onClick={() => handleCancelJob(job)}>Cancel</button>
                 </li>
-              ))}
+              ))
+             )}
             </ul>
         </div>
       </div>

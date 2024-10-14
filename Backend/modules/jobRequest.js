@@ -6,7 +6,7 @@ const jobRequestSchema = new mongoose.Schema({
   //description: { type: String, required: true },
   location: { type: String, required: true },
   service: { type: String, required: true }, // Service required
-  status: { type: String, enum: ['open', 'In_Progress', 'completed', 'cancelled'], default: 'open' },
+  status: { type: String, enum: ['pending', 'In_Progress', 'completed', 'cancelled'], default: 'pending' },
   serviceProviderId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Optional initially
   customerName:{type:String,required:true},
   serviceProviderName:{type:String,required:true},

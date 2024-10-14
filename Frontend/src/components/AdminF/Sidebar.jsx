@@ -2,9 +2,13 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+var userid = localStorage.getItem("userInfo");
+userid=JSON.parse(userid);
+
 export const Sidebar = ({ activeSection, setActiveSection }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
+  const username = userid.username|| " "
 
   const handleLogoutClick = () => {
     setShowLogoutModal(true);
@@ -27,7 +31,7 @@ export const Sidebar = ({ activeSection, setActiveSection }) => {
         <i class="fa-solid fa-circle-user"></i>
       </center>
       <center>
-        <h3>Admin</h3>
+        <h3>{username}</h3>
       </center>
       <ul>
         <li
@@ -75,6 +79,7 @@ export const Sidebar = ({ activeSection, setActiveSection }) => {
               <button id="yes" className="btn btn-dark"onClick={handleConfirmLogout}>
                 Yes
               </button>
+              {/* localStorage.clear(); */}
               <button className="btn btn-dark" onClick={handleCancelLogout}>No</button>
             </div></div>
           </div>

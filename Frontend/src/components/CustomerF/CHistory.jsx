@@ -30,8 +30,8 @@ export const CHistory = () => {
     // event.preventDefault()
     try{ 
       const response = await axios.post('http://localhost:8088/jobRequestRoutes/joblisthistory',{user})
-      console.log(response.data)
-      setServices(response.data.job)
+      const fetchedJobs = Array.isArray(response.data.job) ? response.data.job : []; 
+      setServices(fetchedJobs)
     }
     catch(error){
       console.log('error fetching service history',error)
@@ -55,7 +55,10 @@ export const CHistory = () => {
           </tr>
         </thead>
         <tbody>
-          {services.map((service) => (
+          {Array.isArray(services) && services.length === 0 ? ( 
+                <p>No Job Records</p> 
+          ) : (
+          services.map((service) => (
             <tr key={service.id}>
               <td>{service.service}</td>
               <td>{service.serviceProviderName}</td>
@@ -78,7 +81,8 @@ export const CHistory = () => {
                 )}
               </td>
             </tr>
-          ))}
+          ))
+        )}
         </tbody>
       </table>
     </div>

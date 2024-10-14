@@ -38,11 +38,12 @@ export const THistory = () => {
   const user = userid._id
   useEffect( ()=> {
     fetchJobHistory()
-  })
+  },[])
   const fetchJobHistory = async() => {
     try{
       const response = await axios.post('http://localhost:8088/jobRequestRoutes/joblisthistory',{user})
-      setHistory(response.data.job)
+      setHistory(response.data.job || [])
+      console.log(response.data)
     }
     catch(error){
       console.log('error fetching job history',error)
@@ -65,7 +66,10 @@ export const THistory = () => {
           </tr>
         </thead>
         <tbody>
-          {history.map((job) => (
+          {  history === 0 ? ( 
+          <p>No Job Records</p> 
+          ) : (
+          history.map((job) => (
             <tr key={job.id}>
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.service}</td>
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.customerName}</td>
@@ -77,7 +81,8 @@ export const THistory = () => {
                 {job.status === 'Completed' ? job.rating : '-'}
               </td>
             </tr>
-          ))}
+          ))
+        )}
         </tbody>
       </table>
     </div>
