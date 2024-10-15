@@ -279,7 +279,7 @@ export const CServices = () => {
       setLocation('')
       setIssue('')
       setPhoneNumber('')
-      setShowForm((prevShowForm) => ({ ...prevShowForm, [selectedWorker._id]: false }));
+      setShowForm(false);
     }
     catch(error){
       console.log('error while registering job request',error)

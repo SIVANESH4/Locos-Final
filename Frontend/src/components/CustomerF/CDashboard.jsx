@@ -65,13 +65,6 @@ export const CDashboard = () => {
     ],
   };
 
-  //   const [userData, setUserData] = useState({
-  //   name: 'John Doe',
-  //   email: 'johndoe@example.com',
-  //   phone: '123-456-7890',
-  //   address: '123 Main St, Springfield',
-  //   pincode: '987654',
-  // });
   const [name,setName]=useState(userid.username || "")
   const email=userid.email || ""
   const [phone,setPhone]=useState(userid.phoneNo || "")
@@ -94,11 +87,12 @@ export const CDashboard = () => {
   //cancel job request
   const handleDeclineJob = async(job) => {
     try{
-      const response = await axios.post('http://localhost:8088/jobRequestRoutes/declinejobrequest',{
-        custId:userid._id,servicerId:job.serviceProviderId
+      const response = await axios.put('http://localhost:8088/jobRequestRoutes/declinejobrequest',{
+        // custId:userid._id,servicerId:job.serviceProviderId
+        id:job._id
       })
-      console.log(response.data)
       window.location.reload();
+      // console.log(response.data)
     }
     catch(error){
       console.log(error)

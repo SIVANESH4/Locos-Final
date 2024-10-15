@@ -92,11 +92,13 @@ export const TProfile = () => {
   //accepting job Request
   const handleAccept = async(job) => {
     try{
-      const response = await axios.post('http://localhost:8088/jobRequestRoutes/acceptjobrequest',{
-        custId:job.customerId,
-        servicerId:userid._id
+      const response = await axios.put('http://localhost:8088/jobRequestRoutes/acceptjobrequest',{
+        // custId:job.customerId,
+        // servicerId:userid._id
+        id:job._id
       })
-      fetchJobRequest();
+      // fetchJobRequest();
+      window.location.reload();
     }
     catch(error){
       console.log(error)
@@ -106,9 +108,10 @@ export const TProfile = () => {
   //cancel the job request
   const handleDecline = async(job) => {
     try{
-      const response = await axios.post('http://localhost:8088/jobRequestRoutes/canceljobrequest',{
-        custId:job.customerId,
-        servicerId:userid._id
+      const response = await axios.put('http://localhost:8088/jobRequestRoutes/canceljobrequest',{
+        // custId:job.customerId,
+        // servicerId:userid._id
+        id:job._id
       })
       window.location.reload();
       fetchJobRequest();
