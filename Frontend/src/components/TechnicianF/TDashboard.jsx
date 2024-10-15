@@ -36,7 +36,6 @@ export const TDashboard = () => {
       })
       console.log(response.data)
       fetchOngoingJob();
-      window.location.reload();
     }
     catch(error){
       console.log(error)
@@ -45,7 +44,7 @@ export const TDashboard = () => {
   //count of job request
   const fetchJobCount = async(event) => {
     try{
-      const response = await axios.post('http://localhost:8088/jobRequestRoutes/countjob',{id:userid._id})
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/countjob',{servicerId:userid._id})
       console.log(response.data)
       setCompletedJobs(response.data.complete)
       setInProgressJobs(response.data.progress)
@@ -107,7 +106,11 @@ export const TDashboard = () => {
                 <li key={job.id} className="ongoing-job-item">
                   <h4>{job.service}</h4>
                   <p>Provider: {job.customerName}</p>
-                  <p>Date: {job.bookingDate}</p>
+                  <p>Date: {new Date(job.bookingDate).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    })}</p>
                   <p>Status: {job.status}</p>
                   <button className="btn btn-dark" onClick={() => handleCancelJob(job)}>Cancel</button>
                 </li>

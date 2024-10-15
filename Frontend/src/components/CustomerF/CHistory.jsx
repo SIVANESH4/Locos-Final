@@ -62,7 +62,11 @@ export const CHistory = () => {
             <tr key={service.id}>
               <td>{service.service}</td>
               <td>{service.serviceProviderName}</td>
-              <td>{service.bookingDate}</td>
+              <td>{new Date(service.bookingDate).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    })}</td>
               <td>{service.status}</td>
               <td>{service.rating ? service.rating.toFixed(1) : 'Not Rated'}</td>
               <td>

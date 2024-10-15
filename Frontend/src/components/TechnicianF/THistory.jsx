@@ -74,7 +74,11 @@ export const THistory = () => {
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.service}</td>
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.customerName}</td>
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.location}</td>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.bookingDate}</td>
+              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{new Date(job.bookingDate).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    })}</td>
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>{job.status}</td>
               {/* If status is completed, display rating */}
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>

@@ -118,7 +118,11 @@ export const CDashboard = () => {
                 <li key={job.id} className="ongoing-job-item">
                   <h4>{job.service}</h4>
                   <p>Provider: {job.serviceProviderName}</p>
-                  <p>Date: {job.bookingDate}</p>
+                  <p>Date: {new Date(job.bookingDate).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    })}</p>
                   <p>Status: {job.status}</p>
                   <button className="btn btn-dark" onClick={() => handleDeclineJob(job)}>Cancel</button>
                 </li>
