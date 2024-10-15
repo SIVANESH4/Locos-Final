@@ -41,7 +41,7 @@ const defaultJobs = [
     serviceType: "Carpentry",
     location: "789 Road, City",
     bookingDate: "2024-09-21",
-    status: "Pending",
+    status: "In_Progress",
   },
 ];
 
@@ -55,7 +55,7 @@ export const TProfile = () => {
   const [service, setService] = useState(userid.service || " ");
   const [customer,setCustomer] = useState('')
   useEffect(() => {
-    fetchJobRequest();
+   fetchJobRequest();
   },[])
   //updating technician details
   const handleUpdateData = async (event) => {
@@ -82,27 +82,34 @@ export const TProfile = () => {
   const fetchJobRequest = async(event) => {
     try{
      const response = await axios.post('http://localhost:8088/jobRequestRoutes/openjoblist',{user:userid._id})
-      console.log(response.data)
-      const fetchedJobs = Array.isArray(response.data.job) ? response.data.job : []; 
-      setJobs(fetchedJobs)
+      setJobs(response.data||[])
     }
     catch(error){
       console.log('Error while Fetching joblist ',error)
     }
   }
+
   //accepting job Request
-  const handleAccept = (job) => {
-    setCustomer(job); // Store the selected customer's data
-    console.log(customer)
+  const handleAccept = async(job) => {
+    try{
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/acceptjobrequest',{
+        custId:job.customerId,
+        servicerId:userid._id
+      })
+      fetchJobRequest();
+    }
+    catch(error){
+      console.log(error)
+    }
   };
 
   // Function to update the status of a job
-  const updateJobStatus = (jobId, newStatus) => {
-    const updatedJobs = jobs.map((job) =>
-      job.id === jobId ? { ...job, status: newStatus } : job
-    );
-    setJobs(updatedJobs);
-  };
+  // const updateJobStatus = (jobId, newStatus) => {
+  //   const updatedJobs = jobs.map((job) =>
+  //     job.id === jobId ? { ...job, status: newStatus } : job
+  //   );
+  //   setJobs(updatedJobs);
+  // };
 
   return (
     <>
@@ -199,79 +206,79 @@ export const TProfile = () => {
         <div className="tech-notify">
           <h3>Job Requests</h3>
           <div className="tech-not">
-            <div className="tech-jobreq">
-              {/* List of Job Requests */}
-              <div>
-                {
-                  Array.isArray(jobs) && jobs.length > 0 ? (
+  <div className="tech-jobreq">
+    {/* List of Job Requests */}
+    {jobs && jobs.length > 0 ? (
+      jobs.map((job) => (
+        <div
+          key={job.id}
+          style={{
+            border: "1px solid #ddd",
+            padding: "10px",
+            marginBottom: "10px",
+          }}
+          className="job-card"
+        >
+          <h3>Service: {job.service}</h3>
+          <p>
+            <strong>Customer:</strong> {job.customerName}
+          </p>
+          <p>
+            <strong>Location:</strong> {job.location}
+          </p>
+          <p>
+            <strong>Appoinment Date:</strong> {new Date(job.bookingDate).toLocaleDateString('en-GB', {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric',
+            })}
+          </p>
+          <p>
+            <strong>Status:</strong> {job.status}
+          </p>
 
-                 jobs.map((job) => (
-                  <div
-                    key={job.id}
-                    style={{
-                      border: "1px solid #ddd",
-                      padding: "10px",
-                      marginBottom: "10px",
-                    }}
-                    className="job-card"
-                  >
-                    <h3>Service: {job.service}</h3>
-                    <p>
-                      <strong>Customer:</strong> {job.customerName}
-                    </p>
-                    <p>
-                      <strong>Location:</strong> {job.location}
-                    </p>
-                    <p>
-                      <strong>Appoinment Date:</strong> {job.bookingDate}
-                    </p>
-                    <p>
-                      <strong>Status:</strong> {job.status}
-                    </p>
-
-                    {/* Show Accept/Decline buttons if job is pending */}
-                    {job.status === "pending" && (
-                      <div>
-                        <button
-                          onClick={() => updateJobStatus(job.id,"In_Progress")}
-                          className="btn btn-dark"
-                        >
-                          Accept
-                        </button>
-                        <button
-                          onClick={() => updateJobStatus(job.id, "Declined")}
-                          className="btn btn-dark"
-                        >
-                          Decline
-                        </button>
-                      </div>
-                    )}
-
-                    {/* Show Cancel and Complete buttons if job is in progress */}
-                    {job.status === "In_Progress" && (
-                      <div>
-                        <button
-                          onClick={() => updateJobStatus(job.id, "Cancelled")}
-                          className="btn btn-dark"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => updateJobStatus(job.id, "Completed")}
-                          className="btn btn-dark"
-                        >
-                          Complete
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                ))
-                  ) :(
-                    <p>no records</p>
-                  )}
-              </div>
+          {/* Show Accept/Decline buttons if job is pending */}
+          {job.status === "pending" && (
+            <div>
+              <button
+                onClick={() => handleAccept(job)}
+                className="btn btn-dark"
+              >
+                Accept
+              </button>
+              <button
+                onClick={() => updateJobStatus(job.id, "Declined")}
+                className="btn btn-dark"
+              >
+                Decline
+              </button>
             </div>
-          </div>
+          )}
+
+          {/* Show Cancel and Complete buttons if job is in progress */}
+          {job.status === "In_Progress" && (
+            <div>
+              <button
+                onClick={() => updateJobStatus(job.id, "Cancelled")}
+                className="btn btn-dark"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => updateJobStatus(job.id, "Completed")}
+                className="btn btn-dark"
+              >
+                Complete
+              </button>
+            </div>
+          )}
+        </div>
+      ))
+    ) : (
+      <p>No job requests found.</p>
+    )}
+  </div>
+</div>
         </div>
 
       </div>
