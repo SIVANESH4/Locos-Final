@@ -103,6 +103,21 @@ export const TProfile = () => {
     }
   };
 
+  //cancel the job request
+  const handleDecline = async(job) => {
+    try{
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/canceljobrequest',{
+        custId:job.customerId,
+        servicerId:userid._id
+      })
+      window.location.reload();
+      fetchJobRequest();
+    }
+    catch(error){
+      console.log(error)
+    }
+  };
+
   // Function to update the status of a job
   // const updateJobStatus = (jobId, newStatus) => {
   //   const updatedJobs = jobs.map((job) =>
@@ -247,7 +262,7 @@ export const TProfile = () => {
                 Accept
               </button>
               <button
-                onClick={() => updateJobStatus(job.id, "Declined")}
+                onClick={() => handleDecline(job)}
                 className="btn btn-dark"
               >
                 Decline
@@ -263,12 +278,6 @@ export const TProfile = () => {
                 className="btn btn-dark"
               >
                 Cancel
-              </button>
-              <button
-                onClick={() => updateJobStatus(job.id, "Completed")}
-                className="btn btn-dark"
-              >
-                Complete
               </button>
             </div>
           )}
