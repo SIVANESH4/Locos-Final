@@ -9,44 +9,61 @@ dotenv.config()
 
 // Create a new user (Signup route)
 router.post('/signup', async (req, res) => {
-    try {
-      const { username, email, password, phoneNo, address,pincode, role,service} = req.body;
+  try {
+    const { 
+      username, 
+      email, 
+      password, 
+      phoneNo, 
+      address, 
+      pincode, 
+      role, 
+      service, 
+      location // Receives location as { latitude, longitude }
+    } = req.body;
 
-      //check if the users already exists
-      const existsUser = await UserDB.findOne({email:email})
-      if (existsUser) {
-          return res.status(200).json({ message: 'users already exists'})
-     }
+    // Check if the user already exists
+    const existsUser = await UserDB.findOne({ email: email });
+    if (existsUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
 
-      //Register the user
-      const newUser = new UserDB({
-        username,
-        email,
-        password,
-        phoneNo,
-        address,
-        pincode,
-        role,
-        // Only add services if the user is a service provider
-        service: role === 'Technician' ? service : null
-      });
-      const user = await newUser.save();
+    // Convert location to GeoJSON format if role is Technician
+    const geoLocation = role === 'Technician' && location
+      ? {
+          type: 'Point',
+          coordinates: [location.longitude, location.latitude] // GeoJSON format: [longitude, latitude]
+        }
+      : null;
 
-      //Generate a JWT token
-      const token = jwt.sign(
-        { id: user._id, username: user.username, email: user.email },
-        SECRET_KEY,
-    );
+    // Create a new user
+    const newUser = new UserDB({
+      username,
+      email,
+      password, // Remember to hash this before saving
+      phoneNo,
+      address,
+      pincode,
+      role,
+      service: role === 'Technician' ? service : null,
+      location: geoLocation // Store location in GeoJSON format
+    });
 
+    // Save the user
+    const user = await newUser.save();
 
-      res.status(200).json({ 
-        message: 'Account created successfully' ,token
-      });
-    } catch (error) {
-      
-      return res.status(500).json({ message: 'Error during signup', error: error.message });
+    // Generate JWT token (if needed)
+    // const token = jwt.sign({ id: user._id, username: user.username, email: user.email }, SECRET_KEY);
+
+    res.status(201).json({ message: 'Account created successfully', user });
+  } catch (error) {
+    console.error('Signup Error:', error); // Log the error for debugging
+    return res.status(500).json({ message: 'Error during signup', error: error.message });
   }
 });
+
+
+
 
 //user login
 router.post( '/userlogin' , async (req,res) => { 
@@ -275,5 +292,74 @@ router.put( '/userupdate', async ( req,res ) => {
 // Additional endpoints for updating or deleting users
 // Example: router.put('/api/users/:id', (req, res) => {});
 // Example: router.delete('/api/users/:id', (req, res) => {});
+
+// 
+
+// // Haversine formula to calculate distance between two coordinates
+// const haversine = (lat1, lon1, lat2, lon2) => {
+//   const R = 6371; // Radius of the Earth in km
+//   const dLat = ((lat2 - lat1) * Math.PI) / 180;
+//   const dLon = ((lon2 - lon1) * Math.PI) / 180;
+//   const a =
+//     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+//     Math.cos((lat1 * Math.PI) / 180) *
+//       Math.cos((lat2 * Math.PI) / 180) *
+//       Math.sin(dLon / 2) *
+//       Math.sin(dLon / 2);
+//   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//   return R * c; // Distance in km
+// };
+
+// // API to get technicians within 10km of the provided latitude and longitude
+// router.get("/nearby", async (req, res) => {
+//   const { latitude, longitude } = req.query;
+
+//   if (!latitude || !longitude) {
+//     return res.status(400).json({ message: "Latitude and longitude are required." });
+//   }
+
+//   try {
+//     const technicians = await Technician.find();
+//     const nearbyTechnicians = technicians.filter((technician) => {
+//       const distance = haversine(latitude, longitude, technician.latitude, technician.longitude);
+//       return distance <= 10; // Filtering technicians within 10 km
+//     });
+
+//     return res.status(200).json({ technicians: nearbyTechnicians });
+//   } catch (error) {
+//     console.error("Error fetching nearby technicians:", error);
+//     return res.status(500).json({ message: "Internal server error." });
+//   }
+// });
+
+// const express = require('express');
+
+
+// API to get nearby technicians within 10 km range
+router.get('/nearby', async (req, res) => {
+    try {
+        const { latitude, longitude } = req.query;
+
+        if (!latitude || !longitude) {
+            return res.status(200).json({ message: 'Latitude and longitude are required' });
+        }
+
+        const technicians = await UserDB.find({
+            role: 'Technician',
+            location: {
+                $near: {
+                    $geometry: { type: 'Point', coordinates: [parseFloat(longitude), parseFloat(latitude)] },
+                    $maxDistance: 10000 // 10 km in meters
+                }
+            }
+        });
+
+        res.status(200).json({technicians});
+    } catch (error) {
+        console.error('Error fetching nearby technicians:', error);
+        res.status(500).json({ message: 'An error occurred while fetching technicians', error: error.message });
+    }
+});
+
 
 module.exports = router;

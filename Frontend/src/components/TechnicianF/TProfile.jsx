@@ -82,7 +82,7 @@ export const TProfile = () => {
   const fetchJobRequest = async(event) => {
     try{
      const response = await axios.post('http://localhost:8088/jobRequestRoutes/openjoblist',{user:userid._id})
-      setJobs(response.data||[])
+      setJobs(response.data.service)
     }
     catch(error){
       console.log('Error while Fetching joblist ',error)
