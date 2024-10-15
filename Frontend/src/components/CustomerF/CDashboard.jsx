@@ -19,7 +19,7 @@ export const CDashboard = () => {
   });
   useEffect(() => {
     fetchOngoingJob();
-    fetchServiceStats();
+    fetchJobCount();
   }, []);
 
   const fetchOngoingJob = async(event) => {
@@ -32,9 +32,22 @@ export const CDashboard = () => {
       console.log(error)
     }
   }
-  const fetchServiceStats = () => {
-    setServiceStats({ booked: 20, finished: 15, cancelled: 5 });
-  };
+  
+  //fetch job request count
+  const fetchJobCount = async(event) => {
+    try{
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/countjob',{custId:userid._id})
+      console.log(response.data)
+      setServiceStats({
+        booked: response.data.pending || 0,
+        finished: response.data.complete || 0,
+        cancelled: response.data.cancel || 0,
+      });
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
   const barData = {
     labels: ["Booked", "Finished", "Cancelled"],
     datasets: [
@@ -78,15 +91,19 @@ export const CDashboard = () => {
     window.location.reload()
   }
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setUserData({ ...userData, [name]: value });
-  // };
-
-  // const handleSave = () => {
-  //   // Logic to save/update profile data
-  //   alert("Profile updated successfully");
-  // };
+  //cancel job request
+  const handleDeclineJob = async(job) => {
+    try{
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/declinejobrequest',{
+        custId:userid._id,servicerId:job.serviceProviderId
+      })
+      console.log(response.data)
+      window.location.reload();
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
   return (
     <>
       <div className="customer-dash">
@@ -103,7 +120,7 @@ export const CDashboard = () => {
                   <p>Provider: {job.serviceProviderName}</p>
                   <p>Date: {job.bookingDate}</p>
                   <p>Status: {job.status}</p>
-                  <button className="btn btn-dark">Cancel</button>
+                  <button className="btn btn-dark" onClick={() => handleDeclineJob(job)}>Cancel</button>
                 </li>
               ))
             )}

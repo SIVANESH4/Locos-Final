@@ -70,35 +70,6 @@ router.post('/openjoblist', async (req, res) => {
 
 });
 
-//accepting job Request
-router.put('/acceptingjob',async(req, res) => {
-  try{
-
-    const statusUpdate = await JobRequest.findOneAndUpdate(
-      {
-        _id:req.body.id
-      },
-      {
-        $set : {
-          status:"In_Progress"
-        }
-      },
-      {
-        new:true , runValidators:true
-      }
-    )
-    if(!statusUpdate){
-      console.log(statusUpdate)
-      return res.status(404).json({message:'No mathcing Requested'})
-    }
-    res.status(200).json({message:'JobRequest Accepted',status:'success',statusUpdate})
-  }
-  catch(error){
-    console.log(error.message)
-    return res.status(500).json({message:'internal error',error:error.message})
-  }
-})
-
 // Fetch all job requests ( customers or technician)
 router.post('/joblisthistory', async (req, res) => {
   const {user} = req.body
@@ -159,11 +130,24 @@ router.post('/countjob',async(req,res) => {
     //   return res.status(404).json({message:'user not found'})
     // }
 
-    const progress = await JobRequest.countDocuments({serviceProviderId:req.body.id,status:"In_Progress"})
-    const pending = await JobRequest.countDocuments({serviceProviderId:req.body.id ,status:"pending"})
-    const complete = await JobRequest.countDocuments({serviceProviderId:req.body.id,status:"completed"})
+      const progress = await JobRequest.countDocuments({
+        $or: [{ customerId: req.body.custId}, { serviceProviderId: req.body.servicerId}],
+        status: "In_Progress" 
+      })
 
-    return res.status(200).json({progress,pending,complete})
+      const pending = await JobRequest.countDocuments({
+        $or: [{ customerId: req.body.custId}, { serviceProviderId: req.body.servicerId}],
+        status:"pending"})
+
+      const complete = await JobRequest.countDocuments({ 
+        $or: [{ customerId: req.body.custId}, { serviceProviderId: req.body.servicerId}],
+        status:"completed"})
+
+        const cancel = await JobRequest.countDocuments({ 
+          $or: [{ customerId: req.body.custId}, { serviceProviderId: req.body.servicerId}],
+          status:"cancelled"})
+
+    return res.status(200).json({progress,pending,complete,cancel})
   }
   catch(error){
     return res.status(500).json({error:error.message})
@@ -196,6 +180,87 @@ router.post('/ongoingjob', async (req, res) => {
     return res.status(500).json({message:'Error while fetching',err:error.message})
   }
 
+});
+
+//accept job request
+router.post('/acceptjobrequest', async (req, res) => {
+  try {
+    const id = req.body.custId;
+    const user = await UserDB.findById(id);
+    const job = await JobRequest.findOneAndUpdate({
+      customerId: req.body.custId,
+      serviceProviderId: req.body.servicerId
+    },
+    {
+      $set : {
+        status:"In_Progress"
+      }
+    },
+    {
+      new:true
+    }
+  );
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({ message: 'Customer not found' });
+    }
+
+    // Check if the job exists
+    if (!job) {
+      return res.status(404).json({ message: 'Job request not found' });
+    }
+
+    // Configure Nodemailer transporter
+    const transport = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MAILID,
+        pass: process.env.MAILPASS,
+      },
+    });
+
+    // Configure the email options
+const send = {
+  from: `Loco's ${process.env.MAILID}`,
+  to: user.email, // Use the customer's email
+  subject: 'Job Request Accepted Notification',
+  html: `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        h2 { color: #333; }
+        p { color: #555; }
+        a { color: #1a73e8; text-decoration: none; }
+        .footer { font-size: 12px; color: #777; margin-top: 20px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h2>Hello ${user.username},</h2>
+        <p>Good news! Your job request for the service <strong>${job.service}</strong> has been accepted by <strong>${job.serviceProviderName}</strong>.</p>
+        <p>The service provider will contact you soon to discuss the details and schedule the service.</p>
+        <p>If you have any questions or need further assistance, please feel free to reach out to our support team.</p>
+        <div class="footer">
+          <p>Best regards,<br>Loco's Service Team</p>
+        </div>
+      </div>
+    </body>
+    </html>`
+};
+
+    
+    // Send the email
+    await transport.sendMail(send);
+
+    return res.status(200).json({ message: "Service cancelled successfully.", job });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 // Function to generate a random 4-digit OTP
@@ -296,7 +361,7 @@ router.post('/completejobrequest',async(req,res) => {
   }
 })
 
-//cancelling the job request
+//cancelling the job request for technician
 router.post('/canceljobrequest', async (req, res) => {
   try {
     const id = req.body.custId;
@@ -376,6 +441,85 @@ router.post('/canceljobrequest', async (req, res) => {
   }
 });
 
+//cancel job request for customer
+router.post('/declinejobrequest', async (req, res) => {
+  try {
+    const id = req.body.servicerId;
+    const user = await UserDB.findById(id);
+    console.log(user)
+    const job = await JobRequest.findOneAndUpdate({
+      customerId: req.body.custId,
+      serviceProviderId: req.body.servicerId
+    },
+    {
+      $set : {
+        status:"cancelled"
+      }
+    },
+    {
+      new:true
+    }
+  );
 
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({ message: 'Customer not found' });
+    }
+
+    // Check if the job exists
+    if (!job) {
+      return res.status(404).json({ message: 'Job request not found' });
+    }
+
+    // Configure Nodemailer transporter
+    const transport = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MAILID,
+        pass: process.env.MAILPASS,
+      },
+    });
+
+    // Configure the email options
+    const send = {
+      from: `Loco's ${process.env.MAILID}`,
+      to: user.email, // Use the service provider's email
+      subject: 'Job Request Cancellation Notification',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+            h2 { color: #333; }
+            p { color: #555; }
+            a { color: #1a73e8; text-decoration: none; }
+            .footer { font-size: 12px; color: #777; margin-top: 20px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h2>Hello ${job.serviceProviderName},</h2>
+            <p>We would like to inform you that the customer <strong>${job.customerName}</strong> has cancelled their job request for the service <strong>${job.service}</strong>.</p>
+            <p>If you have any questions or need further details, please do not hesitate to contact our support team.</p>
+            <p>We appreciate your understanding and look forward to continuing to work with you.</p>
+            <div class="footer">
+              <p>Best regards,<br>Loco's Service Team</p>
+            </div>
+          </div>
+        </body>
+        </html>`
+    };
+    
+    // Send the email
+    await transport.sendMail(send);
+
+    return res.status(200).json({ message: "Service cancelled successfully.", job });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 module.exports = router;

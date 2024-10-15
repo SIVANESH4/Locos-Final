@@ -233,7 +233,7 @@ export const TProfile = () => {
                     {job.status === "pending" && (
                       <div>
                         <button
-                          onClick={() => handleAccept(job)}
+                          onClick={() => updateJobStatus(job.id,"In_Progress")}
                           className="btn btn-dark"
                         >
                           Accept
