@@ -11,6 +11,8 @@ export const TDashboard = () => {
   const [inProgressJobs, setInProgressJobs] = useState(""); // default value
   const [pendingJobs, setPendingJobs] = useState(""); // default value
   const [showCompleteForm, setShowCompleteForm] = useState(false);
+  const [otp,setOtp] = useState('')
+  const [verify,setVerify] = useState('')
 
   useEffect(() => {
     fetchOngoingJob();
@@ -35,21 +37,48 @@ export const TDashboard = () => {
   const handleComplete = async (job) => {
     try {
       setShowCompleteForm(true);
-      // const response = await axios.post(
-      //   "http://localhost:8088/jobRequestRoutes/confirmationjobrequest",
-      //   {
-      //     custId: job.customerId,
-      //   }
-      // );
-      console.log(response.data);
+      const response = await axios.post(
+        "http://localhost:8088/jobRequestRoutes/confirmationjobrequest",
+        {
+          custId: job.customerId,
+        }
+      );
+      console.log(response.data)
+      setVerify(response.data.otp)
     } catch (error) {
       console.log(error);
     }
   };
+  useEffect(() => {
+    if (verify) {
+      console.log("Updated verify state:", verify);
+    }
+  }, [verify]);
+
+
+  const handleCancel = () => {
+    setVerify(null)
+    setShowCompleteForm(false)
+  };
+  
   const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    // ... (form submission logic)
-    setShowCompleteForm(false);
+   event.preventDefault();
+    try{
+      if(otp == verify){
+        console.log("otp is correct")
+        const response = await axios.post('http://localhost:8088/jobRequestRoutes/completejobrequest',{
+          custId:job.customerId,servicerId:userid._id
+        })
+        setShowCompleteForm(false);
+        window.location.reload();
+      }
+     else{
+      alert('Entered Otp Is Incorrect')
+     }
+    }
+    catch(error){
+      console.log(error);
+    }
   };
   //decline the job request
   const handleCancelJob = async (job) => {
@@ -169,8 +198,10 @@ export const TDashboard = () => {
                         <input
                           type="text"
                           className="form-control"
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value)}
                         /> <br />
-                        <button type="submit" className="btn btn-dark" style={{ marginRight: "20px" }}>Cancel</button>
+                        <button type="button" className="btn btn-dark" onClick={() =>handleCancel() } style={{ marginRight: "20px" }}>Cancel</button>
                         <button type="submit" className="btn btn-dark">Submit</button>
                       </form></center>
                     </div>

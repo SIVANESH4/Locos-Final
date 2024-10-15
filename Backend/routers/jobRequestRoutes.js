@@ -282,49 +282,49 @@ router.post('/confirmationjobrequest', async (req, res) => {
     const otp = generateOTP();
 
     // Configure Nodemailer transporter
-    const transport = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.MAILID,
-        pass: process.env.MAILPASS,
-      },
-    });
+    // const transport = nodemailer.createTransport({
+    //   service: "gmail",
+    //   auth: {
+    //     user: process.env.MAILID,
+    //     pass: process.env.MAILPASS,
+    //   },
+    // });
 
-    // Configure the email options
-    const send = {
-      from: `Loco's ${process.env.MAILID}`,
-      to: user.email, // Use the user's email
-      subject: 'Service Completion Notification',
-      html: `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <style>
-            body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-            .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
-            h2 { color: #333; }
-            p { color: #555; }
-            a { color: #1a73e8; text-decoration: none; }
-            .footer { font-size: 12px; color: #777; margin-top: 20px; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <h2>Hello ${user.username},</h2>
-            <p>Your service request has been completed successfully!</p>
-            <p>To confirm the completion, please use the following OTP:</p>
-            <h4 style="font-weight: bold;">${otp}</h4>
-            <p>If you did not request this, please ignore this email or contact support if you have questions.</p>
-            <div class="footer">
-              <p>Best regards,<br>Loco's Service Team</p>
-            </div>
-          </div>
-        </body>
-        </html>`
-    };
+    // // Configure the email options
+    // const send = {
+    //   from: `Loco's ${process.env.MAILID}`,
+    //   to: user.email, // Use the user's email
+    //   subject: 'Service Completion Notification',
+    //   html: `
+    //     <!DOCTYPE html>
+    //     <html>
+    //     <head>
+    //       <style>
+    //         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    //         .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+    //         h2 { color: #333; }
+    //         p { color: #555; }
+    //         a { color: #1a73e8; text-decoration: none; }
+    //         .footer { font-size: 12px; color: #777; margin-top: 20px; }
+    //       </style>
+    //     </head>
+    //     <body>
+    //       <div class="container">
+    //         <h2>Hello ${user.username},</h2>
+    //         <p>Your service request has been completed successfully!</p>
+    //         <p>To confirm the completion, please use the following OTP:</p>
+    //         <h4 style="font-weight: bold;">${otp}</h4>
+    //         <p>If you did not request this, please ignore this email or contact support if you have questions.</p>
+    //         <div class="footer">
+    //           <p>Best regards,<br>Loco's Service Team</p>
+    //         </div>
+    //       </div>
+    //     </body>
+    //     </html>`
+    // };
 
-    // Send the email
-    await transport.sendMail(send);
+    // // Send the email
+    // await transport.sendMail(send);
 
     return res.status(200).json({ message: "Service completed successfully. OTP sent to your email." ,otp});
   } catch (error) {
@@ -336,6 +336,8 @@ router.post('/confirmationjobrequest', async (req, res) => {
 //complete status update
 router.post('/completejobrequest',async(req,res) => {
   try{
+    console.log(req.body.custId)
+    console.log(req.body.servicerId)
       const completeJob = await JobRequest.findOneAndUpdate(
         {
           customerId:req.body.custId,
