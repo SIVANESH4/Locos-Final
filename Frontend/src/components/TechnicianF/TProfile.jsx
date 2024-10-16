@@ -49,13 +49,15 @@ export const TProfile = () => {
    const [jobs, setJobs] = useState([]);
   const [name, setName] = useState(userid.username || "");
   const email = userid.email || "";
+  const services = userid.service || "";
   const [phone, setPhone] = useState(userid.phoneNo || "");
   const [address, setAddress] = useState(userid.address || "");
-  const [pincode, setPincode] = useState(userid.pincode || "");
-  const [service, setService] = useState(userid.service || " ");
+  const [service, setService] = useState([]);
   const [customer,setCustomer] = useState('')
+
   useEffect(() => {
    fetchJobRequest();
+   fetchService();
   },[])
   //updating technician details
   const handleUpdateData = async (event) => {
@@ -65,7 +67,6 @@ export const TProfile = () => {
       email,
       phone,
       address,
-      pincode,
       service,
     };
     const response = await axios.put(
@@ -77,6 +78,18 @@ export const TProfile = () => {
     alert("Profile updated Sucessfully");
     window.location.reload();
   };
+
+  //fetching services
+  const fetchService = async(event) => {
+    try{
+      const response = await axios.get('http://localhost:8088/serviceRoutes/service')
+      setService(response.data.service)
+      console.log(service)
+    }
+    catch(error){
+      console.error(error);
+    }
+  }
   
   //fetching the job request
   const fetchJobRequest = async(event) => {
@@ -184,7 +197,7 @@ export const TProfile = () => {
               />
             </div>
 
-            <div className="form-group-tech">
+            {/* <div className="form-group-tech">
               <label htmlFor="pincode">Pincode</label>
               <input
                 type="text"
@@ -194,7 +207,7 @@ export const TProfile = () => {
                 onChange={(e) => setPincode(e.target.value)}
                 className="form-control"
               />
-            </div>
+            </div> */}
 
             <div className="form-group-tech">
               <label htmlFor="service">Service</label>
@@ -204,12 +217,12 @@ export const TProfile = () => {
                 value={service}
                 onChange={(e) => setService(e.target.value)}
                 className="form-control"
-                disabled
+
               >
-                <option value="">{service}</option>
-                {services.map((service, index) => (
-                  <option key={index} value={service.title}>
-                    {service.title}
+                <option value="">{services}</option>
+                {service.map((service, index) => (
+                  <option key={index} value={service.servicename}>
+                    {service.servicename}
                   </option>
                 ))}
               </select>

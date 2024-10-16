@@ -82,8 +82,6 @@ export const CServices = () => {
     }
   };
 
-
-
   const fetchNearbyTechnicians = async () => {
     // Get the user's geolocation
     navigator.geolocation.getCurrentPosition(async (position) => {

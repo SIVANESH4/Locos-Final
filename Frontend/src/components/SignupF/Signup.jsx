@@ -15,9 +15,9 @@ export const Signup = () => {
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
     const [services] = useState(['Electrical', 'Cleaning', 'Plumbing', 'AC', 'RO', 'Washing Machine', 'Installation', 'Television']);
-    const [pincode, setPincode] = useState('');
     const navigate = useNavigate();
 
+    //register new cutomer or technician
     const handleRegister = async (event) => {
         event.preventDefault();
 
@@ -32,7 +32,6 @@ export const Signup = () => {
             password,
             phoneNo,
             address,
-            pincode,
             role: isTechnician ? 'Technician' : 'Customer',
             service: isTechnician ? service : null,
             location: isTechnician ? { latitude: latitude, longitude: longitude } : null // Store geolocation here
@@ -46,7 +45,6 @@ export const Signup = () => {
                 setPassword('');
                 setPhoneNo('');
                 setAddress('');
-                setPincode('');
                 setService('');
                 setLatitude(''); // Reset latitude
                 setLongitude(''); // Reset longitude
@@ -67,17 +65,19 @@ export const Signup = () => {
         fetchUser();
     }, []);
 
-    const fetchUser = async () => {
-        try {
-            await axios.get('http://localhost:8088/userRoutes/signup')
-                .then((res) => {
-                    console.log(res.data);
-                });
-        } catch (error) {
-            console.error('Error fetching user:', error);
-        }
-    };
+    // const fetchUser = async () => {
+    //     try {
+    //         await axios.get('http://localhost:8088/userRoutes/signup')
+    //             .then((res) => {
+    //                 console.log(res.data);
+    //             });
+    //     } catch (error) {
+    //         console.error('Error fetching user:', error);
+    //     }
+    // };
 
+    //fetch services
+    
     const handleRole = (role) => {
         setIsTechnician(role === 'Technician');
     };
@@ -140,7 +140,7 @@ export const Signup = () => {
                                     ))}
                                 </select><br />
                                 <label className="form-label">Location</label><br />
-                                <input type="text" className="form-control" value={`${latitude}, ${longitude}`} readOnly /><br />
+                                <input type="text" className="form-control" value={`${latitude}, ${longitude}`}  disabled  /><br />
                                 <button type="button" className="btn btn-dark" onClick={fetchLocation}>
                                     Get Location
                                 </button><br />
@@ -150,8 +150,7 @@ export const Signup = () => {
                         <textarea className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} required></textarea><br />
                         <label className="form-label">Phone No</label><br />
                         <input type="text" className="form-control" value={phoneNo} onChange={(e) => setPhoneNo(e.target.value)} required /><br />
-                        <label className="form-label">Pincode</label><br />
-                        <input type="text" className="form-control" value={pincode} onChange={(e) => setPincode(e.target.value)} required /><br />
+
                         <p>Already have an account?<Link to='/login'><span> Login</span></Link></p>
                         <center><button type="submit" id="signup-btn" className="btn btn-dark">Sign up</button></center>
                     </div>
