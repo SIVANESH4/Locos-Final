@@ -69,8 +69,7 @@ export const TDashboard = () => {
       if(otp == verify){
         console.log("otp is correct")
         const response = await axios.put('http://localhost:8088/jobRequestRoutes/completejobrequest',{
-          // custId:customer.customerId,servicerId:userid._id
-          id:customer._id
+          id:customer._id,
         })
         setShowCompleteForm(false);
         window.location.reload();
@@ -88,7 +87,7 @@ export const TDashboard = () => {
     try {
       const response = await axios.put(
         "http://localhost:8088/jobRequestRoutes/canceljobrequest",{ 
-          // custId: job.customerId, servicerId: job.serviceProviderId 
+          custId: job.customerId ,
           id:job._id
         }
       );

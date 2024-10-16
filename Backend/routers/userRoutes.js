@@ -96,7 +96,7 @@ router.post( '/userlogin' , async (req,res) => {
 });
 
 //fogot password
-router.post( '/ForgotPassword' , async (req,res) => {
+router.post('/ForgotPassword', async (req,res) => {
     const { email } = req.body
     try{
         //Find the user by email
@@ -152,7 +152,7 @@ router.post( '/ForgotPassword' , async (req,res) => {
       return res.status(200).json({message:"Password is send successfully"});
   }catch(err)
       {
-      return res.status(500).json({message:"Internal Error"});
+      return res.status(500).json({message:"Internal Error",error:err.message});
       }
   });
 
@@ -302,7 +302,7 @@ router.get('/nearby', async (req, res) => {
             location: {
                 $near: {
                     $geometry: { type: 'Point', coordinates: [parseFloat(longitude), parseFloat(latitude)] },
-                    $maxDistance: 10000 // 10 km in meters
+                    $maxDistance: 3000 // 3 km in meters
                 }
             }
         });

@@ -95,7 +95,7 @@ export const TProfile = () => {
   const fetchJobRequest = async(event) => {
     try{
      const response = await axios.post('http://localhost:8088/jobRequestRoutes/openjoblist',{user:userid._id})
-      setJobs(response.data.service)
+      setJobs(response.data)
     }
     catch(error){
       console.log('Error while Fetching joblist ',error)
@@ -106,7 +106,7 @@ export const TProfile = () => {
   const handleAccept = async(job) => {
     try{
       const response = await axios.put('http://localhost:8088/jobRequestRoutes/acceptjobrequest',{
-        // custId:job.customerId,
+        custId:job.customerId,
         // servicerId:userid._id
         id:job._id
       })

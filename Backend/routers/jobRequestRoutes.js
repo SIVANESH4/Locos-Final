@@ -186,8 +186,10 @@ router.post('/ongoingjob', async (req, res) => {
 //accept job request
 router.put('/acceptjobrequest', async (req, res) => {
   try {
+    
     const id = req.body.custId;
     const user = await UserDB.findById(id);
+    console.log(user)
     const job = await JobRequest.findOneAndUpdate({
       // customerId: req.body.custId,
       // serviceProviderId: req.body.servicerId
@@ -213,55 +215,55 @@ router.put('/acceptjobrequest', async (req, res) => {
       return res.status(404).json({ message: 'Job request not found' });
     }
 
-//     // Configure Nodemailer transporter
-//     const transport = nodemailer.createTransport({
-//       service: "gmail",
-//       auth: {
-//         user: process.env.MAILID,
-//         pass: process.env.MAILPASS,
-//       },
-//     });
+//    // Configure Nodemailer transporter
+    const transport = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MAILID,
+        pass: process.env.MAILPASS,
+      },
+    });
 
-//     // Configure the email options
-// const send = {
-//   from: `Loco's ${process.env.MAILID}`,
-//   to: user.email, // Use the customer's email
-//   subject: 'Job Request Accepted Notification',
-//   html: `
-//     <!DOCTYPE html>
-//     <html>
-//     <head>
-//       <style>
-//         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-//         .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
-//         h2 { color: #333; }
-//         p { color: #555; }
-//         a { color: #1a73e8; text-decoration: none; }
-//         .footer { font-size: 12px; color: #777; margin-top: 20px; }
-//       </style>
-//     </head>
-//     <body>
-//       <div class="container">
-//         <h2>Hello ${user.username},</h2>
-//         <p>Good news! Your job request for the service <strong>${job.service}</strong> has been accepted by <strong>${job.serviceProviderName}</strong>.</p>
-//         <p>The service provider will contact you soon to discuss the details and schedule the service.</p>
-//         <p>If you have any questions or need further assistance, please feel free to reach out to our support team.</p>
-//         <div class="footer">
-//           <p>Best regards,<br>Loco's Service Team</p>
-//         </div>
-//       </div>
-//     </body>
-//     </html>`
-// };
+     // Configure the email options
+const send = {
+  from: `Loco's ${process.env.MAILID}`,
+  to: user.email, // Use the customer's email
+  subject: 'Job Request Accepted Notification',
+  html: `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        h2 { color: #333; }
+        p { color: #555; }
+        a { color: #1a73e8; text-decoration: none; }
+        .footer { font-size: 12px; color: #777; margin-top: 20px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h2>Hello ${user.username},</h2>
+        <p>Good news! Your job request for the service <strong>${job.service}</strong> has been accepted by <strong>${job.serviceProviderName}</strong>.</p>
+        <p>The service provider will contact you soon to discuss the details and schedule the service.</p>
+        <p>If you have any questions or need further assistance, please feel free to reach out to our support team.</p>
+        <div class="footer">
+          <p>Best regards,<br>Loco's Service Team</p>
+        </div>
+      </div>
+    </body>
+    </html>`
+};
 
     
 //     // Send the email
-//     await transport.sendMail(send);
+     await transport.sendMail(send);
 
-    return res.status(200).json({ message: "Service cancelled successfully.", job });
+    return res.status(200).json({ message: "Service accept successfully.", job });
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' ,error:error.message});
   }
 });
 
@@ -274,7 +276,7 @@ router.put('/confirmationjobrequest', async (req, res) => {
   try {
     const id = req.body.custId;
     const user = await UserDB.findById(id);
-
+    console.log(user)
     // Check if the user exists
     if (!user) {
       return res.status(404).json({ message: 'Customer not found' });
@@ -283,63 +285,61 @@ router.put('/confirmationjobrequest', async (req, res) => {
     // Generate a 4-digit OTP
     const otp = generateOTP();
 
-    // // Configure Nodemailer transporter
-    // const transport = nodemailer.createTransport({
-    //   service: "gmail",
-    //   auth: {
-    //     user: process.env.MAILID,
-    //     pass: process.env.MAILPASS,
-    //   },
-    // });
+    // Configure Nodemailer transporter
+    const transport = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MAILID,
+        pass: process.env.MAILPASS,
+      },
+    });
 
-    // // // Configure the email options
-    // const send = {
-    //   from: `Loco's ${process.env.MAILID}`,
-    //   to: user.email, // Use the user's email
-    //   subject: 'Service Completion Notification',
-    //   html: `
-    //     <!DOCTYPE html>
-    //     <html>
-    //     <head>
-    //       <style>
-    //         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    //         .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
-    //         h2 { color: #333; }
-    //         p { color: #555; }
-    //         a { color: #1a73e8; text-decoration: none; }
-    //         .footer { font-size: 12px; color: #777; margin-top: 20px; }
-    //       </style>
-    //     </head>
-    //     <body>
-    //       <div class="container">
-    //         <h2>Hello ${user.username},</h2>
-    //         <p>Your service request has been completed successfully!</p>
-    //         <p>To confirm the completion, please use the following OTP:</p>
-    //         <h4 style="font-weight: bold;">${otp}</h4>
-    //         <p>If you did not request this, please ignore this email or contact support if you have questions.</p>
-    //         <div class="footer">
-    //           <p>Best regards,<br>Loco's Service Team</p>
-    //         </div>
-    //       </div>
-    //     </body>
-    //     </html>`
-    // };
+     // Configure the email options
+    const send = {
+      from: `Loco's ${process.env.MAILID}`,
+      to: user.email, // Use the user's email
+      subject: 'Service Completion Notification',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+            h2 { color: #333; }
+            p { color: #555; }
+            a { color: #1a73e8; text-decoration: none; }
+            .footer { font-size: 12px; color: #777; margin-top: 20px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h2>Hello ${user.username},</h2>
+            <p>Your service request has been completed successfully!</p>
+            <p>To confirm the completion, please use the following OTP:</p>
+            <h4 style="font-weight: bold;">${otp}</h4>
+            <p>If you did not request this, please ignore this email or contact support if you have questions.</p>
+            <div class="footer">
+              <p>Best regards,<br>Loco's Service Team</p>
+            </div>
+          </div>
+        </body>
+        </html>`
+    };
 
-    // // Send the email
-    // await transport.sendMail(send);
+    // Send the email
+    await transport.sendMail(send);
 
     return res.status(200).json({ message: "Service completed successfully. OTP sent to your email." ,otp});
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error',error:error.message });
   }
 });
 
 //complete status update
 router.put('/completejobrequest',async(req,res) => {
   try{
-    console.log(req.body.custId)
-    console.log(req.body.servicerId)
       const completeJob = await JobRequest.findOneAndUpdate(
         {
           // customerId:req.body.custId,
@@ -359,7 +359,8 @@ router.put('/completejobrequest',async(req,res) => {
         console.log(completeJob)
         return res.status(404).json({message:'no such as job request'})
       }
-      return res.status(200).json({status:'success',completeJob})
+      return res.status(200).json({status:'success',message:'job request  completed successfully'})
+
   }
   catch(error){
     return res.status(500).json({error})
@@ -397,62 +398,62 @@ console.log(job)
       return res.status(404).json({ message: 'Job request not found' });
     }
 
-    // // Configure Nodemailer transporter
-    // const transport = nodemailer.createTransport({
-    //   service: "gmail",
-    //   auth: {
-    //     user: process.env.MAILID,
-    //     pass: process.env.MAILPASS,
-    //   },
-    // });
+     // Configure Nodemailer transporter
+    const transport = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MAILID,
+        pass: process.env.MAILPASS,
+      },
+    });
 
-    // // Configure the email options
-    // const send = {
-    //   from: `Loco's ${process.env.MAILID}`,
-    //   to: user.email, // Use the user's email
-    //   subject: 'Job Request Cancellation Notification',
-    //   html: `
-    //     <!DOCTYPE html>
-    //     <html>
-    //     <head>
-    //       <style>
-    //         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    //         .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
-    //         h2 { color: #333; }
-    //         p { color: #555; }
-    //         a { color: #1a73e8; text-decoration: none; }
-    //         .footer { font-size: 12px; color: #777; margin-top: 20px; }
-    //       </style>
-    //     </head>
-    //     <body>
-    //       <div class="container">
-    //         <h2>Hello ${user.username},</h2>
-    //         <p>We regret to inform you that your job request for the service <strong>${job.service}</strong> provided by <strong>${job.serviceProviderName}</strong> has been cancelled.</p>
-    //         <p>If you need further assistance or would like to connect with another service provider, please do not hesitate to reach out to our support team.</p>
-    //         <p>We apologize for any inconvenience this may have caused and appreciate your understanding.</p>
-    //         <div class="footer">
-    //           <p>Best regards,<br>Loco's Service Team</p>
-    //         </div>
-    //       </div>
-    //     </body>
-    //     </html>`
-    // };
+    // Configure the email options
+    const send = {
+      from: `Loco's ${process.env.MAILID}`,
+      to: user.email, // Use the user's email
+      subject: 'Job Request Cancellation Notification',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+            h2 { color: #333; }
+            p { color: #555; }
+            a { color: #1a73e8; text-decoration: none; }
+            .footer { font-size: 12px; color: #777; margin-top: 20px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h2>Hello ${user.username},</h2>
+            <p>We regret to inform you that your job request for the service <strong>${job.service}</strong> provided by <strong>${job.serviceProviderName}</strong> has been cancelled.</p>
+            <p>If you need further assistance or would like to connect with another service provider, please do not hesitate to reach out to our support team.</p>
+            <p>We apologize for any inconvenience this may have caused and appreciate your understanding.</p>
+            <div class="footer">
+              <p>Best regards,<br>Loco's Service Team</p>
+            </div>
+          </div>
+        </body>
+        </html>`
+    };
 
     // // Send the email
-    // await transport.sendMail(send);
+    await transport.sendMail(send);
 
-    return res.status(200).json({ message: "Service cancelled successfully.", job });
+    return res.status(200).json({ message: "Service cancelled successfully by Technician."});
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error',error:error.message });
   }
 });
 
 //cancel job request for customer
 router.put('/declinejobrequest', async (req, res) => {
   try {
-    const id = req.body.servicerId;
-    const user = await UserDB.findById(id);
+    const Userid = req.body.servicerId;
+    const user = await UserDB.findById(Userid);
     console.log(user)
     const job = await JobRequest.findOneAndUpdate({
       // customerId: req.body.custId,
@@ -479,54 +480,54 @@ router.put('/declinejobrequest', async (req, res) => {
       return res.status(404).json({ message: 'Job request not found' });
     }
 
-    // // Configure Nodemailer transporter
-    // const transport = nodemailer.createTransport({
-    //   service: "gmail",
-    //   auth: {
-    //     user: process.env.MAILID,
-    //     pass: process.env.MAILPASS,
-    //   },
-    // });
+     // Configure Nodemailer transporter
+    const transport = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MAILID,
+        pass: process.env.MAILPASS,
+      },
+    });
 
-    // // Configure the email options
-    // const send = {
-    //   from: `Loco's ${process.env.MAILID}`,
-    //   to: user.email, // Use the service provider's email
-    //   subject: 'Job Request Cancellation Notification',
-    //   html: `
-    //     <!DOCTYPE html>
-    //     <html>
-    //     <head>
-    //       <style>
-    //         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    //         .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
-    //         h2 { color: #333; }
-    //         p { color: #555; }
-    //         a { color: #1a73e8; text-decoration: none; }
-    //         .footer { font-size: 12px; color: #777; margin-top: 20px; }
-    //       </style>
-    //     </head>
-    //     <body>
-    //       <div class="container">
-    //         <h2>Hello ${job.serviceProviderName},</h2>
-    //         <p>We would like to inform you that the customer <strong>${job.customerName}</strong> has cancelled their job request for the service <strong>${job.service}</strong>.</p>
-    //         <p>If you have any questions or need further details, please do not hesitate to contact our support team.</p>
-    //         <p>We appreciate your understanding and look forward to continuing to work with you.</p>
-    //         <div class="footer">
-    //           <p>Best regards,<br>Loco's Service Team</p>
-    //         </div>
-    //       </div>
-    //     </body>
-    //     </html>`
-    // };
+    // Configure the email options
+    const send = {
+      from: `Loco's ${process.env.MAILID}`,
+      to: user.email, // Use the service provider's email
+      subject: 'Job Request Cancellation Notification',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+            h2 { color: #333; }
+            p { color: #555; }
+            a { color: #1a73e8; text-decoration: none; }
+            .footer { font-size: 12px; color: #777; margin-top: 20px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h2>Hello ${job.serviceProviderName},</h2>
+            <p>We would like to inform you that the customer <strong>${job.customerName}</strong> has cancelled their job request for the service <strong>${job.service}</strong>.</p>
+            <p>If you have any questions or need further details, please do not hesitate to contact our support team.</p>
+            <p>We appreciate your understanding and look forward to continuing to work with you.</p>
+            <div class="footer">
+              <p>Best regards,<br>Loco's Service Team</p>
+            </div>
+          </div>
+        </body>
+        </html>`
+    };
     
-    // // Send the email
-    // await transport.sendMail(send);
+     // Send the email
+    await transport.sendMail(send);
 
-    return res.status(200).json({ message: "Service cancelled successfully.", job });
+    return res.status(200).json({ message: "Service cancelled successfully by customer."});
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' ,error:error.message});
   }
 });
 

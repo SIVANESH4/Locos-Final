@@ -138,11 +138,11 @@ export const CServices = () => {
         <div className="drop-down">
           <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)}>
             <option value="All Services">All Services</option>
-            {services.map((service, index) => (
+            {/* {services.map((service, index) => (
               <option key={index} value={service.servicename}>
                 {service.servicename}
               </option>
-            ))}
+            ))} */}
           </select>
           <button className="btn btn-dark" onClick={fetchNearbyTechnicians}>  
               Nearby Me
@@ -184,12 +184,12 @@ export const CServices = () => {
                       <br />
                       <label>
                         {/* Worker Name: */}
-                        <input type="hidden" value={selectedWorker.username} disabled className="form-control" />
+                        <input type="text" value={selectedWorker.username} disabled className="form-control" />
                       </label>
                       <br />
                       <label>
                         {/* Service Name: */}
-                        <input type="hidden" value={selectedWorker.service} disabled className="form-control" />
+                        <input type="text" value={selectedWorker.service} disabled className="form-control" />
                       </label>
                       <br />
                       <label>
