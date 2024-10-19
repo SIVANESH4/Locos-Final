@@ -48,7 +48,7 @@ export const Technicians = () => {
             <th>Email</th>
             <th>Phone</th>
             <th>Address</th>
-            <th>Pincode</th>
+            {/* <th>Pincode</th> */}
             <th>Service</th>
             <th>Status</th>
             {/* /*<th>Rating</th>
@@ -63,7 +63,7 @@ export const Technicians = () => {
               <td>{technician.email}</td>
               <td>{technician.phoneNo}</td>
               <td>{technician.address}</td>
-              <td>{technician.pincode}</td>
+              {/* <td>{technician.pincode}</td> */}
               <td>{technician.service}</td>
               <td>{technician.status}</td>
               {/* <td>{technician.rating.toFixed(1)}</td>

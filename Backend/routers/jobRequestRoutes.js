@@ -329,6 +329,7 @@ router.put('/confirmationjobrequest', async (req, res) => {
 
     // Send the email
     await transport.sendMail(send);
+    console.log(otp)
 
     return res.status(200).json({ message: "Service completed successfully. OTP sent to your email." ,otp});
   } catch (error) {

@@ -99,7 +99,7 @@ export const AllUsers = () => {
                 <th>Email</th>
                 <th>Phone Number</th>
                 <th>Address</th>
-                <th>Pincode</th>
+                {/* <th>Pincode</th> */}
                 <th>Role</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -112,7 +112,7 @@ export const AllUsers = () => {
                   <td>{user.email}</td>
                   <td>{user.phoneNo}</td>
                   <td className='address'>{user.address}</td>
-                  <td>{user.pincode}</td>
+                  {/* <td>{user.pincode}</td> */}
                   <td>{user.role}</td>
                   <td>{user.status}</td>
                   <td>

@@ -5,10 +5,10 @@ userid=JSON.parse(userid);
 
 export const CServices = () => {
   const [workers, setWorkers] = useState([]);
-  const [bookedServices, setBookedServices] = useState([]);
+  //const [bookedServices, setBookedServices] = useState([]);
   const [selectedService, setSelectedService] = useState("All Services");
-  const [selectedLocation, setSelectedLocation] = useState("Default");
-  const [selectedRating, setSelectedRating] = useState("Default");
+  //const [selectedLocation, setSelectedLocation] = useState("Default");
+  //const [selectedRating, setSelectedRating] = useState("Default");
   const [services, setServices] = useState([]);
   const [showForm, setShowForm] = useState({});
   const [name, setName] = useState("");
@@ -17,6 +17,7 @@ export const CServices = () => {
   const [issue, setIssue] = useState("");
   const [appointmentDate, setAppointmentDate] = useState("");
   const [selectedWorker, setSelectedWorker] = useState(null);
+  const [filteredServicers,setFilteredServicers]=useState([])
 
   const handleBookNow = (worker) => {
     console.log("Book Now button clicked");
@@ -68,6 +69,7 @@ export const CServices = () => {
     try {
       const response = await axios.get("http://localhost:8088/userRoutes/techniciandetails");
       setWorkers(response.data.tech);
+      setFilteredServicers(response.data.tech)
     } catch (error) {
       console.log("Error fetching Technicians Details", error);
     }
@@ -121,28 +123,51 @@ export const CServices = () => {
     }
   };
 
-  const filteredWorkers = workers.filter((worker) => {
-    const [minRating, maxRating] = getRatingValue(selectedRating);
-    return (
-      (selectedService === "All Services" || worker.service === selectedService) &&
-      (selectedLocation === "Default" || worker.location === selectedLocation) &&
-      worker.rating >= minRating &&
-      worker.rating <= maxRating
-    );
-  });
+  // const filteredWorkers = workers.filter((worker) => {
+  //   const [minRating, maxRating] = getRatingValue(selectedRating);
+  //   return (
+  //     (selectedService === "All Services" || worker.service === selectedService) &&
+  //     (selectedLocation === "Default" || worker.location === selectedLocation) &&
+  //     worker.rating >= minRating &&
+  //     worker.rating <= maxRating
+  //   );
+  // });
+
+  useEffect(()=>{
+    if(selectedService === 'All Services'){
+      setFilteredServicers(workers)
+    }
+  },[workers,selectedService])
+
+    // Handle service selection from the dropdown
+    const handleServiceChange = (e) => {
+      const selected = e.target.value;
+      setSelectedService(selected);
+      
+      if (selected === '') {
+        // If no service is selected, display all service providers
+        setFilteredServicers(workers);
+      } else {
+        // Filter service providers based on the selected service
+        const filtered = workers.filter(workers =>
+          workers.service.includes(selected)
+        );
+        setFilteredServicers(filtered);
+      }
+    };
 
   return (
     <div className="services-page-dash">
       <div className="head">
         <h2>{selectedService}</h2>
         <div className="drop-down">
-          <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)}>
+          <select value={selectedService} onChange={handleServiceChange}>
             <option value="All Services">All Services</option>
-            {/* {services.map((service, index) => (
+            {services.map((service, index) => (
               <option key={index} value={service.servicename}>
                 {service.servicename}
               </option>
-            ))} */}
+            ))}
           </select>
           <button className="btn btn-dark" onClick={fetchNearbyTechnicians}>  
               Nearby Me
@@ -157,8 +182,8 @@ export const CServices = () => {
         </div>
       </div>
       <div className="services-grid-dash">
-        {workers.length > 0 ? (
-          workers.map((worker) => (
+        {filteredServicers.length > 0 ? (
+          filteredServicers.map((worker) => (
             <div className="worker-card" key={worker.id}>
               <center>
                 <i className="fa-solid fa-circle-user"></i>
