@@ -107,11 +107,14 @@ export const CDashboard = () => {
   //cancel job request
   const handleDeclineJob = async(job) => {
     try{
-      const response = await axios.post('http://localhost:8088/jobRequestRoutes/declinejobrequest',{
-        custId:userid._id,servicerId:job.serviceProviderId
+      const response = await axios.put('http://localhost:8088/jobRequestRoutes/declinejobrequest',{
+        custId:userid._id,servicerId:job.serviceProviderId,id:job._id
       })
       console.log(response.data)
       window.location.reload();
+    }
+    catch(error){
+      console.log(error);
     }
   };
   return (
