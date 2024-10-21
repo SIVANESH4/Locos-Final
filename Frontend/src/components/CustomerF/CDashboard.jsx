@@ -7,8 +7,8 @@ import { registerables } from "chart.js";
 import axios from "axios";
 Chart.register(...registerables);
 var userid = localStorage.getItem("userInfo");
-userid=JSON.parse(userid);
-console.log(userid)
+userid = JSON.parse(userid);
+console.log(userid);
 
 export const CDashboard = () => {
   const [ongoingJobs, setOngoingJobs] = useState([]);
@@ -22,32 +22,38 @@ export const CDashboard = () => {
     fetchJobCount();
   }, []);
 
-  const fetchOngoingJob = async(event) => {
-    try{
-      const response = await axios.post('http://localhost:8088/jobRequestRoutes/ongoingjob',{user:userid._id})
-      const fetchedJobs = Array.isArray(response.data.job) ? response.data.job : []; 
-      setOngoingJobs(fetchedJobs)
+  const fetchOngoingJob = async (event) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8088/jobRequestRoutes/ongoingjob",
+        { user: userid._id }
+      );
+      const fetchedJobs = Array.isArray(response.data.job)
+        ? response.data.job
+        : [];
+      setOngoingJobs(fetchedJobs);
+    } catch (error) {
+      console.log(error);
     }
-    catch(error){
-      console.log(error)
-    }
-  }
-  
+  };
+
   //fetch job request count
-  const fetchJobCount = async(event) => {
-    try{
-      const response = await axios.post('http://localhost:8088/jobRequestRoutes/countjob',{custId:userid._id})
-      console.log(response.data)
+  const fetchJobCount = async (event) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8088/jobRequestRoutes/countjob",
+        { custId: userid._id }
+      );
+      console.log(response.data);
       setServiceStats({
         booked: response.data.pending || 0,
         finished: response.data.complete || 0,
         cancelled: response.data.cancel || 0,
       });
+    } catch (error) {
+      console.log(error);
     }
-    catch(error){
-      console.log(error)
-    }
-  }
+  };
   const barData = {
     labels: ["Booked", "Finished", "Cancelled"],
     datasets: [
@@ -72,63 +78,80 @@ export const CDashboard = () => {
   //   address: '123 Main St, Springfield',
   //   pincode: '987654',
   // });
-  const [name,setName]=useState(userid.username || "")
-  const email=userid.email || ""
-  const [phone,setPhone]=useState(userid.phoneNo || "")
-  const [address,setAddress]=useState(userid.address || "")
-  const [pincode,setPincode]=useState(userid.pincode || "")
+  const [name, setName] = useState(userid.username || "");
+  const email = userid.email || "";
+  const [phone, setPhone] = useState(userid.phoneNo || "");
+  const [address, setAddress] = useState(userid.address || "");
+  const [pincode, setPincode] = useState(userid.pincode || "");
 
   //updating userdetails
-  const handleUpdateData = async(event) => {
+  const handleUpdateData = async (event) => {
     event.preventDefault();
-    const Updatedata = ({
-      name,email,phone,address,pincode
-    })
-    const response = await axios.put('http://localhost:8088/userRoutes/userupdate',Updatedata)
-    console.log(response.data)
-    localStorage.setItem('userInfo',JSON.stringify(response.data))
-    alert('Profile updated Sucessfully')
-    window.location.reload()
-  }
+    const Updatedata = {
+      name,
+      email,
+      phone,
+      address,
+      pincode,
+    };
+    const response = await axios.put(
+      "http://localhost:8088/userRoutes/userupdate",
+      Updatedata
+    );
+    console.log(response.data);
+    localStorage.setItem("userInfo", JSON.stringify(response.data));
+    alert("Profile updated Sucessfully");
+    window.location.reload();
+  };
 
   //cancel job request
-  const handleDeclineJob = async(job) => {
-    try{
-      const response = await axios.post('http://localhost:8088/jobRequestRoutes/declinejobrequest',{
-        custId:userid._id,servicerId:job.serviceProviderId
-      })
-      console.log(response.data)
+  const handleDeclineJob = async (job) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8088/jobRequestRoutes/declinejobrequest",
+        {
+          custId: userid._id,
+          servicerId: job.serviceProviderId,
+        }
+      );
+      console.log(response.data);
       window.location.reload();
+    } catch (error) {
+      console.log(error);
     }
-    catch(error){
-      console.log(error)
-    }
-  }
+  };
   return (
     <>
       <div className="customer-dash">
         <h3>Ongoing Works</h3>
         <div className="ongoing-works">
-            <ul className="ongoing-jobs-list">
-              {
-                Array.isArray(ongoingJobs) && ongoingJobs.length === 0 ? (
-                  <p>No Ongoing Jobs Found</p>
-                ) : (
+          <ul className="ongoing-jobs-list">
+            {Array.isArray(ongoingJobs) && ongoingJobs.length === 0 ? (
+              <p>No Ongoing Jobs Found</p>
+            ) : (
               ongoingJobs.map((job) => (
                 <li key={job.id} className="ongoing-job-item">
                   <h4>{job.service}</h4>
                   <p>Provider: {job.serviceProviderName}</p>
-                  <p>Date: {new Date(job.bookingDate).toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    })}</p>
+                  <p>
+                    Date:{" "}
+                    {new Date(job.bookingDate).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </p>
                   <p>Status: {job.status}</p>
-                  <button className="btn btn-dark" onClick={() => handleDeclineJob(job)}>Cancel</button>
+                  <button
+                    className="btn btn-dark"
+                    onClick={() => handleDeclineJob(job)}
+                  >
+                    Cancel
+                  </button>
                 </li>
               ))
             )}
-            </ul>
+          </ul>
         </div>
         <div className="chart-section">
           <h5>Service Statistics</h5>
@@ -136,72 +159,72 @@ export const CDashboard = () => {
         </div>
         {/* Personal Details */}
         <form onSubmit={handleUpdateData}>
-        <div className="personal-details">
-          <h3>Personal Information</h3>
+          <div className="personal-details">
+            <h3>Personal Information</h3>
 
-          <div className="form-group">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={name}
-              onChange={(e)=> setName(e.target.value)}
-              className="form-control"
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="form-control"
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              disabled
-              className="form-control"
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                disabled
+                className="form-control"
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="phone">Phone</label>
-            <input
-              type="text"
-              id="phone"
-              name="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="form-control"
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="phone">Phone</label>
+              <input
+                type="text"
+                id="phone"
+                name="phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="form-control"
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="address">Address</label>
-            <textarea
-              id="address"
-              name="address"
-              value={address}
-              onChange={(e)=>setAddress(e.target.value)}
-              className="form-control"
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="address">Address</label>
+              <textarea
+                id="address"
+                name="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="form-control"
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="pincode">Pincode</label>
-            <input
-              type="text"
-              id="pincode"
-              name="pincode"
-              value={pincode}
-              onChange={(e) => setPincode(e.target.value)}
-              className="form-control"
-            />
+            <div className="form-group">
+              <label htmlFor="pincode">Pincode</label>
+              <input
+                type="text"
+                id="pincode"
+                name="pincode"
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value)}
+                className="form-control"
+              />
+            </div>
+            <br />
+            <button className="btn btn-dark" type="submit">
+              Save Changes
+            </button>
           </div>
-          <br />
-          <button className="btn btn-dark" type="submit">
-            Save Changes
-          </button>
-        </div>
         </form>
         {/* <div className="empty-black">
           <div className="circle" id="c1"></div>
