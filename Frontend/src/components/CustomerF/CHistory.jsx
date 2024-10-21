@@ -153,10 +153,10 @@ export const CHistory = () => {
         <thead>
           <tr>
             <th>Service Type</th>
-            <th>Provider</th>
+            <th>Provider Name</th>
             <th>Date</th>
             <th>Status</th>
-            <th>Feedback</th>
+            {/* <th>Feedback</th> */}
           </tr>
         </thead>
         <tbody>
@@ -173,18 +173,18 @@ export const CHistory = () => {
                   year: 'numeric',
                 })}</td>
                 <td>{service.status}</td>
-                <td>
-                  {service.status === 'completed' && !service.rating && (
-                    <button onClick={() => handleFeedbackClick(service)}>Leave Feedback</button>
-                  )}
-                </td>
+                  {/* <td>
+                    {service.status === 'completed' && !service.rating && (
+                      <button onClick={() => handleFeedbackClick(service)}>Leave Feedback</button>
+                    )}
+                  </td> */}
               </tr>
             ))
           )}
         </tbody>
       </table>
 <br />
-      {/* Feedback Form */}
+      {/* Feedback Form
       {selectedService && (
         <div className="feedback-form">
           <h3>Leave Feedback for {selectedService.serviceProviderName}</h3>
@@ -222,7 +222,7 @@ export const CHistory = () => {
           </form>
           <br/>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

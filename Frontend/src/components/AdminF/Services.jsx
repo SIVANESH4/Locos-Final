@@ -148,9 +148,9 @@ export const Services = () => {
           <div key={service.id} className="service-admin-card">
             <h3>{service.servicename}</h3>
             <p>{service.servicedescription}</p>
-            <p>
+            {/* <p>
               <strong>No. of Providers:</strong> {service.providersCount}
-            </p>
+            </p> */}
             <p>
               <strong>Status:</strong> {service.status}
             </p>
