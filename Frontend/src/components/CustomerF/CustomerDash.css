@@ -169,3 +169,20 @@
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+.feedback-form{
+  width:50%;
+  padding: 20px;
+  border-radius: 10px;
+  height: auto;
+  background-color: var(--background-color);
+}
+.feedback-form label{
+  margin-bottom: 1rem;
+}
+.feedback-form button{
+  margin-right: 2rem;
+}
+.feedback-form textarea{
+  width:110%;
+  resize: none;
+}

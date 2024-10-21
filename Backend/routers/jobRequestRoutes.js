@@ -15,7 +15,8 @@ router.post('/creatingjob', async (req, res) => {
   const existingService = await JobRequest.findOne({
     customerId:req.body.custId,
     service:req.body.service,
-    serviceProviderId:req.body.servicerId
+    serviceProviderId:req.body.servicerId,
+    status:"pending"
   })
 
   if(existingService){
@@ -55,7 +56,7 @@ router.post('/openjoblist', async (req, res) => {
 
     const job = await JobRequest.find({
      serviceProviderId:req.body.user,
-     status:'pending'
+     status:"pending"
     })
     
     if(job.length === 0){
@@ -166,7 +167,7 @@ router.post('/ongoingjob', async (req, res) => {
 
     const job = await JobRequest.find({
       $or:[{customerId:user } ,{serviceProviderId:user}],
-      status:'In_Progress'
+      status:"In_Progress"
     })
     
     //check the job were found
@@ -183,13 +184,16 @@ router.post('/ongoingjob', async (req, res) => {
 });
 
 //accept job request
-router.post('/acceptjobrequest', async (req, res) => {
+router.put('/acceptjobrequest', async (req, res) => {
   try {
+    
     const id = req.body.custId;
     const user = await UserDB.findById(id);
+    console.log(user)
     const job = await JobRequest.findOneAndUpdate({
-      customerId: req.body.custId,
-      serviceProviderId: req.body.servicerId
+      // customerId: req.body.custId,
+      // serviceProviderId: req.body.servicerId
+      _id:req.body.id
     },
     {
       $set : {
@@ -211,7 +215,7 @@ router.post('/acceptjobrequest', async (req, res) => {
       return res.status(404).json({ message: 'Job request not found' });
     }
 
-    // Configure Nodemailer transporter
+//    // Configure Nodemailer transporter
     const transport = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -220,7 +224,7 @@ router.post('/acceptjobrequest', async (req, res) => {
       },
     });
 
-    // Configure the email options
+     // Configure the email options
 const send = {
   from: `Loco's ${process.env.MAILID}`,
   to: user.email, // Use the customer's email
@@ -253,13 +257,13 @@ const send = {
 };
 
     
-    // Send the email
-    await transport.sendMail(send);
+//     // Send the email
+     await transport.sendMail(send);
 
-    return res.status(200).json({ message: "Service cancelled successfully.", job });
+    return res.status(200).json({ message: "Service accept successfully.", job });
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' ,error:error.message});
   }
 });
 
@@ -268,11 +272,11 @@ const generateOTP = () => {
   return Math.floor(1000 + Math.random() * 9000); // Generates a number between 1000 and 9999
 };
 
-router.post('/confirmationjobrequest', async (req, res) => {
+router.put('/confirmationjobrequest', async (req, res) => {
   try {
     const id = req.body.custId;
     const user = await UserDB.findById(id);
-
+    console.log(user)
     // Check if the user exists
     if (!user) {
       return res.status(404).json({ message: 'Customer not found' });
@@ -282,66 +286,66 @@ router.post('/confirmationjobrequest', async (req, res) => {
     const otp = generateOTP();
 
     // Configure Nodemailer transporter
-    // const transport = nodemailer.createTransport({
-    //   service: "gmail",
-    //   auth: {
-    //     user: process.env.MAILID,
-    //     pass: process.env.MAILPASS,
-    //   },
-    // });
+    const transport = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MAILID,
+        pass: process.env.MAILPASS,
+      },
+    });
 
-    // // Configure the email options
-    // const send = {
-    //   from: `Loco's ${process.env.MAILID}`,
-    //   to: user.email, // Use the user's email
-    //   subject: 'Service Completion Notification',
-    //   html: `
-    //     <!DOCTYPE html>
-    //     <html>
-    //     <head>
-    //       <style>
-    //         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    //         .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
-    //         h2 { color: #333; }
-    //         p { color: #555; }
-    //         a { color: #1a73e8; text-decoration: none; }
-    //         .footer { font-size: 12px; color: #777; margin-top: 20px; }
-    //       </style>
-    //     </head>
-    //     <body>
-    //       <div class="container">
-    //         <h2>Hello ${user.username},</h2>
-    //         <p>Your service request has been completed successfully!</p>
-    //         <p>To confirm the completion, please use the following OTP:</p>
-    //         <h4 style="font-weight: bold;">${otp}</h4>
-    //         <p>If you did not request this, please ignore this email or contact support if you have questions.</p>
-    //         <div class="footer">
-    //           <p>Best regards,<br>Loco's Service Team</p>
-    //         </div>
-    //       </div>
-    //     </body>
-    //     </html>`
-    // };
+     // Configure the email options
+    const send = {
+      from: `Loco's ${process.env.MAILID}`,
+      to: user.email, // Use the user's email
+      subject: 'Service Completion Notification',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+            h2 { color: #333; }
+            p { color: #555; }
+            a { color: #1a73e8; text-decoration: none; }
+            .footer { font-size: 12px; color: #777; margin-top: 20px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h2>Hello ${user.username},</h2>
+            <p>Your service request has been completed successfully!</p>
+            <p>To confirm the completion, please use the following OTP:</p>
+            <h4 style="font-weight: bold;">${otp}</h4>
+            <p>If you did not request this, please ignore this email or contact support if you have questions.</p>
+            <div class="footer">
+              <p>Best regards,<br>Loco's Service Team</p>
+            </div>
+          </div>
+        </body>
+        </html>`
+    };
 
-    // // Send the email
-    // await transport.sendMail(send);
+    // Send the email
+    await transport.sendMail(send);
+    console.log(otp)
 
     return res.status(200).json({ message: "Service completed successfully. OTP sent to your email." ,otp});
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error',error:error.message });
   }
 });
 
 //complete status update
-router.post('/completejobrequest',async(req,res) => {
+router.put('/completejobrequest',async(req,res) => {
   try{
-    console.log(req.body.custId)
-    console.log(req.body.servicerId)
       const completeJob = await JobRequest.findOneAndUpdate(
         {
-          customerId:req.body.custId,
-          serviceProviderId:req.body.servicerId
+          // customerId:req.body.custId,
+          // serviceProviderId:req.body.servicerId
+          _id:req.body.id
         },
         {
           $set : {
@@ -356,7 +360,8 @@ router.post('/completejobrequest',async(req,res) => {
         console.log(completeJob)
         return res.status(404).json({message:'no such as job request'})
       }
-      return res.status(200).json({status:'success',completeJob})
+      return res.status(200).json({status:'success',message:'job request  completed successfully'})
+
   }
   catch(error){
     return res.status(500).json({error})
@@ -364,13 +369,15 @@ router.post('/completejobrequest',async(req,res) => {
 })
 
 //cancelling the job request for technician
-router.post('/canceljobrequest', async (req, res) => {
+router.put('/canceljobrequest', async (req, res) => {
   try {
+   
     const id = req.body.custId;
     const user = await UserDB.findById(id);
     const job = await JobRequest.findOneAndUpdate({
-      customerId: req.body.custId,
-      serviceProviderId: req.body.servicerId
+      // customerId: req.body.custId,
+      // serviceProviderId: req.body.servicerId
+      _id:req.body.id
     },
     {
       $set : {
@@ -381,7 +388,7 @@ router.post('/canceljobrequest', async (req, res) => {
       new:true
     }
   );
-
+console.log(job)
     // Check if the user exists
     if (!user) {
       return res.status(404).json({ message: 'Customer not found' });
@@ -392,7 +399,7 @@ router.post('/canceljobrequest', async (req, res) => {
       return res.status(404).json({ message: 'Job request not found' });
     }
 
-    // Configure Nodemailer transporter
+     // Configure Nodemailer transporter
     const transport = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -433,25 +440,26 @@ router.post('/canceljobrequest', async (req, res) => {
         </html>`
     };
 
-    // Send the email
+    // // Send the email
     await transport.sendMail(send);
 
-    return res.status(200).json({ message: "Service cancelled successfully.", job });
+    return res.status(200).json({ message: "Service cancelled successfully by Technician."});
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error',error:error.message });
   }
 });
 
 //cancel job request for customer
-router.post('/declinejobrequest', async (req, res) => {
+router.put('/declinejobrequest', async (req, res) => {
   try {
-    const id = req.body.servicerId;
-    const user = await UserDB.findById(id);
+    const Userid = req.body.servicerId;
+    const user = await UserDB.findById(Userid);
     console.log(user)
     const job = await JobRequest.findOneAndUpdate({
-      customerId: req.body.custId,
-      serviceProviderId: req.body.servicerId
+      // customerId: req.body.custId,
+      // serviceProviderId: req.body.servicerId
+      _id:req.body.id
     },
     {
       $set : {
@@ -473,7 +481,7 @@ router.post('/declinejobrequest', async (req, res) => {
       return res.status(404).json({ message: 'Job request not found' });
     }
 
-    // Configure Nodemailer transporter
+     // Configure Nodemailer transporter
     const transport = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -514,13 +522,13 @@ router.post('/declinejobrequest', async (req, res) => {
         </html>`
     };
     
-    // Send the email
+     // Send the email
     await transport.sendMail(send);
 
-    return res.status(200).json({ message: "Service cancelled successfully.", job });
+    return res.status(200).json({ message: "Service cancelled successfully by customer."});
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' ,error:error.message});
   }
 });
 

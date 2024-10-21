@@ -78,11 +78,11 @@ export const CDashboard = () => {
   //   address: '123 Main St, Springfield',
   //   pincode: '987654',
   // });
-  const [name, setName] = useState(userid.username || "");
-  const email = userid.email || "";
-  const [phone, setPhone] = useState(userid.phoneNo || "");
-  const [address, setAddress] = useState(userid.address || "");
-  const [pincode, setPincode] = useState(userid.pincode || "");
+  const [name,setName]=useState(userid.username || "")
+  const email=userid.email || ""
+  const [phone,setPhone]=useState(userid.phoneNo || "")
+  const [address,setAddress]=useState(userid.address || "")
+  const [pincode,setPincode]=useState(userid.pincode || "")
 
   //updating userdetails
   const handleUpdateData = async (event) => {
@@ -105,19 +105,13 @@ export const CDashboard = () => {
   };
 
   //cancel job request
-  const handleDeclineJob = async (job) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8088/jobRequestRoutes/declinejobrequest",
-        {
-          custId: userid._id,
-          servicerId: job.serviceProviderId,
-        }
-      );
-      console.log(response.data);
+  const handleDeclineJob = async(job) => {
+    try{
+      const response = await axios.post('http://localhost:8088/jobRequestRoutes/declinejobrequest',{
+        custId:userid._id,servicerId:job.serviceProviderId
+      })
+      console.log(response.data)
       window.location.reload();
-    } catch (error) {
-      console.log(error);
     }
   };
   return (
@@ -209,22 +203,22 @@ export const CDashboard = () => {
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="pincode">Pincode</label>
-              <input
-                type="text"
-                id="pincode"
-                name="pincode"
-                value={pincode}
-                onChange={(e) => setPincode(e.target.value)}
-                className="form-control"
-              />
-            </div>
-            <br />
-            <button className="btn btn-dark" type="submit">
-              Save Changes
-            </button>
+          <div className="form-group">
+            <label htmlFor="pincode">Pincode</label>
+            <input
+              type="text"
+              id="pincode"
+              name="pincode"
+              value={pincode}
+              onChange={(e) => setPincode(e.target.value)}
+              className="form-control"
+            />
           </div>
+          <br />
+          <button className="btn btn-dark" type="submit">
+            Save Changes
+          </button>
+        </div>
         </form>
         {/* <div className="empty-black">
           <div className="circle" id="c1"></div>

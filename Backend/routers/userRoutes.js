@@ -9,44 +9,59 @@ dotenv.config()
 
 // Create a new user (Signup route)
 router.post('/signup', async (req, res) => {
-    try {
-      const { username, email, password, phoneNo, address,pincode, role,service} = req.body;
+  try {
+    const { 
+      username, 
+      email, 
+      password, 
+      phoneNo, 
+      address, 
+      role, 
+      service, 
+      location // Receives location as { latitude, longitude }
+    } = req.body;
 
-      //check if the users already exists
-      const existsUser = await UserDB.findOne({email:email})
-      if (existsUser) {
-          return res.status(200).json({ message: 'users already exists'})
-     }
+    // Check if the user already exists
+    const existsUser = await UserDB.findOne({ email: email });
+    if (existsUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
 
-      //Register the user
-      const newUser = new UserDB({
-        username,
-        email,
-        password,
-        phoneNo,
-        address,
-        pincode,
-        role,
-        // Only add services if the user is a service provider
-        service: role === 'Technician' ? service : null
-      });
-      const user = await newUser.save();
+    // Convert location to GeoJSON format if role is Technician
+    const geoLocation = role === 'Technician' && location
+      ? {
+          type: 'Point',
+          coordinates: [location.longitude, location.latitude] // GeoJSON format: [longitude, latitude]
+        }
+      : null;
 
-      //Generate a JWT token
-      const token = jwt.sign(
-        { id: user._id, username: user.username, email: user.email },
-        SECRET_KEY,
-    );
+    // Create a new user
+    const newUser = new UserDB({
+      username,
+      email,
+      password, // Remember to hash this before saving
+      phoneNo,
+      address,
+      role,
+      service: role === 'Technician' ? service : null,
+      location: geoLocation // Store location in GeoJSON format
+    });
 
+    // Save the user
+    const user = await newUser.save();
 
-      res.status(200).json({ 
-        message: 'Account created successfully' ,token
-      });
-    } catch (error) {
-      
-      return res.status(500).json({ message: 'Error during signup', error: error.message });
+    // Generate JWT token (if needed)
+    // const token = jwt.sign({ id: user._id, username: user.username, email: user.email }, SECRET_KEY);
+
+    res.status(201).json({ message: 'Account created successfully', user });
+  } catch (error) {
+    console.error('Signup Error:', error); // Log the error for debugging
+    return res.status(500).json({ message: 'Error during signup', error: error.message });
   }
 });
+
+
+
 
 //user login
 router.post( '/userlogin' , async (req,res) => { 
@@ -81,7 +96,7 @@ router.post( '/userlogin' , async (req,res) => {
 });
 
 //fogot password
-router.post( '/ForgotPassword' , async (req,res) => {
+router.post('/ForgotPassword', async (req,res) => {
     const { email } = req.body
     try{
         //Find the user by email
@@ -137,7 +152,7 @@ router.post( '/ForgotPassword' , async (req,res) => {
       return res.status(200).json({message:"Password is send successfully"});
   }catch(err)
       {
-      return res.status(500).json({message:"Internal Error"});
+      return res.status(500).json({message:"Internal Error",error:err.message});
       }
   });
 
@@ -272,8 +287,32 @@ router.put( '/userupdate', async ( req,res ) => {
           return res.status(500).json({message:'Internal Error'})
       }
 })
-// Additional endpoints for updating or deleting users
-// Example: router.put('/api/users/:id', (req, res) => {});
-// Example: router.delete('/api/users/:id', (req, res) => {});
+
+// API to get nearby technicians within 10 km range
+router.get('/nearby', async (req, res) => {
+    try {
+        const { latitude, longitude } = req.query;
+
+        if (!latitude || !longitude) {
+            return res.status(200).json({ message: 'Latitude and longitude are required' });
+        }
+
+        const technicians = await UserDB.find({
+            role: 'Technician',
+            location: {
+                $near: {
+                    $geometry: { type: 'Point', coordinates: [parseFloat(longitude), parseFloat(latitude)] },
+                    $maxDistance: 3000 // 3 km in meters
+                }
+            }
+        });
+
+        res.status(200).json({technicians});
+    } catch (error) {
+        console.error('Error fetching nearby technicians:', error);
+        res.status(500).json({ message: 'An error occurred while fetching technicians', error: error.message });
+    }
+});
+
 
 module.exports = router;

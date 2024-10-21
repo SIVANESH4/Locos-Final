@@ -13,6 +13,7 @@ export const TDashboard = () => {
   const [showCompleteForm, setShowCompleteForm] = useState(false);
   const [otp,setOtp] = useState('')
   const [verify,setVerify] = useState('')
+  const [customer,setCustomer]=useState(null)
 
   useEffect(() => {
     fetchOngoingJob();
@@ -36,8 +37,9 @@ export const TDashboard = () => {
   //complete job request
   const handleComplete = async (job) => {
     try {
+      setCustomer(job);
       setShowCompleteForm(true);
-      const response = await axios.post(
+      const response = await axios.put(
         "http://localhost:8088/jobRequestRoutes/confirmationjobrequest",
         {
           custId: job.customerId,
@@ -66,8 +68,8 @@ export const TDashboard = () => {
     try{
       if(otp == verify){
         console.log("otp is correct")
-        const response = await axios.post('http://localhost:8088/jobRequestRoutes/completejobrequest',{
-          custId:job.customerId,servicerId:userid._id
+        const response = await axios.put('http://localhost:8088/jobRequestRoutes/completejobrequest',{
+          id:customer._id,
         })
         setShowCompleteForm(false);
         window.location.reload();
@@ -83,9 +85,11 @@ export const TDashboard = () => {
   //decline the job request
   const handleCancelJob = async (job) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8088/jobRequestRoutes/canceljobrequest",
-        { custId: job.customerId, servicerId: job.serviceProviderId }
+      const response = await axios.put(
+        "http://localhost:8088/jobRequestRoutes/canceljobrequest",{ 
+          custId: job.customerId ,
+          id:job._id
+        }
       );
       // console.log(response.data)
       window.location.reload();

@@ -62,7 +62,7 @@ export const JobRequests = () => {
       <table className="job-requests-table">
         <thead>
           <tr>
-            <th>Request ID</th>
+            {/* <th>Request ID</th> */}
             <th>User</th>
             <th>Service</th>
             <th>Address</th>
@@ -70,27 +70,31 @@ export const JobRequests = () => {
              <th>Appointment Date</th>
             <th>Technician</th>
             <th>Status</th>
-            <th>Actions</th>
+            {/* <th>Actions</th> */}
           </tr>
         </thead>
         <tbody>
           {filteredJobRequests.map((job) => (
             <tr key={job.id}>
-              <td>{job._id}</td>
+              {/* <td>{job._id}</td> */}
               <td>{job.customerName}</td>
               <td>{job.service}</td>
               <td>{job.location}</td>
               {/* <td>{job.pincode}</td> */}
-                <td>{job.bookingDate}</td>
+              <td>{new Date(job.bookingDate).toLocaleDateString('en-GB', {
+                  day: '2-digit',
+                  month: 'long',
+                  year: 'numeric',
+                })}</td>
               <td>{job.serviceProviderName || 'Unassigned'}</td>
               <td>{job.status}</td>
-              <td>
+              {/* <td>
                 {job.status !== 'Cancelled' && (
                   <button onClick={() => handleUpdateStatus(job.id, 'Cancelled')}>
                     Cancel
                   </button>
                 )}
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>
